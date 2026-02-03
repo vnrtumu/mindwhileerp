@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import StudentProfileCard from './components/StudentProfileCard';
 import StudentAttendance from './components/StudentAttendance';
 import StudentQuickLinks from './components/StudentQuickLinks';
@@ -27,32 +27,55 @@ const StudentDashboard = () => {
                 </div>
             </div>
 
-            {/* Main Content - 3 Column Layout */}
-            <div className="student-dashboard-content">
-                {/* Left Column - Student Profile */}
-                <div className="student-left-column">
+            {/* Top Row - Profile, Attendance, Quick Links */}
+            <div className="dashboard-top-row">
+                <div className="profile-column">
                     <StudentProfileCard />
                 </div>
-
-                {/* Middle Column */}
-                <div className="student-middle-column">
+                <div className="attendance-column">
                     <StudentAttendance />
+                </div>
+                <div className="quicklinks-column">
                     <StudentQuickLinks />
-                    <StudentSchedules />
-                    <StudentPerformance />
-                    <StudentHomework />
                 </div>
+            </div>
 
-                {/* Right Column */}
-                <div className="student-right-column">
-                    <ClassFaculties />
-                    <LeaveStatus />
-                    <StudentExamResult />
-                    <StudentFeesReminder />
-                    <StudentNoticeBoard />
-                    <StudentSyllabus />
-                    <StudentTodo />
-                </div>
+            {/* Schedules Section - Full Width with Calendar */}
+            <div className="dashboard-section">
+                <StudentSchedules />
+            </div>
+
+            {/* Performance Section */}
+            <div className="dashboard-section">
+                <StudentPerformance />
+            </div>
+
+            {/* Home Works Section */}
+            <div className="dashboard-section">
+                <StudentHomework />
+            </div>
+
+            {/* Class Faculties Section */}
+            <div className="dashboard-section">
+                <ClassFaculties />
+            </div>
+
+            {/* Leave Status & Exam Result - Side by Side */}
+            <div className="dashboard-two-column">
+                <LeaveStatus />
+                <StudentExamResult />
+            </div>
+
+            {/* Fees Reminder Section */}
+            <div className="dashboard-section">
+                <StudentFeesReminder />
+            </div>
+
+            {/* Notice Board, Syllabus, Todo - Three Columns */}
+            <div className="dashboard-three-column">
+                <StudentNoticeBoard />
+                <StudentSyllabus />
+                <StudentTodo />
             </div>
 
             {/* Footer */}

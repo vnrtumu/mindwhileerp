@@ -34,16 +34,16 @@ const StudentQuickLinks = () => {
     ];
 
     return (
-        <div className="student-quick-links">
+        <div className="quicklinks-grid">
             {links.map((item, index) => (
-                <a key={index} href={item.link} className="quick-link-card">
+                <a key={index} href={item.link} className="quicklink-box">
                     <div
-                        className="quick-link-icon"
+                        className="quicklink-icon"
                         style={{ backgroundColor: item.bgColor, color: item.color }}
                     >
-                        <item.icon size={24} />
+                        <item.icon size={28} />
                     </div>
-                    <span className="quick-link-title">{item.title}</span>
+                    <span className="quicklink-title">{item.title}</span>
                 </a>
             ))}
         </div>
