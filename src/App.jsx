@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Login from './components/Login/Login';
 import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
+import TeacherDashboard from './pages/TeacherDashboard';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           {/* Protected Routes Wrapper */}
           <Route path="/" element={<MainLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="teacher-dashboard" element={<TeacherDashboard />} />
             <Route path="students" element={<div>Students Page</div>} />
             <Route path="teachers" element={<div>Teachers Page</div>} />
             <Route path="departments" element={<div>Departments Page</div>} />
