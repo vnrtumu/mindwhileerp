@@ -16,6 +16,7 @@ const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintai
 
 // School Admin Pages
 const SchoolDashboard = Loadable(lazy(() => import('../school/pages/Dashboard')));
+const TeacherDashboard = Loadable(lazy(() => import('../school/pages/TeacherDashboard')));
 
 // Super Admin Dashboards
 const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));
@@ -51,7 +52,11 @@ const Router = [
     children: [
       { path: '/school', element: <Navigate to="/school/dashboard" replace /> },
       { path: '/school/dashboard', element: <SchoolDashboard /> },
-      // Add more school admin routes here as needed
+      { path: '/school/teacher-dashboard', element: <TeacherDashboard /> },
+      { path: '/school/students', element: <div>Students Page</div> },
+      { path: '/school/teachers', element: <div>Teachers Page</div> },
+      { path: '/school/departments', element: <div>Departments Page</div> },
+      { path: '/school/accounts', element: <div>Accounts Page</div> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
