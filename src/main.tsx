@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import './superAdmin/css/globals.css'
-import App from './superAdmin/App.tsx'
-import Spinner from './superAdmin/views/spinner/Spinner.tsx'
+import './css/globals.css'
+import App from './App'
+import Spinner from './views/spinner/Spinner'
 
 createRoot(document.getElementById('root')!).render(
   <Suspense fallback={<Spinner />}>

@@ -34,6 +34,9 @@ const AuthLogin = () => {
         <Button asChild className="w-full">
           <Link to="/dashboard">Open Super Admin Dashboard</Link>
         </Button>
+        <Button asChild className="w-full mt-3 bg-secondary hover:bg-secondary/90">
+          <Link to="/school-dashboard">School Admin Dashboard</Link>
+        </Button>
       </form>
     </>
   );

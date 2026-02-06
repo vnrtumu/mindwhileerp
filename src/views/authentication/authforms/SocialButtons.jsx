@@ -7,11 +7,7 @@ import { Link } from "react-router";
 import FB from "src/assets/images/svgs/icon-facebook.png";
 
 
-interface MyAppProps {
-  title?: string;
-}
-
-const SocialButtons: React.FC<MyAppProps> = ({ title }) => {
+const SocialButtons = ({ title }) => {
   return (
     <>
       <div className="flex justify-between gap-8 my-6 ">
