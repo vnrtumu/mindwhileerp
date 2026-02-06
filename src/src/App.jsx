@@ -6,6 +6,7 @@ import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import StudentDashboard from './pages/StudentDashboard';
+import Income from './pages/Accounts/Income';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="teachers" element={<div>Teachers Page</div>} />
             <Route path="departments" element={<div>Departments Page</div>} />
             <Route path="accounts" element={<div>Accounts Page</div>} />
+            <Route path="accounts/income" element={<Income />} />
           </Route>
         </Routes>
       </Router>
@@ -32,3 +34,4 @@ function App() {
 }
 
 export default App;
+

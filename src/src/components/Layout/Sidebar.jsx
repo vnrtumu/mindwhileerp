@@ -7,7 +7,18 @@ import {
     IconTruck, IconBallFootball, IconBed, IconSettings, IconReportAnalytics,
     IconChartPie, IconChartBar, IconBell, IconMail, IconLock,
     IconChevronDown, IconChevronRight, IconMenu2, IconUserCircle,
-    IconBriefcase, IconCreditCard, IconBeach, IconLayoutSidebar
+    IconBriefcase, IconCreditCard, IconBeach, IconLayoutSidebar,
+    IconReceipt, IconSearch, IconRefresh, IconDiscount, IconShield,
+    IconWallet, IconTrendingUp, IconTrendingDown, IconShoppingCart,
+    IconUserCheck, IconAlertCircle, IconAccessible, IconBuilding,
+    IconListDetails, IconFileInvoice, IconNotebook, IconPencil,
+    IconDeviceLaptop, IconCertificate, IconFileDownload, IconMessage,
+    IconBrandWhatsapp, IconMail as IconMailAlt, IconPrinter, IconCloud,
+    IconDatabase, IconForms, IconUpload, IconMenu, IconZoomQuestion,
+    IconId, IconTicket, IconClockHour4, IconHistory, IconPackage,
+    IconCategory, IconUsersGroup, IconRoute, IconGps, IconDoor,
+    IconKeyboard, IconWorld, IconApi, IconBackspace, IconFilePlus,
+    IconArchive, IconAffiliate, IconVideo, IconMessages
 } from '@tabler/icons-react';
 import './Layout.css';
 
@@ -24,86 +35,6 @@ const menuData = [
                     { title: 'Student Dashboard', path: '/school/student-dashboard' },
                     { title: 'Parent Dashboard', path: '/school/parent-dashboard' }
                 ]
-            },
-            {
-                title: 'Application',
-                icon: IconApps,
-                subItems: [
-                    { title: 'Chat', path: '/school/chat' },
-                    { title: 'Calendar', path: '/school/calendar' },
-                    { title: 'Email', path: '/school/email' },
-                    { title: 'To Do', path: '/school/todo' },
-                    { title: 'Notes', path: '/school/notes' }
-                ]
-            }
-        ]
-    },
-    {
-        group: 'Peoples',
-        items: [
-            {
-                title: 'Students',
-                icon: IconUser,
-                subItems: [
-                    { title: 'All Students', path: '/school/students' },
-                    { title: 'Student List', path: '/school/students/list' },
-                    { title: 'Student Details', path: '/school/students/details' }
-                ]
-            },
-            {
-                title: 'Parents',
-                icon: IconUsers,
-                subItems: [
-                    { title: 'All Parents', path: '/school/parents' },
-                    { title: 'Parent List', path: '/school/parents/list' }
-                ]
-            },
-            {
-                title: 'Guardians',
-                icon: IconUserPlus,
-                subItems: [
-                    { title: 'All Guardians', path: '/school/guardians' },
-                    { title: 'Guardian List', path: '/school/guardians/list' }
-                ]
-            },
-            {
-                title: 'Teachers',
-                icon: IconSchool,
-                subItems: [
-                    { title: 'All Teachers', path: '/school/teachers' },
-                    { title: 'Teacher List', path: '/school/teachers/list' },
-                    { title: 'Teacher Details', path: '/school/teachers/details' }
-                ]
-            }
-        ]
-    },
-    {
-        group: 'Academic',
-        items: [
-            {
-                title: 'Classes',
-                icon: IconBook,
-                subItems: [
-                    { title: 'All Classes', path: '/school/classes' },
-                    { title: 'Schedule', path: '/school/classes/schedule' }
-                ]
-            },
-            { title: 'Class Room', icon: IconHome, path: '/school/classroom' },
-            { title: 'Class Routine', icon: IconClock, path: '/school/routine' },
-            { title: 'Section', icon: IconLayoutSidebar, path: '/school/section' },
-            { title: 'Subject', icon: IconBooks, path: '/school/subjects' },
-            { title: 'Syllabus', icon: IconFileText, path: '/school/syllabus' },
-            { title: 'Time Table', icon: IconCalendar, path: '/school/timetable' },
-            { title: 'Home Work', icon: IconClipboard, path: '/school/homework' },
-            {
-                title: 'Examinations',
-                icon: IconClipboard,
-                subItems: [
-                    { title: 'Exam', path: '/school/exam' },
-                    { title: 'Exam Schedule', path: '/school/exam/schedule' },
-                    { title: 'Grade', path: '/school/exam/grade' },
-                    { title: 'Exam Results', path: '/school/exam/results' }
-                ]
             }
         ]
     },
@@ -111,79 +42,229 @@ const menuData = [
         group: 'Management',
         items: [
             {
-                title: 'Fees Collection',
+                title: 'Finance & Fees',
                 icon: IconCash,
                 subItems: [
-                    { title: 'Fees Group', path: '/school/fees/group' },
-                    { title: 'Fees Type', path: '/school/fees/type' },
-                    { title: 'Fees Master', path: '/school/fees/master' },
-                    { title: 'Collect Fees', path: '/school/fees/collect' }
+                    { title: 'Collect Fees', path: '/fees/collect' },
+                    { title: 'Search Due Fees', path: '/fees/due' },
+                    { title: 'All Transactions', path: '/fees/transactions' },
+                    { title: 'Online Transactions', path: '/fees/online-transactions' },
+                    { title: 'Fees Carry Forward', path: '/fees/carry-forward' },
+                    { title: 'Assign Fees', path: '/fees/assign' },
+                    { title: 'Fee Groups', path: '/fees/groups' },
+                    { title: 'Fees Discount', path: '/fees/discount' },
+                    { title: 'Fee Types', path: '/fees/types' },
+                    { title: 'Fee Permissions', path: '/fees/permissions' }
+                ]
+            },
+            {
+                title: 'Accounts',
+                icon: IconWallet,
+                subItems: [
+                    { title: 'Income', path: '/accounts/income' },
+                    { title: 'Income Heads', path: '/accounts/income-heads' },
+                    { title: 'Expense', path: '/accounts/expense' },
+                    { title: 'Expense Heads', path: '/accounts/expense-heads' }
+                ]
+            },
+            {
+                title: 'Book Sales',
+                icon: IconShoppingCart,
+                subItems: [
+                    { title: 'Books Sales', path: '/book-sales' }
+                ]
+            },
+            {
+                title: 'Student Information',
+                icon: IconUser,
+                subItems: [
+                    { title: 'Student List', path: '/students/list' },
+                    { title: 'Student Attendance', path: '/students/attendance' },
+                    { title: 'Behavior Records', path: '/students/behavior' },
+                    { title: 'Student Categories', path: '/students/categories' },
+                    { title: 'Disabled Students', path: '/students/disabled' }
+                ]
+            },
+            {
+                title: 'Academics',
+                icon: IconSchool,
+                subItems: [
+                    { title: 'Classes', path: '/classes' },
+                    { title: 'Sections', path: '/sections' },
+                    { title: 'Subjects', path: '/subjects' },
+                    { title: 'Assign Subjects', path: '/assign-subjects' },
+                    { title: 'Assign Class Teacher', path: '/assign-teacher' },
+                    { title: 'Manage Periods', path: '/periods' },
+                    { title: 'Class Timetable', path: '/timetable' },
+                    { title: 'Promote Students', path: '/promote-students' },
+                    { title: 'Homework', path: '/homework' }
+                ]
+            },
+            {
+                title: 'Front Office',
+                icon: IconBuilding,
+                subItems: [
+                    { title: 'Visitor Book', path: '/front-office/visitors' },
+                    { title: 'Complaints', path: '/front-office/complaints' },
+                    { title: 'Postal Records', path: '/front-office/postal' }
+                ]
+            },
+            {
+                title: 'Offline Examinations',
+                icon: IconPencil,
+                subItems: [
+                    { title: 'Exam', path: '/exam/offline' },
+                    { title: 'Exam Types', path: '/exam/types' },
+                    { title: 'Schedule & Marks Setup', path: '/exam/schedule-marks' },
+                    { title: 'Marks', path: '/exam/marks' }
+                ]
+            },
+            {
+                title: 'Online Examinations',
+                icon: IconDeviceLaptop,
+                subItems: [
+                    { title: 'Online Exam', path: '/exam/online' }
+                ]
+            },
+            {
+                title: 'Human Resource',
+                icon: IconBriefcase,
+                subItems: [
+                    { title: 'Staff Attendance', path: '/hr/attendance' },
+                    { title: 'Payroll', path: '/hr/payroll' },
+                    { title: 'Set Salary', path: '/hr/salary' },
+                    { title: 'Approve Leave Request', path: '/hr/leave-requests' },
+                    { title: 'Leave Types', path: '/hr/leave-types' },
+                    { title: 'Departments', path: '/hr/departments' },
+                    { title: 'Designations', path: '/hr/designations' }
+                ]
+            },
+            {
+                title: 'Study Center',
+                icon: IconBook,
+                subItems: [
+                    { title: 'Manage Resources', path: '/study/resources' },
+                    { title: 'Assignments', path: '/study/assignments' },
+                    { title: 'Live Classes', path: '/study/live-classes' }
+                ]
+            },
+            {
+                title: 'Certificates',
+                icon: IconCertificate,
+                subItems: [
+                    { title: 'Certificate Templates', path: '/certificates/templates' },
+                    { title: 'Generate Document', path: '/certificates/generate' }
+                ]
+            },
+            {
+                title: 'Communicate',
+                icon: IconMessages,
+                subItems: [
+                    { title: 'Notice Board', path: '/communicate/notice' },
+                    { title: 'Events & Holidays', path: '/communicate/events' },
+                    { title: 'Compose Broadcast', path: '/communicate/broadcast' },
+                    { title: 'Broadcast History', path: '/communicate/history' }
                 ]
             },
             {
                 title: 'Library',
                 icon: IconBooks,
                 subItems: [
-                    { title: 'Books', path: '/school/library/books' },
-                    { title: 'Issue/Return', path: '/school/library/issue' },
-                    { title: 'Members', path: '/school/library/members' }
+                    { title: 'Issue/Return Book', path: '/library/issue-return' },
+                    { title: 'Manage Books', path: '/library/books' },
+                    { title: 'Book Categories', path: '/library/categories' }
                 ]
             },
-            { title: 'Sports', icon: IconBallFootball, path: '/school/sports' },
-            { title: 'Hostel', icon: IconBed, path: '/school/hostel' },
-            { title: 'Transport', icon: IconTruck, path: '/school/transport' }
-        ]
-    },
-    {
-        group: 'HRM',
-        items: [
-            { title: 'Staffs', icon: IconBriefcase, path: '/school/staff' },
-            { title: 'Departments', icon: IconBuildingBank, path: '/school/departments' },
-            { title: 'Designation', icon: IconUserCircle, path: '/school/designation' },
             {
-                title: 'Attendance',
-                icon: IconCalendar,
+                title: 'Inventory',
+                icon: IconPackage,
                 subItems: [
-                    { title: 'Student Attendance', path: '/school/attendance/student' },
-                    { title: 'Staff Attendance', path: '/school/attendance/staff' }
+                    { title: 'Issue Item', path: '/inventory/issue' },
+                    { title: 'Add Stock', path: '/inventory/stock' },
+                    { title: 'Item List', path: '/inventory/items' },
+                    { title: 'Item Categories', path: '/inventory/categories' },
+                    { title: 'Suppliers', path: '/inventory/suppliers' }
                 ]
             },
-            { title: 'Leaves', icon: IconBeach, path: '/school/leaves' },
-            { title: 'Holidays', icon: IconCalendar, path: '/school/holidays' },
-            { title: 'Payroll', icon: IconCreditCard, path: '/school/payroll' }
-        ]
-    },
-    {
-        group: 'Reports',
-        items: [
-            { title: 'Attendance Report', icon: IconChartBar, path: '/school/reports/attendance' },
-            { title: 'Class Report', icon: IconChartBar, path: '/school/reports/class' },
-            { title: 'Student Report', icon: IconChartPie, path: '/school/reports/student' },
-            { title: 'Grade Report', icon: IconReportAnalytics, path: '/school/reports/grade' },
-            { title: 'Fees Report', icon: IconReportAnalytics, path: '/school/reports/fees' }
-        ]
-    },
-    {
-        group: 'User Management',
-        items: [
-            { title: 'Users', icon: IconUsers, path: '/school/users' },
-            { title: 'Roles & Permissions', icon: IconLock, path: '/school/roles' }
-        ]
-    },
-    {
-        group: 'Announcements',
-        items: [
-            { title: 'Notice Board', icon: IconBell, path: '/school/announcements' },
-            { title: 'Events', icon: IconCalendar, path: '/school/events' }
-        ]
-    },
-    {
-        group: 'Settings',
-        items: [
-            { title: 'General Settings', icon: IconSettings, path: '/school/settings/general' },
-            { title: 'Website Settings', icon: IconSettings, path: '/school/settings/website' },
-            { title: 'App Settings', icon: IconSettings, path: '/school/settings/app' },
-            { title: 'System Settings', icon: IconSettings, path: '/school/settings/system' }
+            {
+                title: 'Transport',
+                icon: IconTruck,
+                subItems: [
+                    { title: 'Manage Vehicles', path: '/transport/vehicles' },
+                    { title: 'Manage Routes', path: '/transport/routes' },
+                    { title: 'Live Vehicle Tracking', path: '/transport/tracking' }
+                ]
+            },
+            {
+                title: 'Hostel',
+                icon: IconBed,
+                subItems: [
+                    { title: 'Student Allocation', path: '/hostel/allocation' },
+                    { title: 'Manage Rooms', path: '/hostel/rooms' },
+                    { title: 'Room Types', path: '/hostel/room-types' },
+                    { title: 'Manage Hostels', path: '/hostel/manage' },
+                    { title: 'Permissions', path: '/hostel/permissions' }
+                ]
+            },
+            {
+                title: 'Reports & Analytics',
+                icon: IconReportAnalytics,
+                subItems: [
+                    { title: 'Class Report', path: '/reports/class' },
+                    { title: 'Sponsorship Report', path: '/reports/sponsorship' },
+                    { title: 'Student Report', path: '/reports/student' },
+                    { title: 'ID Card Report', path: '/reports/id-card' },
+                    { title: 'Hall Ticket Report', path: '/reports/hall-ticket' },
+                    { title: 'Timetable Report', path: '/reports/timetable' },
+                    { title: 'Exam Schedule Report', path: '/reports/exam-schedule' },
+                    { title: 'Attendance Report', path: '/reports/attendance' },
+                    { title: 'Library Books Report', path: '/reports/library' },
+                    { title: 'Terminal Report', path: '/reports/terminal' },
+                    { title: 'Merit Stage Report', path: '/reports/merit' },
+                    { title: 'Online Exam', path: '/reports/online-exam' },
+                    { title: 'Certificate Report', path: '/reports/certificate' },
+                    { title: 'Leave Application Report', path: '/reports/leave' },
+                    { title: 'Product Purchase Report', path: '/reports/purchase' },
+                    { title: 'Product Sale Report', path: '/reports/sales' },
+                    { title: 'Fees Report', path: '/reports/fees' },
+                    { title: 'Due Fees Report', path: '/reports/due-fees' },
+                    { title: 'Balance Fees Report', path: '/reports/balance-fees' },
+                    { title: 'Transaction Report', path: '/reports/transactions' },
+                    { title: 'Student Fine Report', path: '/reports/fines' },
+                    { title: 'Overtime Report', path: '/reports/overtime' },
+                    { title: 'Salary Report', path: '/reports/salary' },
+                    { title: 'Audit Report', path: '/reports/audit' },
+                    { title: 'Account Ledger Report', path: '/reports/ledger' }
+                ]
+            },
+            {
+                title: 'System Setting',
+                icon: IconSettings,
+                subItems: [
+                    { title: 'General Setting', path: '/settings/general' },
+                    { title: 'Session Setting', path: '/settings/session' },
+                    { title: 'Notification Setting', path: '/settings/notifications' },
+                    { title: 'WhatsApp Messaging', path: '/settings/whatsapp' },
+                    { title: 'SMS Setting', path: '/settings/sms' },
+                    { title: 'Email Setting', path: '/settings/email' },
+                    { title: 'Payment Methods', path: '/settings/payments' },
+                    { title: 'Print Header Footer', path: '/settings/print' },
+                    { title: 'Thermal Print', path: '/settings/thermal-print' },
+                    { title: 'Front CMS Setting', path: '/settings/cms' },
+                    { title: 'Roles Permissions', path: '/settings/roles' },
+                    { title: 'Backup Restore', path: '/settings/backup' },
+                    { title: 'Users', path: '/settings/users' },
+                    { title: 'Modules', path: '/settings/modules' },
+                    { title: 'Custom Fields', path: '/settings/custom-fields' },
+                    { title: 'Captcha Setting', path: '/settings/captcha' },
+                    { title: 'System Fields', path: '/settings/system-fields' },
+                    { title: 'Student Profile Update', path: '/settings/student-profile' },
+                    { title: 'Online Admission', path: '/settings/admission' },
+                    { title: 'File Types', path: '/settings/file-types' },
+                    { title: 'Sidebar Menu', path: '/settings/sidebar' },
+                    { title: 'System Update', path: '/settings/update' }
+                ]
+            }
         ]
     }
 ];

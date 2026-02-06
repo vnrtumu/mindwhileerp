@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { IconPlus, IconClock, IconCalendarEvent, IconDoor, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { IconPlus, IconClock, IconCalendarEvent, IconDoor, IconChevronLeft, IconChevronRight, IconChevronDown } from '@tabler/icons-react';
 
 const StudentSchedules = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeTab, setActiveTab] = useState('Exams');
+    const [monthDropdownOpen, setMonthDropdownOpen] = useState(false);
+    const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+
+    const monthDropdownRef = useRef(null);
+    const yearDropdownRef = useRef(null);
 
     const exams = [
         {
@@ -22,6 +28,30 @@ const StudentSchedules = () => {
         }
     ];
 
+    // Months array
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    // Generate years array (current year -10 to +10)
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (monthDropdownRef.current && !monthDropdownRef.current.contains(event.target)) {
+                setMonthDropdownOpen(false);
+            }
+            if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target)) {
+                setYearDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     // Calendar helper functions
     const getDaysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -39,6 +69,43 @@ const StudentSchedules = () => {
         const newDate = new Date(currentDate);
         newDate.setMonth(newDate.getMonth() + direction);
         setCurrentDate(newDate);
+    };
+
+    const selectMonth = (monthIndex) => {
+        const newDate = new Date(currentDate);
+        newDate.setMonth(monthIndex);
+        setCurrentDate(newDate);
+        setMonthDropdownOpen(false);
+    };
+
+    const selectYear = (year) => {
+        const newDate = new Date(currentDate);
+        newDate.setFullYear(year);
+        setCurrentDate(newDate);
+        setYearDropdownOpen(false);
+    };
+
+    const goToToday = () => {
+        const today = new Date();
+        setCurrentDate(today);
+        setSelectedDate(today);
+        setMonthDropdownOpen(false);
+        setYearDropdownOpen(false);
+    };
+
+    const selectDate = (dayObj, index) => {
+        let newDate;
+        if (dayObj.isCurrentMonth) {
+            newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayObj.day);
+        } else {
+            if (index < 7 && dayObj.day > 15) {
+                newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, dayObj.day);
+            } else {
+                newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, dayObj.day);
+            }
+            setCurrentDate(newDate);
+        }
+        setSelectedDate(newDate);
     };
 
     const generateCalendarDays = () => {
@@ -76,9 +143,25 @@ const StudentSchedules = () => {
             currentDate.getFullYear() === today.getFullYear();
     };
 
+    const isSelected = (dayObj, index) => {
+        if (!dayObj.isCurrentMonth) return false;
+        return dayObj.day === selectedDate.getDate() &&
+            currentDate.getMonth() === selectedDate.getMonth() &&
+            currentDate.getFullYear() === selectedDate.getFullYear();
+    };
+
     const isWeekend = (dayIndex) => {
         const colIndex = dayIndex % 7;
-        return colIndex === 5 || colIndex === 6;
+        return colIndex === 0 || colIndex === 6;
+    };
+
+    const formatSelectedDate = () => {
+        return selectedDate.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
     };
 
     return (
@@ -98,15 +181,80 @@ const StudentSchedules = () => {
                             <button
                                 className="calendar-nav-btn"
                                 onClick={() => navigateMonth(-1)}
+                                title="Previous Month"
                             >
                                 <IconChevronLeft size={20} />
                             </button>
-                            <h6 className="calendar-month-title">
-                                {getMonthName(currentDate)} {currentDate.getFullYear()}
-                            </h6>
+
+                            <div className="calendar-selectors">
+                                {/* Month Selector */}
+                                <div className="calendar-select-container" ref={monthDropdownRef}>
+                                    <button
+                                        className="calendar-select-btn"
+                                        onClick={() => {
+                                            setMonthDropdownOpen(!monthDropdownOpen);
+                                            setYearDropdownOpen(false);
+                                        }}
+                                    >
+                                        {getMonthName(currentDate)}
+                                        <IconChevronDown size={16} className={`select-arrow ${monthDropdownOpen ? 'open' : ''}`} />
+                                    </button>
+                                    {monthDropdownOpen && (
+                                        <div className="calendar-dropdown month-dropdown">
+                                            {months.map((month, index) => (
+                                                <button
+                                                    key={month}
+                                                    className={`calendar-dropdown-item ${currentDate.getMonth() === index ? 'active' : ''}`}
+                                                    onClick={() => selectMonth(index)}
+                                                >
+                                                    {month}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Year Selector */}
+                                <div className="calendar-select-container" ref={yearDropdownRef}>
+                                    <button
+                                        className="calendar-select-btn"
+                                        onClick={() => {
+                                            setYearDropdownOpen(!yearDropdownOpen);
+                                            setMonthDropdownOpen(false);
+                                        }}
+                                    >
+                                        {currentDate.getFullYear()}
+                                        <IconChevronDown size={16} className={`select-arrow ${yearDropdownOpen ? 'open' : ''}`} />
+                                    </button>
+                                    {yearDropdownOpen && (
+                                        <div className="calendar-dropdown year-dropdown">
+                                            {years.map((year) => (
+                                                <button
+                                                    key={year}
+                                                    className={`calendar-dropdown-item ${currentDate.getFullYear() === year ? 'active' : ''}`}
+                                                    onClick={() => selectYear(year)}
+                                                >
+                                                    {year}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Today Button */}
+                                <button
+                                    className="calendar-today-btn"
+                                    onClick={goToToday}
+                                    title="Go to Today"
+                                >
+                                    Today
+                                </button>
+                            </div>
+
                             <button
                                 className="calendar-nav-btn"
                                 onClick={() => navigateMonth(1)}
+                                title="Next Month"
                             >
                                 <IconChevronRight size={20} />
                             </button>
@@ -130,12 +278,20 @@ const StudentSchedules = () => {
                                     className={`calendar-day-cell 
                                         ${!dayObj.isCurrentMonth ? 'other-month' : ''} 
                                         ${isToday(dayObj) ? 'today' : ''}
+                                        ${isSelected(dayObj, index) ? 'selected' : ''}
                                         ${isWeekend(index) ? 'weekend' : ''}
                                     `}
+                                    onClick={() => selectDate(dayObj, index)}
                                 >
                                     <span className="day-number">{dayObj.day}</span>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* Selected Date Display */}
+                        <div className="selected-date-display">
+                            <IconCalendarEvent size={18} />
+                            <span>{formatSelectedDate()}</span>
                         </div>
                     </div>
 
@@ -180,3 +336,4 @@ const StudentSchedules = () => {
 };
 
 export default StudentSchedules;
+
