@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// Import the SVG images
-import studentIcon from '../../../assets/images/student.svg';
-import teacherIcon from '../../../assets/images/teacher.svg';
-import staffIcon from '../../../assets/images/staff.svg';
-import subjectIcon from '../../../assets/images/subject.svg';
+// Use direct URL paths to SVG images in public directory
+const studentIcon = '/images/student.svg';
+const teacherIcon = '/images/teacher.svg';
+const staffIcon = '/images/staff.svg';
+const subjectIcon = '/images/subject.svg';
 
 // Custom hook for counting animation
 const useCountUp = (end, duration = 1500) => {
