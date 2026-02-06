@@ -98,6 +98,15 @@ const Login = () => {
 
                         <button type="submit" className="login-btn">Sign In</button>
 
+                        <button
+                            type="button"
+                            className="login-btn"
+                            style={{ marginTop: '10px', backgroundColor: '#4a4a4a' }}
+                            onClick={() => navigate('/super/dashboard')}
+                        >
+                            Super Admin Dashboard
+                        </button>
+
                         <div className="register-link">
                             Don't have an account? <a href="#">Create Account</a>
                         </div>

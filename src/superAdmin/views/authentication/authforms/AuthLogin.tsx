@@ -32,7 +32,7 @@ const AuthLogin = () => {
           </Link>
         </div>
         <Button asChild className="w-full">
-          <Link to="/">Sign in</Link>
+          <Link to="/dashboard">Open Super Admin Dashboard</Link>
         </Button>
       </form>
     </>

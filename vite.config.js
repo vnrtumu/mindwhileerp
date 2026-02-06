@@ -8,8 +8,16 @@ import svgr from '@svgr/rollup';
 export default defineConfig({
   resolve: {
     alias: {
-      'src': resolve(__dirname, './src/superAdmin'),
-      '/src': resolve(__dirname, './src/superAdmin'),
+      'src/api': resolve(__dirname, './src/superAdmin/api'),
+      'src/assets': resolve(__dirname, './src/superAdmin/assets'),
+      'src/components': resolve(__dirname, './src/superAdmin/components'),
+      'src/context': resolve(__dirname, './src/superAdmin/context'),
+      'src/css': resolve(__dirname, './src/superAdmin/css'),
+      'src/layouts': resolve(__dirname, './src/superAdmin/layouts'),
+      'src/lib': resolve(__dirname, './src/superAdmin/lib'),
+      'src/routes': resolve(__dirname, './src/superAdmin/routes'),
+      'src/types': resolve(__dirname, './src/superAdmin/types'),
+      'src/views': resolve(__dirname, './src/superAdmin/views'),
       "@/components": resolve(__dirname, "./src/superAdmin/components"),
       "@/assets": resolve(__dirname, "./src/superAdmin/assets"),
       "@/hooks": resolve(__dirname, "./src/superAdmin/hooks"),
