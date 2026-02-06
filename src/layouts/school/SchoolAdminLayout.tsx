@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router';
-import Sidebar from '../../src/components/Layout/Sidebar';
-import Header from '../../src/components/Layout/Header';
+import Sidebar from '../../school/components/Layout/Sidebar';
+import Header from '../../school/components/Layout/Header';
 // @ts-ignore
-import { ThemeProvider } from '../../src/context/ThemeContext';
+import { ThemeProvider } from '../../school/context/ThemeContext';
 
 const SchoolAdminLayout: FC = () => {
     return (

@@ -15,7 +15,7 @@ const Register2 = Loadable(lazy(() => import('../views/authentication/auth2/Regi
 const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintainance')));
 
 // School Admin Pages
-const SchoolDashboard = Loadable(lazy(() => import('../src/pages/Dashboard')));
+const SchoolDashboard = Loadable(lazy(() => import('../school/pages/Dashboard')));
 
 // Super Admin Dashboards
 const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));
