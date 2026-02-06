@@ -3,34 +3,55 @@ import { IconDownload } from '@tabler/icons-react';
 
 const StudentSyllabus = () => {
     const subjects = [
-        { name: 'Maths', color: '#3d5ee1' },
-        { name: 'Physics', color: '#28c76f' },
-        { name: 'Chemistry', color: '#ff9f43' },
-        { name: 'Botany', color: '#ea5455' },
-        { name: 'English', color: '#00cfe8' },
-        { name: 'Spanish', color: '#7367f0' },
-        { name: 'Japanese', color: '#ff6b6b' }
+        { name: 'Mathematics', color: '#3d5ee1', completed: 85 },
+        { name: 'Physics', color: '#28c76f', completed: 72 },
+        { name: 'Chemistry', color: '#ff9f43', completed: 68 },
+        { name: 'Biology', color: '#ea5455', completed: 90 },
+        { name: 'English', color: '#00cfe8', completed: 95 },
+        { name: 'Hindi', color: '#7367f0', completed: 78 },
+        { name: 'Computer Science', color: '#ff6b6b', completed: 60 }
     ];
 
     return (
         <div className="dashboard-card student-syllabus-card">
             <div className="card-header">
-                <h5>Syllabus</h5>
+                <h5>Syllabus Completion</h5>
             </div>
             <div className="card-body">
-                <div className="syllabus-list">
+                <div className="syllabus-progress-list">
                     {subjects.map((subject, index) => (
-                        <div key={index} className="syllabus-item">
-                            <div className="syllabus-info">
-                                <span
-                                    className="syllabus-dot"
-                                    style={{ backgroundColor: subject.color }}
-                                ></span>
-                                <span className="syllabus-name">{subject.name}</span>
+                        <div key={index} className="syllabus-progress-item">
+                            <div className="syllabus-progress-header">
+                                <div className="syllabus-subject-info">
+                                    <span
+                                        className="syllabus-color-dot"
+                                        style={{ backgroundColor: subject.color }}
+                                    ></span>
+                                    <span className="syllabus-subject-name">{subject.name}</span>
+                                </div>
+                                <span className="syllabus-percent" style={{ color: subject.color }}>
+                                    {subject.completed}%
+                                </span>
                             </div>
-                            <button className="download-btn">
-                                <IconDownload size={16} />
-                            </button>
+                            <div className="syllabus-progress-bar">
+                                <div
+                                    className="syllabus-progress-fill"
+                                    style={{
+                                        width: `${subject.completed}%`,
+                                        backgroundColor: subject.color
+                                    }}
+                                ></div>
+                            </div>
+                            <div className="syllabus-progress-footer">
+                                <span className="syllabus-status">
+                                    {subject.completed >= 90 ? 'Almost Complete' :
+                                        subject.completed >= 70 ? 'On Track' :
+                                            subject.completed >= 50 ? 'In Progress' : 'Getting Started'}
+                                </span>
+                                <button className="download-btn" title="Download Syllabus">
+                                    <IconDownload size={14} />
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -40,3 +61,4 @@ const StudentSyllabus = () => {
 };
 
 export default StudentSyllabus;
+

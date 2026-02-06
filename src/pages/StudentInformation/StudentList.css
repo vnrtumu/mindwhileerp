@@ -1,0 +1,424 @@
+/* ============================================
+   STUDENT LIST PAGE - MODERN ADMIN UI
+   Clean, Minimal Design System
+   ============================================ */
+
+.student-list-page {
+    /* Keep page aligned with app theme and center content */
+    background: transparent;
+    min-height: 100vh;
+    padding: 28px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+/* inner container to constrain width and fit page */
+.student-list-page .container {
+    width: 100%;
+    max-width: none; /* allow pages to fill available space */
+}
+
+/* PAGE HEADER */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 48px;
+    padding: 0;
+}
+
+.page-title {
+    flex: 1;
+}
+
+.page-title h4 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: var(--text-color, #333448);
+    letter-spacing: -0.5px;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    color: var(--text-muted, #6e6b7b);
+    font-weight: 400;
+}
+
+.breadcrumb .current {
+    color: var(--primary-color, #3d5ee1);
+    font-weight: 500;
+}
+
+.page-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* BUTTONS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary-color, #3d5ee1);
+    color: white;
+    box-shadow: 0 2px 8px rgba(61, 94, 225, 0.15);
+}
+
+.btn-primary:hover {
+    background: #2a4bc7;
+    box-shadow: 0 4px 16px rgba(61, 94, 225, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-large {
+    padding: 14px 32px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.btn svg {
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+/* EMPTY STATE */
+.empty-state-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+}
+
+.empty-state-card {
+    background: white;
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color, #e9ecef);
+    max-width: 500px;
+    width: 100%;
+}
+
+.empty-state-icon {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.empty-state-icon svg {
+    color: var(--primary-color, #3d5ee1);
+    opacity: 0.2;
+}
+
+.empty-state-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color, #333448);
+    margin: 0 0 12px 0;
+    letter-spacing: -0.5px;
+}
+
+.empty-state-card p {
+    font-size: 14px;
+    color: var(--text-muted, #6e6b7b);
+    margin: 0 0 32px 0;
+    line-height: 1.6;
+}
+
+.empty-state-card .btn {
+    margin-top: 16px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* STUDENTS COUNT */
+.students-count {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(61, 94, 225, 0.05);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-muted, #6e6b7b);
+    margin-top: 32px;
+}
+
+/* TABLE CARD */
+.card.soft-card {
+        padding: 16px;
+        border-radius: 12px;
+}
+
+.fade-in{
+    animation: fadeIn 220ms ease both;
+}
+
+@keyframes fadeIn{
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.table-wrap{ overflow:auto; }
+
+.students-table{
+        width:100%;
+        border-collapse: collapse;
+        min-width: 920px;
+}
+
+.students-table thead th{
+        text-align: left;
+        padding: 12px 16px;
+        background: linear-gradient(90deg,var(--primary-color, #3d5ee1), #2b4fc4);
+        color: #fff;
+        font-weight: 600;
+        font-size: 13px;
+        vertical-align: middle;
+}
+
+.students-table thead th .sort-icon{ opacity:0.9 }
+
+.students-table tbody td{
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color, #edf2f7);
+        vertical-align: middle;
+        color: var(--text-color, #333448);
+        font-size: 14px;
+}
+
+/* Compact table variant */
+.students-table.compact tbody td{
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+.truncate{ max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; vertical-align:middle }
+.name.truncate{ max-width:220px }
+.father.truncate{ max-width:180px }
+.phone.truncate{ max-width:120px }
+
+/* Snackbar (reuse) */
+.snackbar { position:fixed; right:20px; top:20px; background:#111827; color:#fff; padding:10px 14px; border-radius:8px; box-shadow:0 6px 20px rgba(2,6,23,0.3); z-index:9999 }
+.snackbar.success { background:linear-gradient(90deg,#10b981,#06b6d4); }
+
+/* Fade out animation for removed rows (if used) */
+.fade-out{ animation: fadeOut 260ms ease both }
+@keyframes fadeOut{ from { opacity:1; transform: translateY(0) } to { opacity:0; transform: translateY(-6px) } }
+
+/* Actions column: force single row, compact icon buttons */
+.students-table td.actions{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+}
+
+.students-table td.actions .icon-btn{
+        width:34px;
+        height:34px;
+        border-radius:8px;
+        padding:0;
+        flex: 0 0 auto; /* prevent shrinking */
+}
+
+/* Make icons slightly smaller for compact look */
+.students-table td.actions .icon-btn svg{ width:16px; height:16px }
+
+/* Responsive: ensure actions don't wrap; allow horizontal scroll for table */
+@media (max-width: 640px){
+    .students-table td.actions{ gap:6px }
+    .students-table td.actions .icon-btn{ width:32px; height:32px }
+    .students-table td.actions .icon-btn svg{ width:14px; height:14px }
+}
+
+.students-table tbody tr:hover{ background: rgba(61,94,225,0.03); }
+
+.students-table .avatar{ width:40px; height:40px; border-radius:50%; object-fit:cover; display:inline-block }
+
+.col-adm{ width:100px }
+.col-photo{ width:64px }
+.col-name{ width:260px }
+.col-class{ width:90px }
+.col-father{ width:200px }
+.col-phone{ width:140px }
+.col-assigned{ width:140px; text-align:right }
+.col-due{ width:120px; text-align:right }
+.col-actions{ width:140px; text-align:center }
+
+.badge{ display:inline-block; padding:6px 10px; border-radius:999px; font-weight:600; font-size:13px }
+.badge-success{ background: #E6FFFA; color: #0F766E }
+.badge-danger{ background: #FFF5F5; color: #C53030 }
+
+.icon-btn{ display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; border:none; cursor:pointer; transition: transform .12s ease, box-shadow .12s ease; background:transparent }
+.icon-btn svg{ stroke: currentColor }
+.icon-btn:hover{ transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46,49,73,0.08) }
+
+.icon-view{ color: #059669; background: rgba(5,150,105,0.06) }
+.icon-edit{ color: #2563EB; background: rgba(37,99,235,0.06) }
+.icon-disable{ color: #F59E0B; background: rgba(245,158,11,0.06) }
+
+/* Responsive: horizontal scroll on small screens */
+@media (max-width: 900px){
+    .students-table{ min-width: 800px }
+}
+
+
+.count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--primary-color, #3d5ee1);
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.count-text {
+    font-weight: 500;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .student-list-page {
+        padding: 20px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 32px;
+        gap: 20px;
+    }
+
+    .page-title h4 {
+        font-size: 1.5rem;
+    }
+
+    .page-header-actions {
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+
+    .empty-state-card {
+        padding: 40px 24px;
+    }
+
+    .empty-state-card h3 {
+        font-size: 1.25rem;
+    }
+
+    .empty-state-icon svg {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 480px) {
+    .student-list-page {
+        padding: 16px;
+        min-height: 100svh;
+    }
+
+    .page-header {
+        margin-bottom: 24px;
+    }
+
+    .page-title h4 {
+        font-size: 1.25rem;
+    }
+
+    .btn {
+        font-size: 13px;
+        padding: 12px 16px;
+    }
+
+    .empty-state-container {
+        min-height: calc(100vh - 150px);
+        padding: 20px 12px;
+    }
+
+    .empty-state-card {
+        padding: 32px 20px;
+        border-radius: 12px;
+    }
+
+    .empty-state-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .empty-state-card p {
+        font-size: 13px;
+    }
+
+    .students-count {
+        font-size: 13px;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .count-badge {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+}
+
+/* DARK THEME SUPPORT */
+.dark-theme .empty-state-card {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .empty-state-icon svg {
+    color: var(--primary-color);
+    opacity: 0.3;
+}
+
+.dark-theme .students-count {
+    background: rgba(61, 94, 225, 0.1);
+}
+
+/* PRINT STYLES */
+@media print {
+    .btn {
+        display: none;
+    }
+
+    .empty-state-container {
+        display: none;
+    }
+}

@@ -1,0 +1,56 @@
+/* Behavior Records styles - match dashboard design system */
+.behavior-page { padding: 20px; animation: fadeIn .28s ease both; }
+.page-header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:16px; }
+.page-header h3 { margin:0; font-size:20px; }
+.breadcrumb { color:#6b7280; font-size:13px; margin-top:6px; }
+.page-actions { display:flex; gap:12px; align-items:center; }
+.search-export { display:flex; gap:12px; align-items:center; }
+.search-input { padding:8px 10px; border:1px solid #e5e7eb; border-radius:8px; width:220px; }
+.export-buttons .btn { margin-left:6px; }
+.card.soft-card { background:#fff; border-radius:10px; padding:16px; box-shadow:0 6px 18px rgba(15,23,42,0.04); }
+.empty-state { text-align:center; padding:36px 12px; color:#374151; }
+.empty-state h4 { margin-bottom:8px; }
+.table-wrap { overflow:auto; }
+.records-table { width:100%; border-collapse:collapse; min-width:900px; }
+.records-table thead th { text-align:left; padding:12px 12px; font-weight:600; color:#374151; border-bottom:1px solid #eef2f7; }
+.records-table tbody td { padding:12px; border-bottom:1px solid #f3f4f6; vertical-align:middle; }
+.hover-row { transition: background .18s ease, transform .12s ease; }
+.hover-row:hover { background: linear-gradient(90deg, rgba(243,246,255,0.6), rgba(255,255,255,0)); transform: translateY(-2px); }
+.student-info { display:flex; gap:10px; align-items:center; }
+.avatar { width:40px; height:40px; border-radius:8px; background:#eef2ff; display:flex; align-items:center; justify-content:center; font-weight:700; color:#1e3a8a; }
+.badge { padding:6px 8px; border-radius:999px; font-size:12px; font-weight:600; }
+.badge-positive { background:#ecfdf5; color:#065f46; }
+.badge-negative { background:#fff1f2; color:#991b1b; }
+.action-icons { display:flex; gap:8px; }
+.icon-btn { background:transparent; border:1px solid transparent; padding:6px; border-radius:8px; cursor:pointer; }
+.icon-btn:hover { background:#f8fafc; transform:translateY(-2px); }
+.pagination { display:flex; justify-content:space-between; align-items:center; padding:12px 6px; }
+.pages .btn { margin-left:8px; }
+
+/* Form styles reused for AddBehaviorRecordPage */
+.form-card { max-width:980px; margin:8px auto 40px; }
+.form-grid-two-col { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+.form-group { display:flex; flex-direction:column; }
+.form-group-full { grid-column:1/-1; display:flex; flex-direction:column; }
+.form-input { padding:10px 12px; border:1px solid #e6e7ea; border-radius:8px; font-size:14px; outline:none; }
+.form-textarea { min-height:100px; resize:vertical; }
+.form-input:focus { box-shadow:0 0 0 4px rgba(99,102,241,0.06); border-color:#6366f1; }
+.radio-group { display:flex; gap:8px; }
+.radio-label { display:flex; gap:8px; align-items:center; padding:8px 10px; border-radius:8px; cursor:pointer; border:1px solid transparent; }
+.radio-label input { margin-right:6px; }
+.radio-label.active { background:#eef2ff; border-color:#c7d2fe; }
+.form-actions { display:flex; justify-content:flex-end; gap:12px; margin-top:14px; }
+.btn { padding:8px 12px; border-radius:8px; border:1px solid #e6e7ea; background:#fff; cursor:pointer; }
+.btn.small { padding:6px 8px; font-size:13px; }
+.btn-primary { background:linear-gradient(90deg,#4f46e5,#06b6d4); color:#fff; border:none; }
+.btn-outline { background:transparent; border:1px solid #e6e7ea; }
+.btn-loading { opacity:0.85; }
+.error { border-color:#fca5a5; }
+.error-text { color:#dc2626; font-size:13px; margin-top:6px; }
+.snackbar { position:fixed; right:20px; bottom:20px; background:#111827; color:#fff; padding:10px 14px; border-radius:8px; box-shadow:0 6px 20px rgba(2,6,23,0.3); }
+.snackbar.success { background:linear-gradient(90deg,#10b981,#06b6d4); }
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
+
+/* Responsive */
+@media (max-width:900px){ .form-grid-two-col{grid-template-columns:1fr;} .search-input{width:140px;} }
