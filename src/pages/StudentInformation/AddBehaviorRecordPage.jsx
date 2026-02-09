@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { StudentContext } from '../../context/StudentContext';
 import { AcademicsContext } from '../../context/AcademicsContext';
 import './BehaviorRecords.css';
+import HeaderActionButton from './components/HeaderActionButton';
+import BackButton from './components/BackButton';
 
 const AddBehaviorRecordPage = () => {
   const navigate = useNavigate();
@@ -70,7 +72,7 @@ const AddBehaviorRecordPage = () => {
       addBehaviorRecord(payload);
       setSubmitting(false);
       setSaved(true);
-      setTimeout(() => navigate('/student-info/behavior-records'), 900);
+      setTimeout(() => navigate('/school/behavior-records'), 900);
     }, 900);
   };
 
@@ -78,8 +80,16 @@ const AddBehaviorRecordPage = () => {
     <div className="behavior-page animate-fade">
       <div className="page-header">
         <div>
-          <h3>Add Behavior Record</h3>
-          <nav className="breadcrumb"><button className="link-like" onClick={() => navigate('/student-info/behavior-records')}>← Back to Behavior Records</button></nav>
+          <div className="back-button-wrapper">
+            <BackButton title="Go back" />
+            <div>
+              <h3>Add Behavior Record</h3>
+              <nav className="breadcrumb"><button className="link-like" onClick={() => navigate('/school/behavior-records')}>← Back to Behavior Records</button></nav>
+            </div>
+          </div>
+        </div>
+        <div className="page-actions">
+          <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
         </div>
       </div>
 
@@ -161,7 +171,7 @@ const AddBehaviorRecordPage = () => {
         </div>
 
         <div className="form-actions">
-          <button type="button" className="btn btn-outline" onClick={() => navigate('/student-info/behavior-records')}>Cancel</button>
+          <button type="button" className="btn btn-outline" onClick={() => navigate('/school/behavior-records')}>Cancel</button>
           <button type="submit" className={"btn btn-primary " + (submitting ? 'btn-loading' : '')} disabled={submitting}>
             {submitting ? 'Saving...' : 'Add Record'}
           </button>

@@ -25,7 +25,7 @@ const AttendanceListPage = () => {
         </div>
 
         <div>
-          <button className="btn primary" onClick={() => navigate('/student-info/student-attendance/add') }>
+          <button className="btn primary" onClick={() => navigate('/school/student-attendance') }>
             <IconPlus style={{width:16,height:16}} />
             Add Student Attendance
           </button>

@@ -2,6 +2,8 @@ import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { StudentContext } from '../../context/StudentContext';
 import './StudentCategories.css';
+import HeaderActionButton from './components/HeaderActionButton';
+import BackButton from './components/BackButton';
 
 const StudentCategories = () => {
         const navigate = useNavigate();
@@ -34,12 +36,18 @@ const StudentCategories = () => {
             <div className="student-cats-page animate-fade">
                 <div className="page-header">
                     <div>
-                        <h3>Student Categories</h3>
-                        <p className="muted">Manage categories used to tag students</p>
+                        <div className="back-button-wrapper">
+                            <BackButton title="Go back to Student Categories" />
+                            <div>
+                                <h3>Student Categories</h3>
+                                <p className="muted">Manage categories used to tag students</p>
+                            </div>
+                        </div>
                     </div>
                     <div className="page-actions">
                         <input className="search-input" placeholder="Search categories..." value={q} onChange={e => { setQ(e.target.value); setPage(1); }} />
-                        <button className="btn btn-primary" onClick={() => navigate('/student-info/student-categories/add')}>Add New Category</button>
+                        <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
+                        <button className="btn btn-primary" onClick={() => navigate('/school/add-category')}>Add New Category</button>
                     </div>
                 </div>
 
@@ -50,7 +58,7 @@ const StudentCategories = () => {
                             <h4>No categories found</h4>
                             <p>Create your first category to get started.</p>
                             <div style={{marginTop:12}}>
-                                <button className="btn btn-primary" onClick={() => navigate('/student-info/student-categories/add')}>Add New Category</button>
+                                <button className="btn btn-primary" onClick={() => navigate('/school/student-categories')}>Add New Category</button>
                             </div>
                         </div>
                     ) : (
@@ -69,7 +77,7 @@ const StudentCategories = () => {
                                                 <td><strong className="cat-name">{cat.name}</strong></td>
                                                 <td>
                                                     <div className="action-icons">
-                                                        <button className="icon-btn" title="Edit" onClick={() => navigate(`/student-info/student-categories/add?edit=${cat.id}`)}>
+                                                        <button className="icon-btn" title="Edit" onClick={() => navigate(`/school/student-categories?edit=${cat.id}`)}>
                                                             ✎
                                                         </button>
                                                         <button className="icon-btn" title="Delete" onClick={() => { if (confirm('Delete this category?')) deleteCategory(cat.id); }}>

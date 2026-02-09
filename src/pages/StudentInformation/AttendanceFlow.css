@@ -1,36 +1,63 @@
 /* Shared styles for Attendance flow: list, add, portal */
 :root{
-  --bg:#fbfdff; --card:#fff; --muted:#6b7280; --accent:#2563eb; --accent-2:#60a5fa;
-  --shadow: 0 8px 24px rgba(16,24,40,0.06);
+  --af-bg: #fbfdff;
+  --af-card: #ffffff;
+  --af-text-color: #0f172a;
+  --af-muted: #6b7280;
+  --af-accent: #2563eb;
+  --af-accent-2: #60a5fa;
+  --af-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+  --af-border-color: rgba(15, 23, 42, 0.04);
 }
-body{ background:var(--bg) }
-.att-page{ padding:22px; font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial }
+
+.dark-theme {
+  --af-bg: #0f1419;
+  --af-card: #1a2332;
+  --af-text-color: #e5e7eb;
+  --af-muted: #9ca3af;
+  --af-accent: #60a5fa;
+  --af-accent-2: #3b82f6;
+  --af-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  --af-border-color: #374151;
+  --af-page-bg: #0f1419;
+}
+
+body{ background:var(--af-bg) }
+.att-page{ padding:22px; font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; box-sizing:border-box }
 .att-topbar{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px }
-.att-title{ font-size:20px; font-weight:600; color:#071129 }
-.breadcrumbs{ font-size:12px; color:var(--muted); display:flex; gap:8px; align-items:center }
+.att-title{ font-size:20px; font-weight:600; color:var(--af-text-color) }
+.breadcrumbs{ font-size:12px; color:var(--af-muted); display:flex; gap:8px; align-items:center }
 .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; cursor:pointer; border:none }
-.btn.primary{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; box-shadow:0 10px 30px rgba(37,99,235,0.12); font-weight:600 }
+.btn.primary{ background:linear-gradient(90deg,var(--af-accent),var(--af-accent-2)); color:#fff; box-shadow:0 10px 30px rgba(37,99,235,0.12); font-weight:600 }
 .card-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:16px }
-.card{ background:var(--card); border-radius:12px; padding:14px; box-shadow:var(--shadow); transition: transform 180ms ease, box-shadow 220ms ease }
+.card{ background:var(--af-card); border-radius:12px; padding:14px; box-shadow:var(--af-shadow); transition: transform 180ms ease, box-shadow 220ms ease; border:1px solid var(--af-border-color) }
 .card:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(16,24,40,0.08) }
-.card .title{ font-weight:600; color:#071129 }
-.muted{ color:var(--muted); font-size:13px }
+.card .title{ font-weight:600; color:var(--af-text-color) }
+.muted{ color:var(--af-muted); font-size:13px }
 .empty{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:28px }
 .empty .ill{ width:140px; height:96px; opacity:0.9 }
 
 /* Add page */
-.add-wrap{ max-width:880px; margin:0 auto }
+.add-wrap{ width:100%; max-width:none; margin:0 }
 .form-card{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; align-items:end }
 .form-field{ display:flex; flex-direction:column; gap:8px }
-.form-field label{ font-size:13px; color:var(--muted) }
-.input, select{ padding:10px 12px; border-radius:10px; border:1px solid rgba(15,23,42,0.06); font-size:14px }
+.form-field label{ font-size:13px; color:var(--af-muted) }
+.input, select{ padding:10px 12px; border-radius:10px; border:1px solid var(--af-border-color); font-size:14px; background:var(--af-card); color:var(--af-text-color) }
 .proceed{ display:flex; justify-content:flex-end; margin-top:12px }
 
 /* Portal */
-.portal{ max-width:980px; margin:0 auto }
+.portal{ width:100%; max-width:none; margin:0 }
 .student-list{ display:grid; gap:10px }
-.student-row{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:8px; background:#fbfdff; border:1px solid rgba(15,23,42,0.04) }
+.student-row{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:8px; background:var(--af-card); border:1px solid var(--af-border-color) }
 .toggle{ display:inline-flex; gap:8px; align-items:center }
+
+/* Action icon/button parity with Student List */
+.action-btn{ display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; background:transparent; border:1px solid transparent; cursor:pointer }
+.action-btn svg{ width:18px; height:18px }
+.action-btn:hover{ background:rgba(16,24,40,0.04); box-shadow:0 6px 18px rgba(16,24,40,0.04); transform:translateY(-2px) }
+
+/* ensure page container fills available width like Student List */
+.att-page .container{ width:100%; max-width:none }
 .skeleton{ height:16px; background:linear-gradient(90deg,#f3f4f6,#eef2ff,#f3f4f6); border-radius:8px; animation: shimmer 1.2s linear infinite }
 @keyframes shimmer{ 0%{ background-position:-200px 0 } 100%{ background-position:200px 0 } }
 

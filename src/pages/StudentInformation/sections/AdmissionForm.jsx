@@ -55,15 +55,13 @@ const AdmissionForm = ({ formData, classes, handleChange, handleMultiSelect, han
 
         <div className={"form-group required " + (errorsState.section ? 'has-error' : '')}>
           <label>Section *</label>
-          <div style={{display:'flex', gap:8, alignItems:'center', flexWrap:'wrap'}}>
-            {['Telugu','English'].map(s => (
-              formData.section.includes(s) ? (
-                <div key={s} className="chip"><span>{s}</span><button type="button" className="remove" onClick={() => handleRemoveChip('section', s)}>✕</button></div>
-              ) : (
-                <button key={s} type="button" className="checkbox-label" onClick={() => handleMultiSelect('section', s)}>{s}</button>
-              )
-            ))}
-          </div>
+          <select name="section" value={formData.section} onChange={handleChange} className="form-input">
+            <option value="">Select Section</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
           {errorsState.section && <div className="error-text">{errorsState.section}</div>}
         </div>
 
@@ -106,18 +104,14 @@ const AdmissionForm = ({ formData, classes, handleChange, handleMultiSelect, han
           <select name="motherTongue" value={formData.motherTongue} onChange={handleChange} className="form-input">
             <option value="">Select Mother Tongue</option>
             <option value="telugu">Telugu</option>
-            <option value="tamil">Tamil</option>
-            <option value="malayalam">Malayalam</option>
             <option value="hindi">Hindi</option>
-            <option value="english">English</option>
             <option value="urdu">Urdu</option>
-            <option value="kannada">Kannada</option>
           </select>
         </div>
 
         <div className="form-group-full">
           <label>Remarks</label>
-          <textarea name="remarks" value={formData.remarks} onChange={handleChange} placeholder="Any additional notes about the student" className="form-input form-textarea" rows="3" />
+          <textarea name="remarks" value={formData.remarks} onChange={handleChange} placeholder="Any additional notes about the student" className="form-input form-textarea" rows="2" />
         </div>
 
         <div className="form-group">

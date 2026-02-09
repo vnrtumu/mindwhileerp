@@ -11,7 +11,7 @@ const StudentAddress = ({ formData, handleChange }) => {
       <div className="form-grid-two-col">
         <div className="form-group-full">
           <label>Address</label>
-          <textarea name="address" value={formData.address} onChange={handleChange} placeholder="Enter complete residential address" className="form-input form-textarea" rows="3" />
+          <textarea name="address" value={formData.address} onChange={handleChange} placeholder="Enter complete residential address" className="form-input form-textarea" rows="2" />
         </div>
 
         <div className="form-group">
@@ -73,9 +73,9 @@ const StudentAddress = ({ formData, handleChange }) => {
           <label>Student Type</label>
           <select name="studentType" value={formData.studentType} onChange={handleChange} className="form-input">
             <option value="">Select Student Type</option>
-            <option value="regular">Regular</option>
-            <option value="scholarship">Scholarship</option>
-            <option value="transfer">Transfer</option>
+            <option value="day-scholar">Day Scholar</option>
+            <option value="hosteller">Hosteller</option>
+            <option value="transport">Transport</option>
           </select>
         </div>
       </div>

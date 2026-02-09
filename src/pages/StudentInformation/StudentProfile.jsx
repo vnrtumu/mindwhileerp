@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit, Printer, Mail, Phone, MapPin, Award, Calendar, Book, CreditCard, User } from 'react-feather';
+import { Edit, Printer, Mail, Phone, MapPin, Award, Calendar, Book, CreditCard, User } from 'react-feather';
+import HeaderActionButton from './components/HeaderActionButton';
+import BackButton from './components/BackButton';
 import { StudentContext } from '../../context/StudentContext';
 
 const StudentProfile = () => {
@@ -49,12 +51,7 @@ const StudentProfile = () => {
             <div className="bg-white border-b border-gray-100 px-8 py-5 sticky top-0 z-10 bg-opacity-90 backdrop-blur-sm">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => navigate('/student-info/student-list')}
-                            className="p-2 hover:bg-gray-50 rounded-full transition-colors text-gray-400 hover:text-blue-600"
-                        >
-                            <ArrowLeft size={20} />
-                        </button>
+                        <BackButton title="Go back to Student List" />
                         <div>
                             <h1 className="text-xl font-bold text-gray-800">Student Profile</h1>
                             <div className="flex items-center gap-2 text-xs text-gray-400 font-medium mt-0.5">
@@ -64,7 +61,8 @@ const StudentProfile = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 items-center">
+                        <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
                         <button className="flex items-center gap-2 px-4 py-2 border border-blue-100 text-blue-600 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors">
                             <Printer size={16} />
                             Print

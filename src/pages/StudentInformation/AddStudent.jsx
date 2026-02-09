@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import HeaderActionButton from './components/HeaderActionButton';
+import BackButton from './components/BackButton';
 import { StudentContext } from '../../context/StudentContext';
 import { AcademicsContext } from '../../context/AcademicsContext';
 import StudentAddress from './sections/StudentAddress';
@@ -18,10 +20,10 @@ const AddStudent = () => {
         admissionDate: new Date().toISOString().split('T')[0],
         penNumber: '',
         childId: '',
-        medium: '',
+        medium: 'english',
         rfId: '',
         class: '',
-        section: [],
+        section: '',
         rollNo: '',
         joinedClass: '',
         group: '',
@@ -129,13 +131,10 @@ const AddStudent = () => {
         // client-side validation for required fields
         const errs = {};
         if (!formData.class) errs.class = 'Class is required';
-        if (!formData.section || formData.section.length === 0) errs.section = 'Select at least one section';
+        if (!formData.section) errs.section = 'Section is required';
         if (!formData.rollNo) errs.rollNo = 'Roll number is required';
         if (!formData.joinedClass) errs.joinedClass = 'Joined Class is required';
         if (!formData.fatherName) errs.fatherName = 'Father name is required';
-        if (!formData.fatherAadhaar) errs.fatherAadhaar = 'Father Aadhaar is required';
-        if (!formData.motherName) errs.motherName = 'Mother name is required';
-        if (!formData.motherAadhaar) errs.motherAadhaar = 'Mother Aadhaar is required';
         if (!formData.phone) errs.phone = 'Phone is required';
 
         setErrorsState(errs);
@@ -155,7 +154,7 @@ const AddStudent = () => {
             addStudent(studentPayload);
             setSubmitting(false);
             setSaved(true);
-            setTimeout(() => navigate('/student-info/student-list'), 1100);
+            setTimeout(() => navigate('/school/student-list'), 1100);
         }, 1000);
     };
 
@@ -165,17 +164,7 @@ const AddStudent = () => {
             <div className="page-header">
                 <div className="page-title">
                     <div className="back-button-wrapper">
-                        <button 
-                            type="button"
-                            onClick={() => navigate('/student-info/student-list')}
-                            className="back-button"
-                            title="Go back to Student List"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="19" y1="12" x2="5" y2="12"></line>
-                                <polyline points="12 19 5 12 12 5"></polyline>
-                            </svg>
-                        </button>
+                        <BackButton title="Go back to Student List" />
                         <div>
                             <h4>Add Student</h4>
                             <nav className="breadcrumb">
@@ -183,6 +172,9 @@ const AddStudent = () => {
                             </nav>
                         </div>
                     </div>
+                </div>
+                <div className="page-actions">
+                    <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
                 </div>
             </div>
 
@@ -252,7 +244,7 @@ const AddStudent = () => {
                                 onChange={handleChange}
                                 className="form-input"
                             >
-                                <option value="">Select Medium</option>
+
                                 <option value="english">English</option>
                                 <option value="telugu">Telugu</option>
                                 <option value="hindi">Hindi</option>
@@ -272,7 +264,7 @@ const AddStudent = () => {
                         </div>
 
                         <div className={"form-group required " + (errorsState.class ? 'has-error' : '')}>
-                            <label>Class *</label>
+                            <label>Class <span className="label-required">*</span></label>
                             <select 
                                 name="class"
                                 value={formData.class}
@@ -288,24 +280,24 @@ const AddStudent = () => {
                         </div>
 
                         <div className={"form-group required " + (errorsState.section ? 'has-error' : '')}>
-                            <label>Section *</label>
-                            <div style={{display:'flex', gap:8, alignItems:'center', flexWrap:'wrap'}}>
-                                {['Telugu','English'].map(s => (
-                                    formData.section.includes(s) ? (
-                                        <div key={s} className="chip">
-                                            <span>{s}</span>
-                                            <button type="button" className="remove" onClick={() => handleRemoveChip('section', s)}>✕</button>
-                                        </div>
-                                    ) : (
-                                        <button key={s} type="button" className="checkbox-label" onClick={() => handleMultiSelect('section', s)}>{s}</button>
-                                    )
-                                ))}
-                            </div>
+                            <label>Section <span className="label-required">*</span></label>
+                            <select
+                                name="section"
+                                value={formData.section}
+                                onChange={handleChange}
+                                className="form-input"
+                            >
+                                <option value="">Select Section</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
                             {errorsState.section && <div className="error-text">{errorsState.section}</div>}
                         </div>
 
                         <div className={"form-group required " + (errorsState.rollNo ? 'has-error' : '')}>
-                            <label>Roll No *</label>
+                            <label>Roll No <span className="label-required">*</span></label>
                             <input 
                                 type="number" 
                                 name="rollNo"
@@ -318,7 +310,7 @@ const AddStudent = () => {
                         </div>
 
                         <div className={"form-group required " + (errorsState.joinedClass ? 'has-error' : '')}>
-                            <label>Joined Class *</label>
+                            <label>Joined Class <span className="label-required">*</span></label>
                             <select 
                                 name="joinedClass"
                                 value={formData.joinedClass}
@@ -365,12 +357,8 @@ const AddStudent = () => {
                             >
                                 <option value="">Select Mother Tongue</option>
                                 <option value="telugu">Telugu</option>
-                                <option value="tamil">Tamil</option>
-                                <option value="malayalam">Malayalam</option>
                                 <option value="hindi">Hindi</option>
-                                <option value="english">English</option>
                                 <option value="urdu">Urdu</option>
-                                <option value="kannada">Kannada</option>
                             </select>
                         </div>
 
@@ -382,7 +370,7 @@ const AddStudent = () => {
                                 onChange={handleChange}
                                 placeholder="Any additional notes about the student"
                                 className="form-input form-textarea"
-                                rows="3"
+                                rows="2"
                             />
                         </div>
 
@@ -458,30 +446,17 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Gender</label>
-                            <div className="radio-group">
-                                <label className="radio-label">
-                                    <input 
-                                        type="radio" 
-                                        name="gender"
-                                        value="male"
-                                        checked={formData.gender === 'male'}
-                                        onChange={handleChange}
-                                        className="radio-input"
-                                    />
-                                    <span>Male</span>
-                                </label>
-                                <label className="radio-label">
-                                    <input 
-                                        type="radio" 
-                                        name="gender"
-                                        value="female"
-                                        checked={formData.gender === 'female'}
-                                        onChange={handleChange}
-                                        className="radio-input"
-                                    />
-                                    <span>Female</span>
-                                </label>
-                            </div>
+                            <select 
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                className="form-input"
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
 
                         <div className="form-group">
@@ -559,7 +534,7 @@ const AddStudent = () => {
                         </div>
 
                         <div className={"form-group required " + (errorsState.fatherName ? 'has-error' : '')}>
-                            <label>Father Name *</label>
+                            <label>Father Name <span className="label-required">*</span></label>
                             <input 
                                 type="text" 
                                 name="fatherName"
@@ -571,8 +546,8 @@ const AddStudent = () => {
                             {errorsState.fatherName && <div className="error-text">{errorsState.fatherName}</div>}
                         </div>
 
-                        <div className={"form-group required " + (errorsState.fatherAadhaar ? 'has-error' : '')}>
-                            <label>Father Aadhaar *</label>
+                        <div className="form-group">
+                            <label>Father Aadhaar</label>
                             <input 
                                 type="text" 
                                 name="fatherAadhaar"
@@ -581,11 +556,10 @@ const AddStudent = () => {
                                 placeholder="Enter father's Aadhaar number"
                                 className="form-input"
                             />
-                            {errorsState.fatherAadhaar && <div className="error-text">{errorsState.fatherAadhaar}</div>}
                         </div>
 
-                        <div className={"form-group required " + (errorsState.motherName ? 'has-error' : '')}>
-                            <label>Mother Name *</label>
+                        <div className="form-group">
+                            <label>Mother Name</label>
                             <input 
                                 type="text" 
                                 name="motherName"
@@ -594,11 +568,10 @@ const AddStudent = () => {
                                 placeholder="Enter mother's name"
                                 className="form-input"
                             />
-                            {errorsState.motherName && <div className="error-text">{errorsState.motherName}</div>}
                         </div>
 
-                        <div className={"form-group required " + (errorsState.motherAadhaar ? 'has-error' : '')}>
-                            <label>Mother Aadhaar *</label>
+                        <div className="form-group">
+                            <label>Mother Aadhaar</label>
                             <input 
                                 type="text" 
                                 name="motherAadhaar"
@@ -607,11 +580,10 @@ const AddStudent = () => {
                                 placeholder="Enter mother's Aadhaar number"
                                 className="form-input"
                             />
-                            {errorsState.motherAadhaar && <div className="error-text">{errorsState.motherAadhaar}</div>}
                         </div>
 
                         <div className={"form-group required " + (errorsState.phone ? 'has-error' : '')}>
-                            <label>Phone *</label>
+                            <label>Phone <span className="label-required">*</span></label>
                             <input 
                                 type="tel" 
                                 name="phone"
@@ -624,19 +596,19 @@ const AddStudent = () => {
                         </div>
 
                         <div className="form-group">
-                            <label>Alternate Phone</label>
+                            <label>WhatsApp Number</label>
                             <input 
                                 type="tel" 
                                 name="alternatePhone"
                                 value={formData.alternatePhone}
                                 onChange={handleChange}
-                                placeholder="Enter alternate phone"
+                                placeholder="Enter WhatsApp number"
                                 className="form-input"
                             />
                         </div>
 
                         <div className="form-group">
-                            <label>Alternate Phone 2</label>
+                            <label>Alternate Phone Number</label>
                             <input 
                                 type="tel" 
                                 name="alternatePhone2"

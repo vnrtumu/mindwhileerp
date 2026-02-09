@@ -26,7 +26,7 @@ const AttendancePortal = () => {
 
   const handleSubmit = () => {
     setSubmitting(true);
-    setTimeout(()=>{ setSubmitting(false); setDone(true); setTimeout(()=> navigate('/student-info/student-attendance'), 1200); }, 900);
+    setTimeout(()=>{ setSubmitting(false); setDone(true); setTimeout(()=> navigate('/school/student-attendance'), 1200); }, 900);
   };
 
   return (
@@ -61,7 +61,7 @@ const AttendancePortal = () => {
             </div>
 
             <div style={{display:'flex',justifyContent:'flex-end',marginTop:12,gap:12}}>
-              <button className="btn" onClick={()=>navigate('/student-info/student-attendance')}>Cancel</button>
+              <button className="btn" onClick={()=>navigate('/school/student-attendance')}>Cancel</button>
               <button className="btn primary" onClick={handleSubmit} disabled={submitting}>{submitting? 'Submitting...':'Submit Attendance'}</button>
             </div>
           </div>

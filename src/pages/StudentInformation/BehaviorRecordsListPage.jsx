@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StudentContext } from '../../context/StudentContext';
 import './BehaviorRecords.css';
+import HeaderActionButton from './components/HeaderActionButton';
+import BackButton from './components/BackButton';
 
 const BehaviorRecordsListPage = () => {
   const navigate = useNavigate();
@@ -29,8 +31,13 @@ const BehaviorRecordsListPage = () => {
     <div className="behavior-page animate-fade">
       <div className="page-header">
         <div>
-          <h3>Student Behavior Records</h3>
-          <nav className="breadcrumb">Dashboard &gt; Students &gt; Behavior Records</nav>
+          <div className="back-button-wrapper">
+            <BackButton title="Go back to Behavior Records" />
+            <div>
+              <h3>Student Behavior Records</h3>
+              <nav className="breadcrumb">Dashboard &gt; Students &gt; Behavior Records</nav>
+            </div>
+          </div>
         </div>
         <div className="page-actions">
           <div className="search-export">
@@ -43,7 +50,8 @@ const BehaviorRecordsListPage = () => {
               <button className="btn small">Print</button>
             </div>
           </div>
-          <button className="btn btn-primary" onClick={() => navigate('/student-info/behavior-records/add')}>Add New Record</button>
+          <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
+          <button className="btn btn-primary" onClick={() => navigate('/school/behavior-records')}>Add New Record</button>
         </div>
       </div>
 
@@ -52,7 +60,7 @@ const BehaviorRecordsListPage = () => {
             <div className="empty-state">
             <h4>No behavior records yet</h4>
             <p>Add records to track positive and negative incidents for students.</p>
-            <button className="btn btn-primary" onClick={() => navigate('/student-info/behavior-records/add')}>Add New Record</button>
+            <button className="btn btn-primary" onClick={() => navigate('/school/behavior-records')}>Add New Record</button>
           </div>
         ) : (
           <div className="table-wrap">

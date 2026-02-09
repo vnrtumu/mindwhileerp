@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AttendanceFlow.css';
+import HeaderActionButton from './components/HeaderActionButton';
 import { IconChevronLeft, IconInfoCircle } from '@tabler/icons-react';
 
 const classesSample = ['Select Class','Grade 1','Grade 2','Grade 3'];
@@ -25,13 +26,18 @@ const AddAttendancePage = () => {
   const handleProceed = () => {
     if(!validate()) return;
     // navigate to portal, pass selection via state (absolute path)
-    navigate('/student-info/student-attendance/add/portal', { state: { cls, sec, date } });
+    navigate('/school/student-attendance', { state: { cls, sec, date } });
   };
 
   return (
     <div className="att-page add-wrap">
+      {/* Back to Dashboard Link replaced with HeaderActionButton in top-right */}
+      <div style={{display:'flex',justifyContent:'flex-end',marginBottom:12}}>
+        <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
+      </div>
+
       <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:14}}>
-        <button className="btn" onClick={() => navigate('/student-info/student-attendance')}>
+        <button className="btn" onClick={() => navigate('/school/student-attendance')}>
           <IconChevronLeft />
           Back to Attendance
         </button>

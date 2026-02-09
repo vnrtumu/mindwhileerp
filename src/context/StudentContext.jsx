@@ -115,6 +115,32 @@ export const StudentProvider = ({ children }) => {
         return true;
     };
 
+    // Quick Admission Students State
+    const [quickAdmissionStudents, setQuickAdmissionStudents] = useState([]);
+
+    const addQuickAdmissionStudent = (newStudent) => {
+        const studentWithId = {
+            ...newStudent,
+            id: newStudent.id || `QA${Math.floor(Math.random() * 100000)}`,
+            isQuickAdmission: true
+        };
+        setQuickAdmissionStudents(prev => [studentWithId, ...prev]);
+    };
+
+    const updateQuickAdmissionStudent = (id, updates) => {
+        setQuickAdmissionStudents(prev =>
+            prev.map(s => s.id === id ? { ...s, ...updates } : s)
+        );
+    };
+
+    const deleteQuickAdmissionStudent = (id) => {
+        setQuickAdmissionStudents(prev => prev.filter(s => s.id !== id));
+    };
+
+    const getQuickAdmissionStudent = (id) => {
+        return quickAdmissionStudents.find(s => s.id === id);
+    };
+
     return (
         <StudentContext.Provider value={{
             students,
@@ -132,7 +158,12 @@ export const StudentProvider = ({ children }) => {
             disableStudent,
             enableStudent,
             disablingIds,
-            enablingIds
+            enablingIds,
+            quickAdmissionStudents,
+            addQuickAdmissionStudent,
+            updateQuickAdmissionStudent,
+            deleteQuickAdmissionStudent,
+            getQuickAdmissionStudent
         }}>
             {children}
         </StudentContext.Provider>

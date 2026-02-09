@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react';
 import { StudentContext } from '../../context/StudentContext';
 import { useNavigate } from 'react-router-dom';
 import './StudentList.css';
+import HeaderActionButton from './components/HeaderActionButton';
+import BackButton from './components/BackButton';
 import { EyeIcon, CheckIcon, PlaceholderAvatar } from '../../components/Icons';
 
 // Compact Disabled Students table — matches Student List styles
@@ -17,8 +19,16 @@ const DisabledStudents = () => {
       <div className="container">
       <div className="page-header">
         <div className="page-title">
-          <h4>Disabled Students</h4>
-          <nav className="breadcrumb"><span>Students</span> / <span className="current">Disabled</span></nav>
+          <div className="back-button-wrapper">
+            <BackButton title="Go back to Disabled Students" />
+            <div>
+              <h4>Disabled Students</h4>
+              <nav className="breadcrumb"><span>Students</span> / <span className="current">Disabled</span></nav>
+            </div>
+          </div>
+        </div>
+        <div className="page-actions">
+          <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
         </div>
       </div>
 
@@ -54,7 +64,7 @@ const DisabledStudents = () => {
                     <td className="disabled">{new Date(d.disabledAt || d.disabledDate || Date.now()).toLocaleDateString()}</td>
                     <td className="reason"><span className="badge badge-danger" style={{background:'#FFF5F5',color:'#C53030'}}>{d.reason || '—'}</span></td>
                     <td className="actions">
-                      <button className="icon-btn icon-view" title="View" onClick={() => navigate(`/student-info/student-list/profile/${d.id}`)}><EyeIcon /></button>
+                      <button className="icon-btn icon-view" title="View" onClick={() => navigate(`/school/student-profile/${d.id}`)}><EyeIcon /></button>
                       <button className="icon-btn icon-reenable" title="Re-enable" onClick={async () => {
                         if (enablingIds.includes(d.id) || pendingId===d.id) return;
                         setPendingId(d.id);

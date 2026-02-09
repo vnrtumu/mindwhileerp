@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './StudentAttendance.css';
+import HeaderActionButton from './components/HeaderActionButton';
+import BackButton from './components/BackButton';
 import { IconPlus, IconCalendar, IconInfoCircle, IconChevronRight } from '@tabler/icons-react';
 
 const classesSample = ['Select Class', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4'];
 const sectionsSample = ['Select Section', 'A', 'B', 'C'];
 
+import { useNavigate } from 'react-router-dom';
+
 const StudentAttendance = () => {
+    const navigate = useNavigate();
     const [selectedClass, setSelectedClass] = useState('Select Class');
     const [selectedSection, setSelectedSection] = useState('Select Section');
     const [date, setDate] = useState('');
@@ -32,22 +37,29 @@ const StudentAttendance = () => {
 
     return (
         <div className={"attendance-page " + (isLoaded ? 'loaded' : '')}>
+            {/* Back to Dashboard Link replaced with HeaderActionButton in top-actions */}
             <header className="attendance-topbar">
                 <div className="title-wrap">
-                    <h1 className="page-title">Student Attendance</h1>
-                    <nav className="breadcrumbs" aria-label="Breadcrumbs">
-                        <span className="crumb">Dashboard</span>
-                        <IconChevronRight className="crumb-sep" />
-                        <span className="crumb">Students</span>
-                        <IconChevronRight className="crumb-sep" />
-                        <span className="crumb active">Attendance</span>
-                    </nav>
+                    <div className="back-button-wrapper">
+                        <BackButton title="Go back" />
+                        <div>
+                            <h1 className="page-title">Student Attendance</h1>
+                            <nav className="breadcrumbs" aria-label="Breadcrumbs">
+                                <span className="crumb">Dashboard</span>
+                                <IconChevronRight className="crumb-sep" />
+                                <span className="crumb">Students</span>
+                                <IconChevronRight className="crumb-sep" />
+                                <span className="crumb active">Attendance</span>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
-                <div className="top-actions">
-                    <button className="btn btn-primary" onClick={handleAddAttendance}>
+                <div className="top-actions" style={{display:'flex',alignItems:'center',gap:12}}>
+                    <button className="btn btn-primary" onClick={() => navigate('/school/add-attendance')}>
                         <IconPlus className="icon-left" />
                         Add Student Attendance
                     </button>
+                    <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
                 </div>
             </header>
 

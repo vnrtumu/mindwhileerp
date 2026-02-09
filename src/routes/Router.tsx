@@ -1,0 +1,225 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { lazy } from 'react';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
+import Loadable from '../layouts/full/shared/loadable/Loadable';
+
+/* ***Layouts**** */
+const SchoolAdminLayout = Loadable(lazy(() => import('../layouts/school/SchoolAdminLayout')));
+const SuperAdminLayout = Loadable(lazy(() => import('../layouts/super/SuperAdminLayout')));
+const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
+
+// authentication
+const Login2 = Loadable(lazy(() => import('../views/authentication/auth2/Login')));
+const Register2 = Loadable(lazy(() => import('../views/authentication/auth2/Register')));
+const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintainance')));
+
+// School Admin Pages
+const SchoolDashboard = Loadable(lazy(() => import('../school/pages/Dashboard')));
+const TeacherDashboard = Loadable(lazy(() => import('../school/pages/TeacherDashboard')));
+
+// Student Pages
+const StudentDashboard = Loadable(lazy(() => import('../pages/StudentDashboard')));
+const Students = Loadable(lazy(() => import('../pages/Students/Students')));
+const AddStudent = Loadable(lazy(() => import('../pages/StudentInformation/AddStudent')));
+const StudentList = Loadable(lazy(() => import('../pages/StudentInformation/StudentList')));
+const QuickStudentAdmissionList = Loadable(lazy(() => import('../pages/StudentInformation/QuickStudentAdmissionList')));
+const QuickStudentAdmissionForm = Loadable(lazy(() => import('../pages/StudentInformation/QuickStudentAdmissionForm')));
+const StudentProfile = Loadable(lazy(() => import('../pages/StudentInformation/StudentProfile')));
+const DisableStudentPage = Loadable(lazy(() => import('../pages/StudentInformation/DisableStudentPage')));
+const StudentAttendance = Loadable(lazy(() => import('../pages/StudentInformation/StudentAttendance')));
+const AddAttendancePage = Loadable(lazy(() => import('../pages/StudentInformation/AddAttendancePage')));
+const StudentCategories = Loadable(lazy(() => import('../pages/StudentInformation/StudentCategories')));
+const AddStudentCategoryPage = Loadable(lazy(() => import('../pages/StudentInformation/AddStudentCategoryPage')));
+const BehaviorRecords = Loadable(lazy(() => import('../pages/StudentInformation/BehaviorRecords')));
+const AddBehaviorRecordPage = Loadable(lazy(() => import('../pages/StudentInformation/AddBehaviorRecordPage')));
+const DisabledStudents = Loadable(lazy(() => import('../pages/StudentInformation/DisabledStudents')));
+const BulkEdit = Loadable(lazy(() => import('../pages/StudentInformation/BulkEdit')));
+
+// Academics Pages
+const Classes = Loadable(lazy(() => import('../pages/Academics/Classes')));
+const Sections = Loadable(lazy(() => import('../pages/Academics/Sections')));
+const Subjects = Loadable(lazy(() => import('../pages/Academics/Subjects')));
+const AssignSubjects = Loadable(lazy(() => import('../pages/Academics/AssignSubjects')));
+const AssignClassTeacher = Loadable(lazy(() => import('../pages/Academics/AssignClassTeacher')));
+const ManagePeriods = Loadable(lazy(() => import('../pages/Academics/ManagePeriods')));
+const ClassTimetable = Loadable(lazy(() => import('../pages/Academics/ClassTimetable')));
+const PromoteStudents = Loadable(lazy(() => import('../pages/Academics/PromoteStudents')));
+const Homework = Loadable(lazy(() => import('../pages/Academics/Homework')));
+
+// Finance Pages
+const CollectFees = Loadable(lazy(() => import('../pages/Finance/CollectFees')));
+const SearchDueFees = Loadable(lazy(() => import('../pages/Finance/SearchDueFees')));
+const AllTransactions = Loadable(lazy(() => import('../pages/Finance/AllTransactions')));
+const OnlineTransactions = Loadable(lazy(() => import('../pages/Finance/OnlineTransactions')));
+const FeesCarryForward = Loadable(lazy(() => import('../pages/Finance/FeesCarryForward')));
+const AssignFees = Loadable(lazy(() => import('../pages/Finance/AssignFees')));
+const FeeGroups = Loadable(lazy(() => import('../pages/Finance/FeeGroups')));
+const FeesDiscount = Loadable(lazy(() => import('../pages/Finance/FeesDiscount')));
+const FeeTypes = Loadable(lazy(() => import('../pages/Finance/FeeTypes')));
+const FeesMaster = Loadable(lazy(() => import('../pages/Finance/FeesMaster')));
+const FeePermissions = Loadable(lazy(() => import('../pages/Finance/FeePermissions')));
+
+// Accounts Pages
+const Income = Loadable(lazy(() => import('../pages/Accounts/Income')));
+
+// Teachers Pages
+const AllTeachers = Loadable(lazy(() => import('../pages/Teachers/AllTeachers')));
+const AddTeacher = Loadable(lazy(() => import('../pages/Teachers/AddTeacher')));
+const TeachersList = Loadable(lazy(() => import('../pages/Teachers/TeachersList')));
+const Routine = Loadable(lazy(() => import('../pages/Teachers/Routine')));
+const TeacherDetails = Loadable(lazy(() => import('../pages/Teachers/TeacherDetails')));
+
+// Super Admin Dashboards
+const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));
+
+//pages
+const UserProfile = Loadable(lazy(() => import('../views/pages/user-profile/UserProfile')));
+
+/* ****Apps***** */
+const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
+const Form = Loadable(lazy(() => import('../views/utilities/form/Form')));
+const Table = Loadable(lazy(() => import('../views/utilities/table/Table')));
+const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
+const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
+const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
+const BlogDetail = Loadable(lazy(() => import('../views/apps/blog/BlogDetail')));
+
+const Error = Loadable(lazy(() => import('../views/authentication/Error')));
+
+// // icons
+const SolarIcon = Loadable(lazy(() => import('../views/icons/SolarIcon')));
+
+const Router = [
+  // Root redirect to auth
+  {
+    path: '/',
+    element: <Navigate to="/auth/auth2/login" replace />,
+  },
+
+  // School Admin Routes
+  {
+    path: '/school',
+    element: <SchoolAdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="dashboard" replace /> },
+      { path: 'dashboard', element: <SchoolDashboard /> },
+      { path: 'teacher-dashboard', element: <TeacherDashboard /> },
+      
+      // Student Routes
+      { path: 'students', element: <Students /> },
+      { path: 'student-dashboard', element: <StudentDashboard /> },
+      { path: 'student-list', element: <StudentList /> },
+      { path: 'quick-admission', element: <QuickStudentAdmissionList /> },
+      { path: 'quick-admission-form', element: <QuickStudentAdmissionForm /> },
+      { path: 'quick-admission-form/:id', element: <QuickStudentAdmissionForm /> },
+      { path: 'add-student', element: <AddStudent /> },
+      { path: 'student-profile/:id', element: <StudentProfile /> },
+      { path: 'disable-student/:id', element: <DisableStudentPage /> },
+      { path: 'student-attendance', element: <StudentAttendance /> },
+      { path: 'add-attendance', element: <AddAttendancePage /> },
+      { path: 'student-categories', element: <StudentCategories /> },
+      { path: 'add-category', element: <AddStudentCategoryPage /> },
+      { path: 'behavior-records', element: <BehaviorRecords /> },
+      { path: 'add-behavior-record', element: <AddBehaviorRecordPage /> },
+      { path: 'disabled-students', element: <DisabledStudents /> },
+      { path: 'bulk-edit', element: <BulkEdit /> },
+
+      // Academics Routes
+      { path: 'academics/classes', element: <Classes /> },
+      { path: 'academics/sections', element: <Sections /> },
+      { path: 'academics/subjects', element: <Subjects /> },
+      { path: 'academics/assign-subjects', element: <AssignSubjects /> },
+      { path: 'academics/assign-class-teacher', element: <AssignClassTeacher /> },
+      { path: 'academics/manage-periods', element: <ManagePeriods /> },
+      { path: 'academics/class-timetable', element: <ClassTimetable /> },
+      { path: 'academics/promote-students', element: <PromoteStudents /> },
+      { path: 'academics/homework', element: <Homework /> },
+
+      // Finance Routes
+      { path: 'finance/collect-fees', element: <CollectFees /> },
+      { path: 'finance/search-due-fees', element: <SearchDueFees /> },
+      { path: 'finance/all-transactions', element: <AllTransactions /> },
+      { path: 'finance/online-transactions', element: <OnlineTransactions /> },
+      { path: 'finance/fees-carry-forward', element: <FeesCarryForward /> },
+      { path: 'finance/assign-fees', element: <AssignFees /> },
+      { path: 'finance/fee-groups', element: <FeeGroups /> },
+      { path: 'finance/fee-groups/:id', element: <FeeGroups /> },
+      { path: 'finance/fees-discount', element: <FeesDiscount /> },
+      { path: 'finance/fee-types', element: <FeeTypes /> },
+      { path: 'finance/fee-types/:id', element: <FeeTypes /> },
+      { path: 'finance/fees-master', element: <FeesMaster /> },
+      { path: 'finance/fee-permissions', element: <FeePermissions /> },
+
+      // Accounts Routes
+      { path: 'accounts/income', element: <Income /> },
+
+      // Teachers Routes
+      { path: 'teachers/all', element: <AllTeachers /> },
+      { path: 'teachers/add', element: <AddTeacher /> },
+      { path: 'teachers/list', element: <TeachersList /> },
+      { path: 'teachers/routine', element: <Routine /> },
+      { path: 'teachers/details', element: <TeacherDetails /> },
+      
+      { path: 'teachers', element: <div>Teachers Page</div> },
+      { path: 'departments', element: <div>Departments Page</div> },
+      { path: 'accounts', element: <div>Accounts Page</div> },
+      { path: '*', element: <Navigate to="/auth/404" /> },
+    ],
+  },
+
+  // Super Admin Routes
+  {
+    path: '/super',
+    element: <SuperAdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="dashboard" replace /> },
+      { path: 'dashboard', element: <Modern /> },
+
+      { path: 'apps/notes', element: <Notes /> },
+      { path: 'utilities/form', element: <Form /> },
+      { path: 'utilities/table', element: <Table /> },
+      { path: 'apps/tickets', element: <Tickets /> },
+      { path: 'apps/tickets/create', element: <CreateTickets /> },
+      { path: 'apps/blog/post', element: <Blog /> },
+      { path: 'apps/blog/detail/:id', element: <BlogDetail /> },
+      { path: 'user-profile', element: <UserProfile /> },
+      { path: 'icons/iconify', element: <SolarIcon /> },
+
+      { path: '*', element: <Navigate to="/auth/404" /> },
+    ],
+  },
+
+  // Authentication Routes (Shared)
+  {
+    path: '/auth',
+    element: <BlankLayout />,
+    children: [
+      { path: 'auth2/login', element: <Login2 /> },
+      { path: 'auth2/register', element: <Register2 /> },
+      { path: 'maintenance', element: <Maintainance /> },
+      { path: '404', element: <Error /> },
+      { path: '*', element: <Navigate to="/auth/404" /> },
+    ],
+  },
+
+  // Legacy route redirects for backward compatibility
+  {
+    path: '/dashboard',
+    element: <Navigate to="/super/dashboard" replace />,
+  },
+  {
+    path: '/school-dashboard',
+    element: <Navigate to="/school/dashboard" replace />,
+  },
+
+  // Catch-all 404
+  {
+    path: '*',
+    element: <Navigate to="/auth/404" />,
+  },
+];
+
+const router = createBrowserRouter(Router);
+
+export default router;
