@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { IconCalendar, IconChevronDown, IconSettings, IconClock } from '@tabler/icons-react';
+import { useNavigate } from 'react-router';
+import { IconCalendar, IconChevronDown, IconSettings, IconClock, IconChevronLeft } from '@tabler/icons-react';
 import './Teachers.css';
 
 const Routine = () => {
+    const navigate = useNavigate();
     const [showYearDropdown, setShowYearDropdown] = useState(false);
     const [selectedTimeRange, setSelectedTimeRange] = useState('This Year');
 
     return (
         <div className="teachers-container">
-            <div className="page-header">
-                <h2>Teacher Routine</h2>
+            <div className="page-header-row">
+                <div className="breadcrumb">
+                    <h2>Teacher Routine</h2>
+                    <span>Dashboard / Teachers / Teacher Routine</span>
+                </div>
             </div>
 
             <div className="content-card p-4">

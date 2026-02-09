@@ -1,11 +1,11 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router';
 import {
     IconUser, IconCurrencyDollar, IconWalk, IconBuildingBank,
     IconBus, IconBuilding, IconBrandFacebook, IconFileText,
-    IconLock
+    IconLock, IconArrowLeft
 } from '@tabler/icons-react';
-import { teachersData } from './teachersData';
+import { getTeachers, saveTeacher } from './teachersData';
 import './AddTeacher.css';
 
 const AddTeacher = () => {
@@ -14,7 +14,94 @@ const AddTeacher = () => {
     const isEditMode = !!id;
 
     // Synchronous lookup since data is local
-    const teacher = isEditMode ? teachersData.find(t => t.id === id) : null;
+    const teachers = getTeachers();
+    const teacher = isEditMode ? teachers.find(t => t.id === id) : null;
+
+    const fileInputRef = useRef(null);
+    const [selectedImage, setSelectedImage] = useState(teacher?.avatar || null);
+    const [selectedLanguage, setSelectedLanguage] = useState(teacher?.languages || '');
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleRemoveImage = () => {
+        setSelectedImage(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
+        const newTeacher = {
+            ...teacher,
+            id: data.teacherId || teacher?.id || `T${Math.floor(Math.random() * 900000) + 100000}`,
+            name: `${data.firstName} ${data.lastName}`.trim(),
+            class: data.class,
+            subject: data.subject,
+            email: data.email,
+            phone: data.phone,
+            whatsapp: data.whatsapp,
+            status: data.status || 'Active',
+            avatar: selectedImage || 'https://i.pravatar.cc/150?u=' + (data.firstName || 'new'),
+            joinDate: data.joinDate,
+            fatherName: data.fatherName,
+            motherName: data.motherName,
+            dob: data.dob,
+            maritalStatus: data.maritalStatus,
+            bloodGroup: data.bloodGroup,
+            qualification: data.qualification,
+            experience: data.experience,
+            prevSchool: data.prevSchool,
+            prevSchoolAddress: data.prevSchoolAddress,
+            prevSchoolPhone: data.prevSchoolPhone,
+            address: data.address,
+            permanentAddress: data.permanentAddress,
+            panNo: data.panNo,
+            otherInfo: data.otherInfo,
+            languages: selectedLanguage, // Use the state for language
+            epfNo: data.epfNo,
+            basicSalary: data.basicSalary,
+            contractType: data.contractType,
+            shift: data.shift,
+            workLocation: data.workLocation,
+            leaveDate: data.leaveDate,
+            medicalLeaves: data.medicalLeaves,
+            casualLeaves: data.casualLeaves,
+            maternityLeaves: data.maternityLeaves,
+            sickLeaves: data.sickLeaves,
+            accountName: data.accountName,
+            accountNumber: data.accountNumber,
+            bankName: data.bankName,
+            ifsc: data.ifsc,
+            branch: data.branch,
+            route: data.route,
+            vehicleNo: data.vehicleNo,
+            pickupPoint: data.pickupPoint,
+            hostel: data.hostel,
+            roomNo: data.roomNo,
+            facebook: data.facebook,
+            instagram: data.instagram,
+            linkedin: data.linkedin,
+            youtube: data.youtube,
+            twitter: data.twitter
+        };
+
+        saveTeacher(newTeacher);
+        navigate('/school/teachers/list');
+    };
 
     // Helper to get default value safely
     const getVal = (field) => teacher ? teacher[field] : '';
@@ -22,11 +109,16 @@ const AddTeacher = () => {
     return (
         <div className="add-teacher-page">
             <div className="page-header">
-                <h2 className="page-title">{isEditMode ? 'Edit Teacher' : 'Add Teacher'}</h2>
+                <div className="add-teacher-title-row">
+                    <button type="button" className="back-btn" onClick={() => navigate(-1)}>
+                        <IconArrowLeft size={20} />
+                    </button>
+                    <h2 className="page-title">{isEditMode ? 'Edit Teacher' : 'Add Teacher'}</h2>
+                </div>
                 <div className="breadcrumb">Dashboard / Teachers / {isEditMode ? 'Edit Teacher' : 'Add Teacher'}</div>
             </div>
 
-            <form className="form-container" key={id || 'new'}>
+            <form className="form-container" key={id || 'new'} onSubmit={handleSubmit}>
                 {/* Personal Information */}
                 <div className="form-section">
                     <div className="section-header">
@@ -36,12 +128,37 @@ const AddTeacher = () => {
                     <div className="section-body">
                         <div className="image-upload-row">
                             <div className="image-preview">
-                                {teacher?.avatar ? <img src={teacher.avatar} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} /> : <IconUser size={40} />}
+                                {selectedImage ? (
+                                    <img src={selectedImage} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '8px', objectFit: 'cover' }} />
+                                ) : (
+                                    <IconUser size={40} />
+                                )}
                             </div>
                             <div className="upload-actions">
                                 <div style={{ display: 'flex', gap: '10px' }}>
-                                    <button type="button" className="btn btn-secondary" style={{ padding: '6px 12px', fontSize: '12px' }}>Upload</button>
-                                    <button type="button" className="btn btn-secondary" style={{ padding: '6px 12px', fontSize: '12px', background: '#3b82f6', color: 'white' }}>Remove</button>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onChange={handleImageChange}
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        style={{ padding: '6px 12px', fontSize: '12px' }}
+                                        onClick={() => fileInputRef.current.click()}
+                                    >
+                                        Upload
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        style={{ padding: '6px 12px', fontSize: '12px', background: '#3b82f6', color: 'white' }}
+                                        onClick={handleRemoveImage}
+                                    >
+                                        Remove
+                                    </button>
                                 </div>
                                 <span className="upload-text">Upload image size 4MB, Format JPG, PNG, SVG</span>
                             </div>
@@ -49,127 +166,152 @@ const AddTeacher = () => {
 
                         <div className="form-grid">
                             <div className="form-group">
-                                <label className="form-label">Teacher ID</label>
-                                <input type="text" className="form-control" defaultValue={getVal('id')} placeholder="T849127" />
+                                <label className="form-label">Teacher ID <span className="required-star">*</span></label>
+                                <input type="text" name="teacherId" className="form-control" defaultValue={getVal('id')} placeholder="T849127" required />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">First Name</label>
-                                <input type="text" className="form-control" defaultValue={getVal('name')} />
+                                <label className="form-label">First Name <span className="required-star">*</span></label>
+                                <input type="text" name="firstName" className="form-control" defaultValue={teacher?.name?.split(' ')[0] || ''} required />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Last Name</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="lastName" className="form-control" defaultValue={teacher?.name?.split(' ').slice(1).join(' ') || ''} />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Class</label>
-                                <select className="form-control" defaultValue={getVal('class')}>
-                                    <option>Select</option>
-                                    <option value="III A">III A</option>
-                                    <option value="II (A)">II (A)</option>
-                                    <option value="VI (A)">VI (A)</option>
+                                <label className="form-label">Class <span className="required-star">*</span></label>
+                                <select name="class" className="form-control" defaultValue={getVal('class')} required>
+                                    <option value="">Select</option>
+                                    <option value="I">I</option>
+                                    <option value="II">II</option>
+                                    <option value="III">III</option>
+                                    <option value="IV">IV</option>
+                                    <option value="V">V</option>
+                                    <option value="VI">VI</option>
+                                    <option value="VII">VII</option>
+                                    <option value="VIII">VIII</option>
+                                    <option value="IX">IX</option>
+                                    <option value="X">X</option>
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Subject</label>
-                                <select className="form-control" defaultValue={getVal('subject')}>
-                                    <option>Select</option>
+                                <label className="form-label">Subject <span className="required-star">*</span></label>
+                                <select name="subject" className="form-control" defaultValue={getVal('subject')} required>
+                                    <option value="">Select</option>
                                     <option value="Physics">Physics</option>
                                     <option value="Computer">Computer</option>
                                     <option value="English">English</option>
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Gender</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>Male</option>
-                                    <option>Female</option>
+                                <label className="form-label">Gender <span className="required-star">*</span></label>
+                                <select name="gender" className="form-control" defaultValue={getVal('gender')} required>
+                                    <option value="">Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Primary Contact Number</label>
-                                <input type="text" className="form-control" defaultValue={getVal('phone')} />
+                                <label className="form-label">Primary Contact Number <span className="required-star">*</span></label>
+                                <input type="text" name="phone" className="form-control" defaultValue={getVal('phone')} required />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Email Address</label>
-                                <input type="email" className="form-control" defaultValue={getVal('email')} />
+                                <label className="form-label">Primary Whatsapp Number <span className="required-star">*</span></label>
+                                <input type="text" name="whatsapp" className="form-control" defaultValue={getVal('whatsapp')} required />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Email Address <span className="required-star">*</span></label>
+                                <input type="email" name="email" className="form-control" defaultValue={getVal('email')} required />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Blood Group</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>O+</option>
-                                    <option>A+</option>
-                                    <option>B+</option>
+                                <select name="bloodGroup" className="form-control" defaultValue={getVal('bloodGroup')}>
+                                    <option value="">Select</option>
+                                    <option value="O+">O+</option>
+                                    <option value="A+">A+</option>
+                                    <option value="B+">B+</option>
+                                    <option value="AB+">AB+</option>
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Date of Joining</label>
-                                <input type="text" className="form-control" defaultValue={getVal('joinDate')} placeholder="DD Mon YYYY" />
+                                <label className="form-label">Date of Joining <span className="required-star">*</span></label>
+                                <input type="date" name="joinDate" className="form-control" defaultValue={teacher?.joinDate ? new Date(teacher.joinDate).toISOString().split('T')[0] : ''} required />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Father's Name</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Father's Name <span className="required-star">*</span></label>
+                                <input type="text" name="fatherName" className="form-control" defaultValue={getVal('fatherName')} required />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Mother's Name</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Mother's Name <span className="required-star">*</span></label>
+                                <input type="text" name="motherName" className="form-control" defaultValue={getVal('motherName')} required />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Date of Birth</label>
-                                <input type="date" className="form-control" />
+                                <input type="date" name="dob" className="form-control" defaultValue={teacher?.dob ? new Date(teacher.dob).toISOString().split('T')[0] : ''} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Marital Status</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>Single</option>
-                                    <option>Married</option>
+                                <select name="maritalStatus" className="form-control" defaultValue={getVal('maritalStatus')}>
+                                    <option value="">Select</option>
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Qualification</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Language Known</label>
+                                <select
+                                    className="form-control"
+                                    value={selectedLanguage}
+                                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                                >
+                                    <option value="">Select</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="English">English</option>
+                                    <option value="Hindi">Hindi</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Qualification <span className="required-star">*</span></label>
+                                <input type="text" name="qualification" className="form-control" defaultValue={getVal('qualification')} required />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Work Experience</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="experience" className="form-control" defaultValue={getVal('experience')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Previous School if Any</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="prevSchool" className="form-control" defaultValue={getVal('prevSchool')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Previous School Address</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="prevSchoolAddress" className="form-control" defaultValue={getVal('prevSchoolAddress')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Previous School Phone No</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="prevSchoolPhone" className="form-control" defaultValue={getVal('prevSchoolPhone')} />
                             </div>
                             <div className="form-group grid-col-2">
-                                <label className="form-label">Address</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Address <span className="required-star">*</span></label>
+                                <input type="text" name="address" className="form-control" defaultValue={getVal('address')} required />
                             </div>
                             <div className="form-group grid-col-2">
-                                <label className="form-label">Permanent Address</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Permanent Address <span className="required-star">*</span></label>
+                                <input type="text" name="permanentAddress" className="form-control" defaultValue={getVal('permanentAddress')} required />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">PAN Number / ID Number</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="panNo" className="form-control" defaultValue={getVal('panNo')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Status</label>
-                                <select className="form-control" defaultValue={getVal('status')}>
-                                    <option>Select</option>
+                                <select name="status" className="form-control" defaultValue={getVal('status')}>
+                                    <option value="">Select</option>
                                     <option value="Active">Active</option>
                                     <option value="Inactive">Inactive</option>
                                 </select>
                             </div>
                             <div className="form-group full-width">
                                 <label className="form-label">Notes</label>
-                                <textarea className="form-control" rows="3" placeholder="Other Information"></textarea>
+                                <textarea name="otherInfo" className="form-control" rows="3" defaultValue={getVal('otherInfo')} placeholder="Other Information"></textarea>
                             </div>
                         </div>
                     </div>
@@ -185,35 +327,35 @@ const AddTeacher = () => {
                         <div className="form-grid">
                             <div className="form-group">
                                 <label className="form-label">EPF No</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="epfNo" className="form-control" defaultValue={getVal('epfNo')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Basic Salary</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="basicSalary" className="form-control" defaultValue={getVal('basicSalary')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Contract Type</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>Permanent</option>
-                                    <option>Contract</option>
+                                <select name="contractType" className="form-control" defaultValue={getVal('contractType')}>
+                                    <option value="">Select</option>
+                                    <option value="Permanent">Permanent</option>
+                                    <option value="Contract">Contract</option>
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Work Shift</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>Morning</option>
-                                    <option>Evening</option>
+                                <select name="shift" className="form-control" defaultValue={getVal('shift')}>
+                                    <option value="">Select</option>
+                                    <option value="Morning">Morning</option>
+                                    <option value="Evening">Evening</option>
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Work Location</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="workLocation" className="form-control" defaultValue={getVal('workLocation')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Date of Leaving</label>
-                                <input type="date" className="form-control" />
+                                <input type="date" name="leaveDate" className="form-control" defaultValue={teacher?.leaveDate ? new Date(teacher.leaveDate).toISOString().split('T')[0] : ''} />
                             </div>
                         </div>
                     </div>
@@ -229,19 +371,19 @@ const AddTeacher = () => {
                         <div className="form-grid">
                             <div className="form-group">
                                 <label className="form-label">Medical Leaves</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="medicalLeaves" className="form-control" defaultValue={getVal('medicalLeaves')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Casual Leaves</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="casualLeaves" className="form-control" defaultValue={getVal('casualLeaves')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Maternity Leaves</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="maternityLeaves" className="form-control" defaultValue={getVal('maternityLeaves')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Sick Leaves</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="sickLeaves" className="form-control" defaultValue={getVal('sickLeaves')} />
                             </div>
                         </div>
                     </div>
@@ -256,24 +398,24 @@ const AddTeacher = () => {
                     <div className="section-body">
                         <div className="form-grid">
                             <div className="form-group">
-                                <label className="form-label">Account Name</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Account Name <span className="required-star">*</span></label>
+                                <input type="text" name="accountName" className="form-control" defaultValue={getVal('accountName')} required />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Account Number</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="accountNumber" className="form-control" defaultValue={getVal('accountNumber')} />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Bank Name</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Bank Name <span className="required-star">*</span></label>
+                                <input type="text" name="bankName" className="form-control" defaultValue={getVal('bankName')} required />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">IFSC Code</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">IFSC Code <span className="required-star">*</span></label>
+                                <input type="text" name="ifsc" className="form-control" defaultValue={getVal('ifsc')} required />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Branch Name</label>
-                                <input type="text" className="form-control" />
+                                <label className="form-label">Branch Name <span className="required-star">*</span></label>
+                                <input type="text" name="branch" className="form-control" defaultValue={getVal('branch')} required />
                             </div>
                         </div>
                     </div>
@@ -289,26 +431,29 @@ const AddTeacher = () => {
                         <div className="form-grid">
                             <div className="form-group">
                                 <label className="form-label">Route</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>Route 1</option>
-                                    <option>Route 2</option>
+                                <select name="route" className="form-control" defaultValue={getVal('route')}>
+                                    <option value="">Select</option>
+                                    <option value="Newyork">Newyork</option>
+                                    <option value="Route 1">Route 1</option>
+                                    <option value="Route 2">Route 2</option>
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Vehicle Number</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>VH001</option>
-                                    <option>VH002</option>
+                                <select name="vehicleNo" className="form-control" defaultValue={getVal('vehicleNo')}>
+                                    <option value="">Select</option>
+                                    <option value="AM 34346">AM 34346</option>
+                                    <option value="VH001">VH001</option>
+                                    <option value="VH002">VH002</option>
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Pickup Point</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>Point A</option>
-                                    <option>Point B</option>
+                                <select name="pickupPoint" className="form-control" defaultValue={getVal('pickupPoint')}>
+                                    <option value="">Select</option>
+                                    <option value="Cincinnati">Cincinnati</option>
+                                    <option value="Point A">Point A</option>
+                                    <option value="Point B">Point B</option>
                                 </select>
                             </div>
                         </div>
@@ -325,18 +470,20 @@ const AddTeacher = () => {
                         <div className="form-grid">
                             <div className="form-group">
                                 <label className="form-label">Hostel</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>Hostel A</option>
-                                    <option>Hostel B</option>
+                                <select name="hostel" className="form-control" defaultValue={getVal('hostel')}>
+                                    <option value="">Select</option>
+                                    <option value="Phoenix Residence">Phoenix Residence</option>
+                                    <option value="Hostel A">Hostel A</option>
+                                    <option value="Hostel B">Hostel B</option>
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Room No</label>
-                                <select className="form-control">
-                                    <option>Select</option>
-                                    <option>101</option>
-                                    <option>102</option>
+                                <select name="roomNo" className="form-control" defaultValue={getVal('roomNo')}>
+                                    <option value="">Select</option>
+                                    <option value="20">20</option>
+                                    <option value="101">101</option>
+                                    <option value="102">102</option>
                                 </select>
                             </div>
                         </div>
@@ -353,23 +500,23 @@ const AddTeacher = () => {
                         <div className="form-grid">
                             <div className="form-group">
                                 <label className="form-label">Facebook</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="facebook" className="form-control" defaultValue={getVal('facebook')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Instagram</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="instagram" className="form-control" defaultValue={getVal('instagram')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">LinkedIn</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="linkedin" className="form-control" defaultValue={getVal('linkedin')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Youtube</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="youtube" className="form-control" defaultValue={getVal('youtube')} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Twitter URL</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="twitter" className="form-control" defaultValue={getVal('twitter')} />
                             </div>
                         </div>
                     </div>
@@ -384,17 +531,29 @@ const AddTeacher = () => {
                     <div className="section-body">
                         <div className="form-grid">
                             <div className="form-group grid-col-2">
-                                <label className="form-label">Upload Resume</label>
+                                <label className="form-label">Upload Resume <span className="required-star">*</span></label>
                                 <div className="file-upload-control">
                                     <span className="file-hint">Upload image size of 4MB, Accepted Format PDF</span>
-                                    <input type="file" className="form-control" />
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+                                        <button type="button" className="btn btn-secondary" style={{ background: '#3b82f6', color: 'white', display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px' }}>
+                                            <IconFileText size={16} /> Change
+                                        </button>
+                                        <span style={{ fontSize: '13px', color: '#6b7280' }}>Resume.pdf</span>
+                                    </div>
+                                    <input type="file" name="resume" className="form-control" style={{ display: 'none' }} />
                                 </div>
                             </div>
                             <div className="form-group grid-col-2">
                                 <label className="form-label">Upload Joining Letter</label>
                                 <div className="file-upload-control">
                                     <span className="file-hint">Upload image size of 4MB, Accepted Format PDF</span>
-                                    <input type="file" className="form-control" />
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+                                        <button type="button" className="btn btn-secondary" style={{ background: '#3b82f6', color: 'white', display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px' }}>
+                                            <IconFileText size={16} /> Upload Document
+                                        </button>
+                                        <span style={{ fontSize: '13px', color: '#6b7280' }}>Resume.pdf</span>
+                                    </div>
+                                    <input type="file" name="joiningLetter" className="form-control" style={{ display: 'none' }} />
                                 </div>
                             </div>
                         </div>
@@ -411,12 +570,12 @@ const AddTeacher = () => {
                         <div className="section-body">
                             <div className="form-grid">
                                 <div className="form-group grid-col-2">
-                                    <label className="form-label">New Password</label>
-                                    <input type="password" className="form-control" />
+                                    <label className="form-label">New Password <span className="required-star">*</span></label>
+                                    <input type="password" className="form-control" required={!isEditMode} />
                                 </div>
                                 <div className="form-group grid-col-2">
-                                    <label className="form-label">Confirm Password</label>
-                                    <input type="password" className="form-control" />
+                                    <label className="form-label">Confirm Password <span className="required-star">*</span></label>
+                                    <input type="password" className="form-control" required={!isEditMode} />
                                 </div>
                             </div>
                         </div>
@@ -425,7 +584,7 @@ const AddTeacher = () => {
 
                 <div className="form-actions">
                     <button type="button" className="btn btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
-                    <button type="button" className="btn btn-primary" onClick={(e) => { e.preventDefault(); navigate('/teachers/list'); }}>
+                    <button type="submit" className="btn btn-primary">
                         {isEditMode ? 'Update Teacher' : 'Add Teacher'}
                     </button>
                 </div>

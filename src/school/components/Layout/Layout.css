@@ -1,42 +1,23 @@
-/* Layout Variables - Light Theme (Default) */
-:root,
-.light-theme {
+/* Layout Variables - Using Global Theme Tokens */
+:root {
     --sidebar-width: 260px;
     --sidebar-collapsed-width: 80px;
     --header-height: 70px;
-    --primary-color: #3d5ee1;
-    --primary-light: rgba(61, 94, 225, 0.1);
-    --text-color: #333448;
-    --text-muted: #6e6b7b;
-    --text-light: #b5b5c3;
-    --bg-body: #f8f9fa;
-    --bg-white: #ffffff;
-    --bg-sidebar: linear-gradient(180deg, #1e225c 0%, #252b5e 100%);
-    --border-color: #e9ecef;
-    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+    --primary-color: var(--primary);
+    --primary-light: var(--lightprimary);
+    --text-color: var(--foreground);
+    --text-muted: var(--bodytext);
+    --text-light: var(--muted-foreground);
+    --bg-body: var(--background);
+    --bg-white: var(--card);
+    --bg-sidebar: var(--card);
+    --border-color: var(--border);
+    --shadow-sm: var(--shadow-sm);
+    --shadow-md: var(--shadow-md);
     --transition: all 0.3s ease;
-    --card-bg: #ffffff;
-    --input-bg: #f8f9fa;
-    --dropdown-bg: #ffffff;
-}
-
-/* Dark Theme Variables */
-.dark-theme {
-    --primary-color: #5a7cf8;
-    --primary-light: rgba(90, 124, 248, 0.15);
-    --text-color: #e0e0e0;
-    --text-muted: #a0a0a0;
-    --text-light: #707070;
-    --bg-body: #1a1a2e;
-    --bg-white: #16213e;
-    --bg-sidebar: linear-gradient(180deg, #0f0f1a 0%, #16213e 100%);
-    --border-color: #2d2d44;
-    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
-    --card-bg: #1f2940;
-    --input-bg: #0f3460;
-    --dropdown-bg: #1f2940;
+    --card-bg: var(--card);
+    --input-bg: var(--muted);
+    --dropdown-bg: var(--card);
 }
 
 * {

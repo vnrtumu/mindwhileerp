@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router';
 import {
     IconPhone, IconMail, IconMapPin, IconEdit,
     IconFileText, IconCalendar, IconUser, IconHash,
     IconCurrencyDollar, IconBuilding, IconBus, IconEye,
-    IconDownload, IconPlus, IconX, IconClock, IconSettings, IconChevronDown, IconCheck, IconRefresh, IconUserX
+    IconDownload, IconPlus, IconX, IconClock, IconSettings, IconChevronDown, IconCheck, IconRefresh, IconUserX, IconChevronLeft
 } from '@tabler/icons-react';
-import { teachersData } from './teachersData';
+import { getTeachers } from './teachersData';
 import './Teachers.css';
 
 const TeacherDetails = () => {
@@ -27,11 +27,35 @@ const TeacherDetails = () => {
     const [showYearDropdown, setShowYearDropdown] = useState(false);
     const [showTimeRangeDropdown, setShowTimeRangeDropdown] = useState(false);
     const [showExportDropdown, setShowExportDropdown] = useState(false);
+    const [showEntriesDropdown, setShowEntriesDropdown] = useState(false);
     const [selectedTimeRange, setSelectedTimeRange] = useState('This Year');
+    const [selectedYear, setSelectedYear] = useState('2024 / 2025');
+    const [activeWidgetTab, setActiveWidgetTab] = useState('hostel');
 
-    const teacher = teachersData.find(t => t.id === id) || teachersData[0];
+    const [currentPageAttendance, setCurrentPageAttendance] = useState(1);
+    const [itemsPerPageAttendance, setItemsPerPageAttendance] = useState(10);
+
+    const teachers = getTeachers();
+    const teacher = teachers.find(t => t.id === id) || teachers[0];
+    console.log('TeacherDetails id:', id, 'Teacher found:', teacher);
 
     if (!teacher) return <div>Teacher not found</div>;
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.year-selector-container') &&
+                !event.target.closest('.action-dropdown-container') &&
+                !event.target.closest('.custom-select-box-ref')) {
+                setShowYearDropdown(false);
+                setShowTimeRangeDropdown(false);
+                setShowExportDropdown(false);
+                setShowEntriesDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const ApplyLeaveModal = () => (
         <div className="modal-overlay">
@@ -150,7 +174,7 @@ const TeacherDetails = () => {
                     <button className="btn-login-details" onClick={() => setShowLoginModal(true)}>
                         Login Details
                     </button>
-                    <button className="btn-edit-teacher" onClick={() => navigate(`/teachers/edit/${teacher.id}`)}>
+                    <button className="btn-edit-teacher" onClick={() => navigate(`/school/teachers/edit/${teacher.id}`)}>
                         Edit Teacher
                     </button>
                 </div>
@@ -222,17 +246,37 @@ const TeacherDetails = () => {
 
                     <div className="widget-tabs-container">
                         <div className="widget-tabs">
-                            <button className="active">Hostel</button>
-                            <button>Transportation</button>
+                            <button
+                                className={activeWidgetTab === 'hostel' ? 'active' : ''}
+                                onClick={() => setActiveWidgetTab('hostel')}
+                            >
+                                Hostel
+                            </button>
+                            <button
+                                className={activeWidgetTab === 'transport' ? 'active' : ''}
+                                onClick={() => setActiveWidgetTab('transport')}
+                            >
+                                Transportation
+                            </button>
                         </div>
                         <div className="widget-tab-content">
-                            <div className="hostel-info">
-                                <div className="icon-box"><IconBuilding size={18} /></div>
-                                <div>
-                                    <span className="place-name">HI-Hostel, Floor</span>
-                                    <span className="room-no">Room No : 25</span>
+                            {activeWidgetTab === 'hostel' ? (
+                                <div className="hostel-info">
+                                    <div className="icon-box"><IconBuilding size={18} /></div>
+                                    <div>
+                                        <span className="place-name">HI-Hostel, Floor</span>
+                                        <span className="room-no">Room No : 25</span>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="hostel-info transport-info">
+                                    <div className="icon-box"><IconBus size={18} /></div>
+                                    <div>
+                                        <span className="place-name">Route-01 (Main Road)</span>
+                                        <span className="room-no">Vehicle No : MH-43-1234</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -599,17 +643,30 @@ const TeacherDetails = () => {
                                                 <div className="section-title">Leave & Attendance</div>
                                                 <div className="header-actions-row">
                                                     <div className="year-selector-container">
-                                                        <div className="year-selector">
-                                                            <span>Year : 2024 / 2025</span>
+                                                        <div className="year-selector" onClick={() => setShowYearDropdown(!showYearDropdown)}>
+                                                            <span>Year : {selectedYear}</span>
                                                             <IconChevronDown size={16} />
                                                         </div>
+                                                        {showYearDropdown && (
+                                                            <div className="dropdown-menu-ref">
+                                                                <div className="dropdown-item-ref" onClick={() => { setSelectedYear('2024 / 2025'); setShowYearDropdown(false); }}>2024 / 2025</div>
+                                                                <div className="dropdown-item-ref" onClick={() => { setSelectedYear('2023 / 2024'); setShowYearDropdown(false); }}>2023 / 2024</div>
+                                                                <div className="dropdown-item-ref" onClick={() => { setSelectedYear('2022 / 2023'); setShowYearDropdown(false); }}>2022 / 2023</div>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <div className="action-dropdown-container">
-                                                        <div className="action-dropdown-btn" onClick={() => setShowTimeRangeDropdown(!showTimeRangeDropdown)}>
+                                                        <button
+                                                            className="action-dropdown-btn"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setShowTimeRangeDropdown(!showTimeRangeDropdown);
+                                                            }}
+                                                        >
                                                             <IconCalendar size={16} />
                                                             <span>{selectedTimeRange}</span>
                                                             <IconChevronDown size={16} />
-                                                        </div>
+                                                        </button>
                                                         {showTimeRangeDropdown && (
                                                             <div className="dropdown-menu-ref">
                                                                 <div className="dropdown-item-ref" onClick={() => { setSelectedTimeRange('This Year'); setShowTimeRangeDropdown(false); }}>This Year</div>
@@ -619,21 +676,27 @@ const TeacherDetails = () => {
                                                         )}
                                                     </div>
                                                     <div className="action-dropdown-container">
-                                                        <div className="action-dropdown-btn" onClick={() => setShowExportDropdown(!showExportDropdown)}>
+                                                        <button
+                                                            className="action-dropdown-btn"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setShowExportDropdown(!showExportDropdown);
+                                                            }}
+                                                        >
                                                             <IconDownload size={16} />
                                                             <span>Export</span>
                                                             <IconChevronDown size={16} />
-                                                        </div>
+                                                        </button>
                                                         {showExportDropdown && (
                                                             <div className="dropdown-menu-ref">
-                                                                <div className="dropdown-item-ref" onClick={() => setShowExportDropdown(false)}>
+                                                                <button className="dropdown-item-ref" onClick={() => { window.print(); setShowExportDropdown(false); }}>
                                                                     <IconFileText size={16} />
                                                                     <span>Export as PDF</span>
-                                                                </div>
-                                                                <div className="dropdown-item-ref" onClick={() => setShowExportDropdown(false)}>
+                                                                </button>
+                                                                <button className="dropdown-item-ref" onClick={() => setShowExportDropdown(false)}>
                                                                     <IconFileText size={16} />
                                                                     <span>Export as Excel</span>
-                                                                </div>
+                                                                </button>
                                                             </div>
                                                         )}
                                                     </div>
@@ -668,9 +731,27 @@ const TeacherDetails = () => {
                                             <div className="table-controls compact no-border px-4 py-3">
                                                 <div className="entries-selector">
                                                     Row Per Page
-                                                    <div className="custom-select-box-ref">
-                                                        <span>10</span>
+                                                    <div className="custom-select-box-ref" onClick={() => setShowEntriesDropdown(!showEntriesDropdown)}>
+                                                        <span>{itemsPerPageAttendance}</span>
                                                         <IconChevronDown size={14} />
+                                                        {showEntriesDropdown && (
+                                                            <div className="dropdown-menu-ref" style={{ minWidth: '80px' }}>
+                                                                {[10, 25, 50].map(val => (
+                                                                    <div
+                                                                        key={val}
+                                                                        className="dropdown-item-ref"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            setItemsPerPageAttendance(val);
+                                                                            setCurrentPageAttendance(1);
+                                                                            setShowEntriesDropdown(false);
+                                                                        }}
+                                                                    >
+                                                                        {val}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     Entries
                                                 </div>
@@ -706,28 +787,49 @@ const TeacherDetails = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {Array.from({ length: 31 }, (_, i) => i + 1).map(date => (
-                                                            <tr key={date}>
-                                                                <td className="date-cell sticky-col">{date.toString().padStart(2, '0')}</td>
-                                                                {['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'].map((m) => {
-                                                                    const statuses = ['present', 'present', 'present', 'absent', 'late', 'halfday', 'holiday', 'empty'];
-                                                                    const status = statuses[Math.floor(Math.random() * statuses.length)];
-                                                                    return (
-                                                                        <td key={m} className="status-cell">
-                                                                            {status !== 'empty' && <div className={`status-marker-ref ${status}`}></div>}
-                                                                        </td>
-                                                                    );
-                                                                })}
-                                                            </tr>
-                                                        ))}
+                                                        {Array.from({ length: 31 }, (_, i) => i + 1)
+                                                            .slice((currentPageAttendance - 1) * itemsPerPageAttendance, currentPageAttendance * itemsPerPageAttendance)
+                                                            .map(date => (
+                                                                <tr key={date}>
+                                                                    <td className="date-cell sticky-col">{date.toString().padStart(2, '0')}</td>
+                                                                    {['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'].map((m) => {
+                                                                        const statuses = ['present', 'present', 'present', 'absent', 'late', 'halfday', 'holiday', 'empty'];
+                                                                        // For consistent rendering during demo, use hash of date+month
+                                                                        const hash = (date * 31 + m.charCodeAt(0) + m.charCodeAt(1)) % statuses.length;
+                                                                        const status = statuses[hash];
+                                                                        return (
+                                                                            <td key={m} className="status-cell">
+                                                                                {status !== 'empty' && <div className={`status-marker-ref ${status}`}></div>}
+                                                                            </td>
+                                                                        );
+                                                                    })}
+                                                                </tr>
+                                                            ))}
                                                     </tbody>
                                                 </table>
                                             </div>
                                             <div className="pagination-controls px-4 pb-4">
-                                                <span className="prev disabled">Prev</span>
-                                                <span className="page-number active">1</span>
-                                                <span className="page-number">2</span>
-                                                <span className="next">Next</span>
+                                                <span
+                                                    className={`prev ${currentPageAttendance === 1 ? 'disabled' : ''}`}
+                                                    onClick={() => currentPageAttendance > 1 && setCurrentPageAttendance(currentPageAttendance - 1)}
+                                                >
+                                                    Prev
+                                                </span>
+                                                {Array.from({ length: Math.ceil(31 / itemsPerPageAttendance) }, (_, i) => i + 1).map(num => (
+                                                    <span
+                                                        key={num}
+                                                        className={`page-number ${currentPageAttendance === num ? 'active' : ''}`}
+                                                        onClick={() => setCurrentPageAttendance(num)}
+                                                    >
+                                                        {num}
+                                                    </span>
+                                                ))}
+                                                <span
+                                                    className={`next ${currentPageAttendance === Math.ceil(31 / itemsPerPageAttendance) ? 'disabled' : ''}`}
+                                                    onClick={() => currentPageAttendance < Math.ceil(31 / itemsPerPageAttendance) && setCurrentPageAttendance(currentPageAttendance + 1)}
+                                                >
+                                                    Next
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

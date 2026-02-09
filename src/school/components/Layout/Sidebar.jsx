@@ -78,26 +78,36 @@ const menuData = [
                 title: 'Student Information',
                 icon: IconUser,
                 subItems: [
-                    { title: 'Student List', path: '/students/list' },
-                    { title: 'Student Attendance', path: '/students/attendance' },
-                    { title: 'Behavior Records', path: '/students/behavior' },
-                    { title: 'Student Categories', path: '/students/categories' },
-                    { title: 'Disabled Students', path: '/students/disabled' }
+                    { title: 'Student List', path: '/school/students/list' },
+                    { title: 'Student Attendance', path: '/school/students/attendance' },
+                    { title: 'Behavior Records', path: '/school/students/behavior' },
+                    { title: 'Student Categories', path: '/school/students/categories' },
+                    { title: 'Disabled Students', path: '/school/students/disabled' }
+                ]
+            },
+            {
+                title: 'Teachers',
+                icon: IconSchool,
+                subItems: [
+                    { title: 'All Teachers', path: '/school/teachers' },
+                    { title: 'Teacher List', path: '/school/teachers/list' },
+                    { title: 'Teacher Details', path: '/school/teachers/details' },
+                    { title: 'Routine', path: '/school/teachers/routine' }
                 ]
             },
             {
                 title: 'Academics',
                 icon: IconSchool,
                 subItems: [
-                    { title: 'Classes', path: '/classes' },
-                    { title: 'Sections', path: '/sections' },
-                    { title: 'Subjects', path: '/subjects' },
-                    { title: 'Assign Subjects', path: '/assign-subjects' },
-                    { title: 'Assign Class Teacher', path: '/assign-teacher' },
-                    { title: 'Manage Periods', path: '/periods' },
-                    { title: 'Class Timetable', path: '/timetable' },
-                    { title: 'Promote Students', path: '/promote-students' },
-                    { title: 'Homework', path: '/homework' }
+                    { title: 'Classes', path: '/school/academics/classes' },
+                    { title: 'Sections', path: '/school/academics/sections' },
+                    { title: 'Subjects', path: '/school/academics/subjects' },
+                    { title: 'Assign Subjects', path: '/school/academics/assign-subjects' },
+                    { title: 'Assign Class Teacher', path: '/school/academics/assign-teacher' },
+                    { title: 'Manage Periods', path: '/school/academics/periods' },
+                    { title: 'Class Timetable', path: '/school/academics/timetable' },
+                    { title: 'Promote Students', path: '/school/academics/promote-students' },
+                    { title: 'Homework', path: '/school/academics/homework' }
                 ]
             },
             {

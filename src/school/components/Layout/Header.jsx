@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../../components/provider/theme-provider';
 import {
     CalendarIcon, PlusIcon, MoonIcon, BellIcon, MessageIcon,
     ChartBarIcon, MaximizeIcon, MenuIcon, SearchIcon,
@@ -46,7 +46,12 @@ const InvoiceIcon = ({ size = 24, color = '#fff' }) => (
 );
 
 const Header = ({ toggleSidebar }) => {
-    const { isDarkMode, toggleTheme } = useTheme();
+    const { theme, setTheme } = useTheme();
+    const isDarkMode = theme === 'dark';
+
+    const toggleTheme = () => {
+        setTheme(isDarkMode ? 'light' : 'dark');
+    };
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [showAddDropdown, setShowAddDropdown] = useState(false);
     const [showYearDropdown, setShowYearDropdown] = useState(false);
@@ -114,7 +119,7 @@ const Header = ({ toggleSidebar }) => {
                     <MenuIcon size={22} color="#ffffff" />
                 </button>
                 <div className="header-search">
-                    <SearchIcon size={18} color="#b5b5c3" />
+                    <SearchIcon size={18} color="var(--text-light)" />
                     <input type="text" placeholder="Search..." />
                 </div>
             </div>
@@ -126,9 +131,9 @@ const Header = ({ toggleSidebar }) => {
                         className="academic-year-badge"
                         onClick={() => setShowYearDropdown(!showYearDropdown)}
                     >
-                        <CalendarIcon size={18} color="#6e6b7b" />
+                        <CalendarIcon size={18} color="var(--bodytext)" />
                         <span>Academic Year : {selectedYear}</span>
-                        <ChevronDownIcon size={16} color="#6e6b7b" />
+                        <ChevronDownIcon size={16} color="var(--bodytext)" />
                     </button>
 
                     {showYearDropdown && (
@@ -152,7 +157,7 @@ const Header = ({ toggleSidebar }) => {
                         className="header-icon-btn"
                         onClick={() => setShowAddDropdown(!showAddDropdown)}
                     >
-                        <PlusIcon size={20} color="#6e6b7b" />
+                        <PlusIcon size={20} color="var(--bodytext)" />
                     </button>
 
                     {showAddDropdown && (
@@ -185,30 +190,30 @@ const Header = ({ toggleSidebar }) => {
                     {isDarkMode ? (
                         <SunIcon size={20} color="#f59e0b" />
                     ) : (
-                        <MoonIcon size={20} color="#6e6b7b" />
+                        <MoonIcon size={20} color="var(--bodytext)" />
                     )}
                 </button>
 
                 {/* Notifications */}
                 <button className="header-icon-btn has-notification">
-                    <BellIcon size={20} color="#6e6b7b" />
+                    <BellIcon size={20} color="var(--bodytext)" />
                     <span className="notification-dot red"></span>
                 </button>
 
                 {/* Messages */}
                 <button className="header-icon-btn has-notification">
-                    <MessageIcon size={20} color="#6e6b7b" />
+                    <MessageIcon size={20} color="var(--bodytext)" />
                     <span className="notification-dot blue"></span>
                 </button>
 
                 {/* Analytics */}
                 <button className="header-icon-btn">
-                    <ChartBarIcon size={20} color="#6e6b7b" />
+                    <ChartBarIcon size={20} color="var(--bodytext)" />
                 </button>
 
                 {/* Fullscreen */}
                 <button className="header-icon-btn" onClick={toggleFullscreen}>
-                    <MaximizeIcon size={20} color="#6e6b7b" />
+                    <MaximizeIcon size={20} color="var(--bodytext)" />
                 </button>
 
                 {/* Profile with Dropdown */}
@@ -247,13 +252,13 @@ const Header = ({ toggleSidebar }) => {
                             <ul className="dropdown-menu-list">
                                 <li>
                                     <a href="/profile" className="dropdown-menu-item">
-                                        <UserIcon size={18} color="#6e6b7b" />
+                                        <UserIcon size={18} color="var(--bodytext)" />
                                         <span>My Profile</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="/settings" className="dropdown-menu-item">
-                                        <SettingsIcon size={18} color="#6e6b7b" />
+                                        <SettingsIcon size={18} color="var(--bodytext)" />
                                         <span>Settings</span>
                                     </a>
                                 </li>

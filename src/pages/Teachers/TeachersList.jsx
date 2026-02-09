@@ -2,7 +2,7 @@ import React from 'react';
 import AllTeachers from './AllTeachers';
 
 const TeachersList = () => {
-    return <AllTeachers />;
+    return <AllTeachers initialView="list" />;
 };
 
 export default TeachersList;
