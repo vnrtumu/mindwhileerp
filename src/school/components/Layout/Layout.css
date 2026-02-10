@@ -255,6 +255,8 @@ body {
 .layout-content {
     flex: 1;
     margin-left: var(--sidebar-width);
+    /* Ensure content width accounts for the fixed sidebar to avoid right-side gap */
+    width: calc(100% - var(--sidebar-width));
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -263,6 +265,7 @@ body {
 
 .layout-content.sidebar-collapsed {
     margin-left: var(--sidebar-collapsed-width);
+    width: calc(100% - var(--sidebar-collapsed-width));
 }
 
 /* Header */
@@ -750,6 +753,8 @@ body {
     padding: 24px;
     background: var(--bg-body);
     overflow-y: auto;
+    width: 100%;
+    max-width: none; /* allow pages to use full available width */
 }
 
 /* Responsive */

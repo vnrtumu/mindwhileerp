@@ -1,6 +1,14 @@
 import React from 'react';
-import AcademicsPlaceholder from './AcademicsPlaceholder';
 
-const PromoteStudents = () => <AcademicsPlaceholder title="Promote Students" />;
+const PromoteStudents = () => {
+    return (
+        <div className="academics-page">
+            <h2>Promote Students</h2>
+            <div className="content">
+                <p>Welcome to the Promote Students page.</p>
+            </div>
+        </div>
+    );
+};
 
 export default PromoteStudents;
