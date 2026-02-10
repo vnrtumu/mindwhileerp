@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
 import Sidebar from '../../school/components/Layout/Sidebar';
 import Header from '../../school/components/Layout/Header';
 // @ts-ignore

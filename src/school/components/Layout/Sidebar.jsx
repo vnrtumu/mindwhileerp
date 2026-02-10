@@ -45,26 +45,27 @@ const menuData = [
                 title: 'Finance & Fees',
                 icon: IconCash,
                 subItems: [
-                    { title: 'Collect Fees', path: '/fees/collect' },
-                    { title: 'Search Due Fees', path: '/fees/due' },
-                    { title: 'All Transactions', path: '/fees/transactions' },
-                    { title: 'Online Transactions', path: '/fees/online-transactions' },
-                    { title: 'Fees Carry Forward', path: '/fees/carry-forward' },
-                    { title: 'Assign Fees', path: '/fees/assign' },
-                    { title: 'Fee Groups', path: '/fees/groups' },
-                    { title: 'Fees Discount', path: '/fees/discount' },
-                    { title: 'Fee Types', path: '/fees/types' },
-                    { title: 'Fee Permissions', path: '/fees/permissions' }
+                    { title: 'Collect Fees', path: '/school/finance/collect-fees' },
+                    { title: 'Search Due Fees', path: '/school/finance/search-due-fees' },
+                    { title: 'All Transactions', path: '/school/finance/all-transactions' },
+                    { title: 'Online Transactions', path: '/school/finance/online-transactions' },
+                    { title: 'Fees Carry Forward', path: '/school/finance/fees-carry-forward' },
+                    { title: 'Assign Fees', path: '/school/finance/assign-fees' },
+                    { title: 'Fees Master', path: '/school/finance/fees-master' },
+                    { title: 'Fee Groups', path: '/school/finance/fee-groups' },
+                    { title: 'Fees Discount', path: '/school/finance/fees-discount' },
+                    { title: 'Fee Types', path: '/school/finance/fee-types' },
+                    { title: 'Fee Permissions', path: '/school/finance/fee-permissions' }
                 ]
             },
             {
                 title: 'Accounts',
                 icon: IconWallet,
                 subItems: [
-                    { title: 'Income', path: '/accounts/income' },
-                    { title: 'Income Heads', path: '/accounts/income-heads' },
-                    { title: 'Expense', path: '/accounts/expense' },
-                    { title: 'Expense Heads', path: '/accounts/expense-heads' }
+                    { title: 'Income', path: '/school/accounts/income' },
+                    { title: 'Income Heads', path: '/school/accounts/income-heads' },
+                    { title: 'Expense', path: '/school/accounts/expense' },
+                    { title: 'Expense Heads', path: '/school/accounts/expense-heads' }
                 ]
             },
             {
@@ -78,26 +79,28 @@ const menuData = [
                 title: 'Student Information',
                 icon: IconUser,
                 subItems: [
-                    { title: 'Student List', path: '/students/list' },
-                    { title: 'Student Attendance', path: '/students/attendance' },
-                    { title: 'Behavior Records', path: '/students/behavior' },
-                    { title: 'Student Categories', path: '/students/categories' },
-                    { title: 'Disabled Students', path: '/students/disabled' }
+                    { title: 'Student List', path: '/school/student-list' },
+                    { title: 'Quick Student Admission', path: '/school/quick-admission' },
+                    { title: 'Student Attendance', path: '/school/student-attendance' },
+                    { title: 'Behavior Records', path: '/school/behavior-records' },
+                    { title: 'Student Categories', path: '/school/student-categories' },
+                    { title: 'Disabled Students', path: '/school/disabled-students' },
+                    { title: 'Bulk Edit', path: '/school/bulk-edit' }
                 ]
             },
             {
                 title: 'Academics',
                 icon: IconSchool,
                 subItems: [
-                    { title: 'Classes', path: '/classes' },
-                    { title: 'Sections', path: '/sections' },
-                    { title: 'Subjects', path: '/subjects' },
-                    { title: 'Assign Subjects', path: '/assign-subjects' },
-                    { title: 'Assign Class Teacher', path: '/assign-teacher' },
-                    { title: 'Manage Periods', path: '/periods' },
-                    { title: 'Class Timetable', path: '/timetable' },
-                    { title: 'Promote Students', path: '/promote-students' },
-                    { title: 'Homework', path: '/homework' }
+                    { title: 'Classes', path: '/school/academics/classes' },
+                    { title: 'Sections', path: '/school/academics/sections' },
+                    { title: 'Subjects', path: '/school/academics/subjects' },
+                    { title: 'Assign Subjects', path: '/school/academics/assign-subjects' },
+                    { title: 'Assign Class Teacher', path: '/school/academics/assign-class-teacher' },
+                    { title: 'Manage Periods', path: '/school/academics/manage-periods' },
+                    { title: 'Class Timetable', path: '/school/academics/class-timetable' },
+                    { title: 'Promote Students', path: '/school/academics/promote-students' },
+                    { title: 'Homework', path: '/school/academics/homework' }
                 ]
             },
             {
