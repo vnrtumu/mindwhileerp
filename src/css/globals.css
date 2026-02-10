@@ -17,6 +17,13 @@ main {
 
 body {
   font-family: 'DM Sans', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 @theme {
@@ -203,7 +210,7 @@ body {
   --error: #ef4444;
   --white: #ffffff;
   --dark: #1c2536;
-  --bodytext: #5a6a85bf;
+  --bodytext: #c1cedd;
 
   /* Light Variants */
   --lightprimary: color-mix(in oklab, var(--primary) 20%, transparent);
@@ -226,12 +233,14 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -309,7 +318,7 @@ body {
   }
 
   .sales-overview select {
-    @apply pr-9!;
+    @apply !pr-9;
   }
 
   /* Header action button used across Student Information headers */
