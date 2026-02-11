@@ -25,7 +25,6 @@ const TeachersList = Loadable(lazy(() => import('../pages/Teachers/index').then(
 const TestComponent = Loadable(lazy(() => import('../pages/Teachers/TestComponent')));
 const TeacherDetails = Loadable(lazy(() => import('../pages/Teachers/TeacherDetails')));
 const AddTeacher = Loadable(lazy(() => import('../pages/Teachers/AddTeacher')));
-const TeacherRoutine = Loadable(lazy(() => import('../pages/Teachers/Routine')));
 const AllTeachers = Loadable(lazy(() => import('../pages/Teachers/AllTeachers')));
 const Routine = Loadable(lazy(() => import('../pages/Teachers/Routine')));
 

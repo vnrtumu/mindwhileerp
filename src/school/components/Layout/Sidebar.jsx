@@ -94,7 +94,6 @@ const menuData = [
                 subItems: [
                     { title: 'All Teachers', path: '/school/teachers/all' },
                     { title: 'Teachers List', path: '/school/teachers/list' },
-                    { title: 'Teacher Details', path: '/school/teachers/details' },
                     { title: 'Routine', path: '/school/teachers/routine' }
                 ]
             },

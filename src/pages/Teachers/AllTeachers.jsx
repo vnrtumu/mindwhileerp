@@ -4,7 +4,7 @@ import {
     IconPlus, IconPrinter, IconDownload, IconRefresh, IconDotsVertical,
     IconPhone, IconMail, IconChevronDown, IconEye, IconEdit, IconLock,
     IconCircleOff, IconTrash, IconFileTypePdf, IconFileTypeXls, IconFileExport, IconChevronLeft,
-    IconUserPlus
+    IconUserPlus, IconX
 } from '@tabler/icons-react';
 import './Teachers.css';
 
@@ -39,6 +39,8 @@ const AllTeachers = ({ initialView = 'grid' }) => {
     const [showFilterMenu, setShowFilterMenu] = React.useState(false);
     const [showExportMenu, setShowExportMenu] = React.useState(false);
     const [activeMenu, setActiveMenu] = React.useState(null);
+    const [showLoginModal, setShowLoginModal] = React.useState(false);
+    const [selectedTeacher, setSelectedTeacher] = React.useState(null);
 
     // Close menu when clicking outside
     React.useEffect(() => {
@@ -68,17 +70,71 @@ const AllTeachers = ({ initialView = 'grid' }) => {
         }
     };
 
+    const handleShowLoginDetails = (teacherId) => {
+        const teacher = teachersList.find(t => t.id === teacherId);
+        setSelectedTeacher(teacher);
+        setShowLoginModal(true);
+        setActiveMenu(null);
+    };
+
     const ActionMenu = ({ teacherId, status }) => (
         <div className="action-menu">
             <div className="action-item" onClick={() => navigate(`/school/teachers/details/${teacherId}`)}><IconEye size={16} /> View Teacher</div>
             <div className="action-item" onClick={() => navigate(`/school/teachers/edit/${teacherId}`)}><IconEdit size={16} /> Edit</div>
-            <div className="action-item"><IconLock size={16} /> Login Details</div>
+            <div className="action-item" onClick={() => handleShowLoginDetails(teacherId)}><IconLock size={16} /> Login Details</div>
             <div className="action-item" onClick={() => handleToggleStatus(teacherId)}>
                 <IconCircleOff size={16} /> {status === 'Active' ? 'Disable' : 'Enable'}
             </div>
             <div className="action-item delete" onClick={() => handleDelete(teacherId)}><IconTrash size={16} /> Delete</div>
         </div>
     );
+
+    const LoginDetailsModal = () => {
+        if (!selectedTeacher) return null;
+        return (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h3>Login Details</h3>
+                        <button className="close-btn" onClick={() => setShowLoginModal(false)}><IconX size={20} /></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="modal-profile-header">
+                            <img src={selectedTeacher.avatar} alt={selectedTeacher.name} className="modal-avatar" />
+                            <div>
+                                <h4>{selectedTeacher.name}</h4>
+                                <span>{selectedTeacher.class}</span>
+                            </div>
+                        </div>
+                        <table className="modal-table">
+                            <thead>
+                                <tr>
+                                    <th>User Type</th>
+                                    <th>User Name</th>
+                                    <th>Password</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Parent</td>
+                                    <td>parent_{selectedTeacher.id.toLowerCase()}</td>
+                                    <td>parent@123</td>
+                                </tr>
+                                <tr>
+                                    <td>Teacher</td>
+                                    <td>teacher_{selectedTeacher.id.toLowerCase()}</td>
+                                    <td>teacher@123</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="modal-footer">
+                        <button className="btn-cancel" onClick={() => setShowLoginModal(false)}>Cancel</button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete this teacher?')) {
@@ -253,6 +309,8 @@ const AllTeachers = ({ initialView = 'grid' }) => {
                     <button className="add-btn" onClick={() => navigate('/school/teachers/add')}><IconUserPlus size={20} /> Add Teacher</button>
                 </div>
             </div>
+
+            {showLoginModal && <LoginDetailsModal />}
 
             <div className="filters-bar">
                 <div className="title-section">
