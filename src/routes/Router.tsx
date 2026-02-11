@@ -26,6 +26,8 @@ const TestComponent = Loadable(lazy(() => import('../pages/Teachers/TestComponen
 const TeacherDetails = Loadable(lazy(() => import('../pages/Teachers/TeacherDetails')));
 const AddTeacher = Loadable(lazy(() => import('../pages/Teachers/AddTeacher')));
 const TeacherRoutine = Loadable(lazy(() => import('../pages/Teachers/Routine')));
+const AllTeachers = Loadable(lazy(() => import('../pages/Teachers/AllTeachers')));
+const Routine = Loadable(lazy(() => import('../pages/Teachers/Routine')));
 
 // Academics Pages
 const Classes = Loadable(lazy(() => import('../pages/Academics/Classes')));
@@ -33,14 +35,16 @@ const Sections = Loadable(lazy(() => import('../pages/Academics/Sections')));
 const Subjects = Loadable(lazy(() => import('../pages/Academics/Subjects')));
 const AssignSubjects = Loadable(lazy(() => import('../pages/Academics/AssignSubjects')));
 const AssignTeacher = Loadable(lazy(() => import('../pages/Academics/AssignTeacher')));
+const AssignClassTeacher = Loadable(lazy(() => import('../pages/Academics/AssignClassTeacher')));
 const Periods = Loadable(lazy(() => import('../pages/Academics/Periods')));
+const ManagePeriods = Loadable(lazy(() => import('../pages/Academics/ManagePeriods')));
 const Timetable = Loadable(lazy(() => import('../pages/Academics/Timetable')));
+const ClassTimetable = Loadable(lazy(() => import('../pages/Academics/ClassTimetable')));
 const PromoteStudents = Loadable(lazy(() => import('../pages/Academics/PromoteStudents')));
 const Homework = Loadable(lazy(() => import('../pages/Academics/Homework')));
 const ParentDashboard = Loadable(lazy(() => import('../pages/Academics/ParentDashboard')));
 
 // Student Pages
-const StudentDashboard = Loadable(lazy(() => import('../pages/StudentDashboard')));
 const Students = Loadable(lazy(() => import('../pages/Students/Students')));
 const AddStudent = Loadable(lazy(() => import('../pages/StudentInformation/AddStudent')));
 const StudentList = Loadable(lazy(() => import('../pages/StudentInformation/StudentList')));
@@ -57,17 +61,6 @@ const AddBehaviorRecordPage = Loadable(lazy(() => import('../pages/StudentInform
 const DisabledStudents = Loadable(lazy(() => import('../pages/StudentInformation/DisabledStudents')));
 const BulkEdit = Loadable(lazy(() => import('../pages/StudentInformation/BulkEdit')));
 
-// Academics Pages
-const Classes = Loadable(lazy(() => import('../pages/Academics/Classes')));
-const Sections = Loadable(lazy(() => import('../pages/Academics/Sections')));
-const Subjects = Loadable(lazy(() => import('../pages/Academics/Subjects')));
-const AssignSubjects = Loadable(lazy(() => import('../pages/Academics/AssignSubjects')));
-const AssignClassTeacher = Loadable(lazy(() => import('../pages/Academics/AssignClassTeacher')));
-const ManagePeriods = Loadable(lazy(() => import('../pages/Academics/ManagePeriods')));
-const ClassTimetable = Loadable(lazy(() => import('../pages/Academics/ClassTimetable')));
-const PromoteStudents = Loadable(lazy(() => import('../pages/Academics/PromoteStudents')));
-const Homework = Loadable(lazy(() => import('../pages/Academics/Homework')));
-
 // Finance Pages
 const CollectFees = Loadable(lazy(() => import('../pages/Finance/CollectFees')));
 const SearchDueFees = Loadable(lazy(() => import('../pages/Finance/SearchDueFees')));
@@ -83,13 +76,6 @@ const FeePermissions = Loadable(lazy(() => import('../pages/Finance/FeePermissio
 
 // Accounts Pages
 const Income = Loadable(lazy(() => import('../pages/Accounts/Income')));
-
-// Teachers Pages
-const AllTeachers = Loadable(lazy(() => import('../pages/Teachers/AllTeachers')));
-const AddTeacher = Loadable(lazy(() => import('../pages/Teachers/AddTeacher')));
-const TeachersList = Loadable(lazy(() => import('../pages/Teachers/TeachersList')));
-const Routine = Loadable(lazy(() => import('../pages/Teachers/Routine')));
-const TeacherDetails = Loadable(lazy(() => import('../pages/Teachers/TeacherDetails')));
 
 // Super Admin Dashboards
 const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));
@@ -179,9 +165,10 @@ const Router = [
       // Teachers Routes
       { path: 'teachers/all', element: <AllTeachers /> },
       { path: 'teachers/add', element: <AddTeacher /> },
+      { path: 'teachers/edit/:id', element: <AddTeacher /> },
       { path: 'teachers/list', element: <TeachersList /> },
       { path: 'teachers/routine', element: <Routine /> },
-      { path: 'teachers/details', element: <TeacherDetails /> },
+      { path: 'teachers/details/:id', element: <TeacherDetails /> },
 
       { path: 'teachers', element: <div>Teachers Page</div> },
       { path: 'departments', element: <div>Departments Page</div> },
