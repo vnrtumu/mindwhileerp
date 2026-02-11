@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { StudentContext } from '../../context/StudentContext';
-import { AcademicsContext } from '../../context/AcademicsContext';
+import { StudentContext } from '../../../context/StudentContext';
+import { AcademicsContext } from '../../../context/AcademicsContext';
 import './BulkEdit.css';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';
-import { SortIcon } from '../../components/Icons';
+import { SortIcon } from '../../../components/Icons';
 
 const BulkEdit = () => {
     const { students } = useContext(StudentContext);

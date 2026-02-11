@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { StudentContext } from '../../context/StudentContext';
+import { StudentContext } from '../../../context/StudentContext';
 import './StudentCategories.css';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';

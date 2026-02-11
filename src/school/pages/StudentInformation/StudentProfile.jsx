@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Edit, Printer, Mail, Phone, MapPin, Award, Calendar, Book, CreditCard, User } from 'react-feather';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';
-import { StudentContext } from '../../context/StudentContext';
+import { StudentContext } from '../../../context/StudentContext';
 
 const StudentProfile = () => {
     const { id } = useParams();

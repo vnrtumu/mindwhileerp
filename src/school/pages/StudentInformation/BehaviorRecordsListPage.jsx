@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { StudentContext } from '../../context/StudentContext';
+import { StudentContext } from '../../../context/StudentContext';
 import './BehaviorRecords.css';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';
 
-const BehaviorRecords = () => {
+const BehaviorRecordsListPage = () => {
   const navigate = useNavigate();
   const { behaviorRecords, deleteBehaviorRecord, students } = useContext(StudentContext);
   const [q, setQ] = useState('');
@@ -51,7 +51,7 @@ const BehaviorRecords = () => {
             </div>
           </div>
           <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
-          <button className="btn btn-primary" onClick={() => navigate('/school/add-behavior-record')}>Add New Record</button>
+          <button className="btn btn-primary" onClick={() => navigate('/school/behavior-records')}>Add New Record</button>
         </div>
       </div>
 
@@ -60,7 +60,7 @@ const BehaviorRecords = () => {
             <div className="empty-state">
             <h4>No behavior records yet</h4>
             <p>Add records to track positive and negative incidents for students.</p>
-            <button className="btn btn-primary" onClick={() => navigate('/school/add-behavior-record')}>Add New Record</button>
+            <button className="btn btn-primary" onClick={() => navigate('/school/behavior-records')}>Add New Record</button>
           </div>
         ) : (
           <div className="table-wrap">
@@ -95,7 +95,7 @@ const BehaviorRecords = () => {
                     <td>{r.reportedBy}</td>
                     <td>
                       <div className="action-icons">
-                        <button className="icon-btn" title="Edit" onClick={() => navigate(`/school/behavior-records?edit=${r.id}`)}>
+                        <button className="icon-btn" title="Edit" onClick={() => navigate(`/student-info/behavior-records/add?edit=${r.id}`)}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
                         </button>
                         <button className="icon-btn" title="Delete" onClick={() => handleDelete(r.id)}>
@@ -122,4 +122,4 @@ const BehaviorRecords = () => {
   );
 };
 
-export default BehaviorRecords;
+export default BehaviorRecordsListPage;

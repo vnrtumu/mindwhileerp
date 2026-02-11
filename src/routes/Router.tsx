@@ -18,63 +18,63 @@ const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintai
 // School Admin Pages
 const SchoolDashboard = Loadable(lazy(() => import('../school/pages/Dashboard')));
 const TeacherDashboard = Loadable(lazy(() => import('../school/pages/TeacherDashboard')));
-const StudentDashboard = Loadable(lazy(() => import('../pages/StudentDashboard')));
-const TeachersModule = Loadable(lazy(() => import('../pages/Teachers/index')));
-const TeachersGrid = Loadable(lazy(() => import('../pages/Teachers/index').then(m => ({ default: m.TeachersGrid }))));
-const TeachersList = Loadable(lazy(() => import('../pages/Teachers/index').then(m => ({ default: m.TeachersList }))));
-const TestComponent = Loadable(lazy(() => import('../pages/Teachers/TestComponent')));
-const TeacherDetails = Loadable(lazy(() => import('../pages/Teachers/TeacherDetails')));
-const AddTeacher = Loadable(lazy(() => import('../pages/Teachers/AddTeacher')));
-const AllTeachers = Loadable(lazy(() => import('../pages/Teachers/AllTeachers')));
-const Routine = Loadable(lazy(() => import('../pages/Teachers/Routine')));
+const StudentDashboard = Loadable(lazy(() => import('../school/pages/StudentDashboard')));
+const TeachersModule = Loadable(lazy(() => import('../school/pages/Teachers/index')));
+const TeachersGrid = Loadable(lazy(() => import('../school/pages/Teachers/index').then(m => ({ default: m.TeachersGrid }))));
+const TeachersList = Loadable(lazy(() => import('../school/pages/Teachers/index').then(m => ({ default: m.TeachersList }))));
+const TestComponent = Loadable(lazy(() => import('../school/pages/Teachers/TestComponent')));
+const TeacherDetails = Loadable(lazy(() => import('../school/pages/Teachers/TeacherDetails')));
+const AddTeacher = Loadable(lazy(() => import('../school/pages/Teachers/AddTeacher')));
+const AllTeachers = Loadable(lazy(() => import('../school/pages/Teachers/AllTeachers')));
+const Routine = Loadable(lazy(() => import('../school/pages/Teachers/Routine')));
 
 // Academics Pages
-const Classes = Loadable(lazy(() => import('../pages/Academics/Classes')));
-const Sections = Loadable(lazy(() => import('../pages/Academics/Sections')));
-const Subjects = Loadable(lazy(() => import('../pages/Academics/Subjects')));
-const AssignSubjects = Loadable(lazy(() => import('../pages/Academics/AssignSubjects')));
-const AssignTeacher = Loadable(lazy(() => import('../pages/Academics/AssignTeacher')));
-const AssignClassTeacher = Loadable(lazy(() => import('../pages/Academics/AssignClassTeacher')));
-const Periods = Loadable(lazy(() => import('../pages/Academics/Periods')));
-const ManagePeriods = Loadable(lazy(() => import('../pages/Academics/ManagePeriods')));
-const Timetable = Loadable(lazy(() => import('../pages/Academics/Timetable')));
-const ClassTimetable = Loadable(lazy(() => import('../pages/Academics/ClassTimetable')));
-const PromoteStudents = Loadable(lazy(() => import('../pages/Academics/PromoteStudents')));
-const Homework = Loadable(lazy(() => import('../pages/Academics/Homework')));
-const ParentDashboard = Loadable(lazy(() => import('../pages/Academics/ParentDashboard')));
+const Classes = Loadable(lazy(() => import('../school/pages/Academics/Classes')));
+const Sections = Loadable(lazy(() => import('../school/pages/Academics/Sections')));
+const Subjects = Loadable(lazy(() => import('../school/pages/Academics/Subjects')));
+const AssignSubjects = Loadable(lazy(() => import('../school/pages/Academics/AssignSubjects')));
+const AssignTeacher = Loadable(lazy(() => import('../school/pages/Academics/AssignTeacher')));
+const AssignClassTeacher = Loadable(lazy(() => import('../school/pages/Academics/AssignClassTeacher')));
+const Periods = Loadable(lazy(() => import('../school/pages/Academics/Periods')));
+const ManagePeriods = Loadable(lazy(() => import('../school/pages/Academics/ManagePeriods')));
+const Timetable = Loadable(lazy(() => import('../school/pages/Academics/Timetable')));
+const ClassTimetable = Loadable(lazy(() => import('../school/pages/Academics/ClassTimetable')));
+const PromoteStudents = Loadable(lazy(() => import('../school/pages/Academics/PromoteStudents')));
+const Homework = Loadable(lazy(() => import('../school/pages/Academics/Homework')));
+const ParentDashboard = Loadable(lazy(() => import('../school/pages/Academics/ParentDashboard')));
 
 // Student Pages
-const Students = Loadable(lazy(() => import('../pages/Students/Students')));
-const AddStudent = Loadable(lazy(() => import('../pages/StudentInformation/AddStudent')));
-const StudentList = Loadable(lazy(() => import('../pages/StudentInformation/StudentList')));
-const QuickStudentAdmissionList = Loadable(lazy(() => import('../pages/StudentInformation/QuickStudentAdmissionList')));
-const QuickStudentAdmissionForm = Loadable(lazy(() => import('../pages/StudentInformation/QuickStudentAdmissionForm')));
-const StudentProfile = Loadable(lazy(() => import('../pages/StudentInformation/StudentProfile')));
-const DisableStudentPage = Loadable(lazy(() => import('../pages/StudentInformation/DisableStudentPage')));
-const StudentAttendance = Loadable(lazy(() => import('../pages/StudentInformation/StudentAttendance')));
-const AddAttendancePage = Loadable(lazy(() => import('../pages/StudentInformation/AddAttendancePage')));
-const StudentCategories = Loadable(lazy(() => import('../pages/StudentInformation/StudentCategories')));
-const AddStudentCategoryPage = Loadable(lazy(() => import('../pages/StudentInformation/AddStudentCategoryPage')));
-const BehaviorRecords = Loadable(lazy(() => import('../pages/StudentInformation/BehaviorRecords')));
-const AddBehaviorRecordPage = Loadable(lazy(() => import('../pages/StudentInformation/AddBehaviorRecordPage')));
-const DisabledStudents = Loadable(lazy(() => import('../pages/StudentInformation/DisabledStudents')));
-const BulkEdit = Loadable(lazy(() => import('../pages/StudentInformation/BulkEdit')));
+const Students = Loadable(lazy(() => import('../school/pages/Students/Students')));
+const AddStudent = Loadable(lazy(() => import('../school/pages/StudentInformation/AddStudent')));
+const StudentList = Loadable(lazy(() => import('../school/pages/StudentInformation/StudentList')));
+const QuickStudentAdmissionList = Loadable(lazy(() => import('../school/pages/StudentInformation/QuickStudentAdmissionList')));
+const QuickStudentAdmissionForm = Loadable(lazy(() => import('../school/pages/StudentInformation/QuickStudentAdmissionForm')));
+const StudentProfile = Loadable(lazy(() => import('../school/pages/StudentInformation/StudentProfile')));
+const DisableStudentPage = Loadable(lazy(() => import('../school/pages/StudentInformation/DisableStudentPage')));
+const StudentAttendance = Loadable(lazy(() => import('../school/pages/StudentInformation/StudentAttendance')));
+const AddAttendancePage = Loadable(lazy(() => import('../school/pages/StudentInformation/AddAttendancePage')));
+const StudentCategories = Loadable(lazy(() => import('../school/pages/StudentInformation/StudentCategories')));
+const AddStudentCategoryPage = Loadable(lazy(() => import('../school/pages/StudentInformation/AddStudentCategoryPage')));
+const BehaviorRecords = Loadable(lazy(() => import('../school/pages/StudentInformation/BehaviorRecords')));
+const AddBehaviorRecordPage = Loadable(lazy(() => import('../school/pages/StudentInformation/AddBehaviorRecordPage')));
+const DisabledStudents = Loadable(lazy(() => import('../school/pages/StudentInformation/DisabledStudents')));
+const BulkEdit = Loadable(lazy(() => import('../school/pages/StudentInformation/BulkEdit')));
 
 // Finance Pages
-const CollectFees = Loadable(lazy(() => import('../pages/Finance/CollectFees')));
-const SearchDueFees = Loadable(lazy(() => import('../pages/Finance/SearchDueFees')));
-const AllTransactions = Loadable(lazy(() => import('../pages/Finance/AllTransactions')));
-const OnlineTransactions = Loadable(lazy(() => import('../pages/Finance/OnlineTransactions')));
-const FeesCarryForward = Loadable(lazy(() => import('../pages/Finance/FeesCarryForward')));
-const AssignFees = Loadable(lazy(() => import('../pages/Finance/AssignFees')));
-const FeeGroups = Loadable(lazy(() => import('../pages/Finance/FeeGroups')));
-const FeesDiscount = Loadable(lazy(() => import('../pages/Finance/FeesDiscount')));
-const FeeTypes = Loadable(lazy(() => import('../pages/Finance/FeeTypes')));
-const FeesMaster = Loadable(lazy(() => import('../pages/Finance/FeesMaster')));
-const FeePermissions = Loadable(lazy(() => import('../pages/Finance/FeePermissions')));
+const CollectFees = Loadable(lazy(() => import('../school/pages/Finance/CollectFees')));
+const SearchDueFees = Loadable(lazy(() => import('../school/pages/Finance/SearchDueFees')));
+const AllTransactions = Loadable(lazy(() => import('../school/pages/Finance/AllTransactions')));
+const OnlineTransactions = Loadable(lazy(() => import('../school/pages/Finance/OnlineTransactions')));
+const FeesCarryForward = Loadable(lazy(() => import('../school/pages/Finance/FeesCarryForward')));
+const AssignFees = Loadable(lazy(() => import('../school/pages/Finance/AssignFees')));
+const FeeGroups = Loadable(lazy(() => import('../school/pages/Finance/FeeGroups')));
+const FeesDiscount = Loadable(lazy(() => import('../school/pages/Finance/FeesDiscount')));
+const FeeTypes = Loadable(lazy(() => import('../school/pages/Finance/FeeTypes')));
+const FeesMaster = Loadable(lazy(() => import('../school/pages/Finance/FeesMaster')));
+const FeePermissions = Loadable(lazy(() => import('../school/pages/Finance/FeePermissions')));
 
 // Accounts Pages
-const Income = Loadable(lazy(() => import('../pages/Accounts/Income')));
+const Income = Loadable(lazy(() => import('../school/pages/Accounts/Income')));
 
 // Super Admin Dashboards
 const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FeeContext } from '../../context/FeeContext';
+import { FeeContext } from '../../../context/FeeContext';
 import './FeeTypes.css';
 import HeaderActionButton from '../StudentInformation/components/HeaderActionButton';
 import BackButton from '../StudentInformation/components/BackButton';

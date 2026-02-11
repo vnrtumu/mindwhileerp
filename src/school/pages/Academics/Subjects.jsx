@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { AcademicsContext } from '../../context/AcademicsContext';
+import { AcademicsContext } from '../../../context/AcademicsContext';
 import { Plus, Trash2, Edit2, BookOpen } from 'react-feather';
 
 const Subjects = () => {

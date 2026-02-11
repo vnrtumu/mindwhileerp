@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';
-import { StudentContext } from '../../context/StudentContext';
-import { AcademicsContext } from '../../context/AcademicsContext';
+import { StudentContext } from '../../../context/StudentContext';
+import { AcademicsContext } from '../../../context/AcademicsContext';
 import './QuickStudentAdmissionForm.css';
 
 const QuickStudentAdmissionForm = () => {

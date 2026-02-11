@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { StudentContext } from '../../context/StudentContext';
+import { StudentContext } from '../../../context/StudentContext';
 import './DisableStudentPage.css';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';
-import { PlaceholderAvatar } from '../../components/Icons';
+import { PlaceholderAvatar } from '../../../components/Icons';
 
 const reasons = [
   'Transfer to Another School',

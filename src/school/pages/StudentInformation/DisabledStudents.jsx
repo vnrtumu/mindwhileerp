@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { StudentContext } from '../../context/StudentContext';
+import { StudentContext } from '../../../context/StudentContext';
 import { useNavigate } from 'react-router-dom';
 import './StudentList.css';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';
-import { EyeIcon, CheckIcon, PlaceholderAvatar } from '../../components/Icons';
+import { EyeIcon, CheckIcon, PlaceholderAvatar } from '../../../components/Icons';
 
 // Compact Disabled Students table — matches Student List styles
 

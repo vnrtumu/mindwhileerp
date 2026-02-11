@@ -1,22 +1,21 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FeeContext } from '../../context/FeeContext';
+import { FeeContext } from '../../../context/FeeContext';
 import './FeeTypes.css';
 import HeaderActionButton from '../StudentInformation/components/HeaderActionButton';
 import BackButton from '../StudentInformation/components/BackButton';
-import { EyeIcon, EditIcon, DeleteIcon } from '../../components/Icons';
+import { EyeIcon, EditIcon, DeleteIcon } from '../../../components/Icons';
 
-const FeeTypes = () => {
+const FeeGroups = () => {
   const navigate = useNavigate();
   const {
-    feeTypes,
     feeGroups,
     loading,
     error,
-    addFeeType,
-    updateFeeType,
-    deleteFeeType,
-    updateFeeTypeStatus,
+    addFeeGroup,
+    updateFeeGroup,
+    deleteFeeGroup,
+    updateFeeGroupStatus,
     setError
   } = useContext(FeeContext);
 
@@ -31,9 +30,6 @@ const FeeTypes = () => {
   const [selectedColumns] = useState({
     id: true,
     name: true,
-    code: true,
-    group: true,
-    description: true,
     status: true,
     actions: true
   });
@@ -41,8 +37,6 @@ const FeeTypes = () => {
 
   const [formData, setFormData] = useState({
     name: '',
-    group: '',
-    description: '',
     status: 'Active'
   });
 
@@ -59,10 +53,8 @@ const FeeTypes = () => {
   };
 
   // Filter and sort
-  const filtered = feeTypes.filter(ft =>
-    ft.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    ft.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    ft.group.toLowerCase().includes(searchQuery.toLowerCase())
+  const filtered = feeGroups.filter(fg =>
+    fg.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const sorted = [...filtered].sort((a, b) => {
@@ -88,7 +80,7 @@ const FeeTypes = () => {
   // Handle select all
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelectedRows(new Set(paged.map(ft => ft.id)));
+      setSelectedRows(new Set(paged.map(fg => fg.id)));
     } else {
       setSelectedRows(new Set());
     }
@@ -96,57 +88,48 @@ const FeeTypes = () => {
 
   // Handle modal open/close
   const openModal = () => {
-    setFormData({ name: '', group: '', description: '', status: 'Active' });
+    setFormData({ name: '', status: 'Active' });
     setIsEditMode(false);
     setEditingId(null);
     setShowModal(true);
   };
 
-  const openEditModal = (feeType) => {
+  const openEditModal = (feeGroup) => {
     setFormData({
-      name: feeType.name,
-      group: feeType.group,
-      description: feeType.description,
-      status: feeType.status
+      name: feeGroup.name,
+      status: feeGroup.status
     });
     setIsEditMode(true);
-    setEditingId(feeType.id);
+    setEditingId(feeGroup.id);
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
-    setFormData({ name: '', group: '', description: '', status: 'Active' });
+    setFormData({ name: '', status: 'Active' });
     setIsEditMode(false);
     setEditingId(null);
   };
 
   // Handle form submit
   const handleSubmit = async () => {
-    if (!formData.name.trim() || !formData.group.trim()) {
+    if (!formData.name.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
 
     try {
       if (isEditMode) {
-        // Update existing fee type
-        await updateFeeType(editingId, {
+        // Update existing fee group
+        await updateFeeGroup(editingId, {
           name: formData.name,
-          group: formData.group,
-          description: formData.description,
           status: formData.status
         });
-        showToast('Fee Type updated successfully', 'success');
+        showToast('Fee Group updated successfully', 'success');
       } else {
-        // Add new fee type
-        await addFeeType({
-          name: formData.name,
-          group: formData.group,
-          description: formData.description,
-          status: formData.status
-        });
-        showToast('Fee Type added successfully', 'success');
+        // Add new fee group
+        await addFeeGroup(formData.name);
+        showToast('Fee Group added successfully', 'success');
       }
       closeModal();
       setCurrentPage(1);
@@ -156,26 +139,26 @@ const FeeTypes = () => {
   };
 
   // Handle view (navigate to details page)
-  const handleViewFeeType = (id) => {
-    navigate(`/school/finance/fee-types/${id}`);
+  const handleViewFeeGroup = (id) => {
+    navigate(`/school/finance/fee-groups/${id}`);
   };
 
   // Handle edit
-  const handleEditFeeType = (feeType) => {
-    openEditModal(feeType);
+  const handleEditFeeGroup = (feeGroup) => {
+    openEditModal(feeGroup);
   };
 
   // Handle delete with confirmation
-  const handleDeleteClick = (feeType) => {
-    setDeleteConfirm(feeType);
+  const handleDeleteClick = (feeGroup) => {
+    setDeleteConfirm(feeGroup);
   };
 
   const confirmDelete = async () => {
     if (!deleteConfirm) return;
 
     try {
-      await deleteFeeType(deleteConfirm.id);
-      showToast(`Fee Type "${deleteConfirm.name}" deleted successfully`, 'success');
+      await deleteFeeGroup(deleteConfirm.id);
+      showToast(`Fee Group "${deleteConfirm.name}" deleted successfully`, 'success');
       setDeleteConfirm(null);
       setSelectedRows(prev => {
         const newSet = new Set(prev);
@@ -183,17 +166,17 @@ const FeeTypes = () => {
         return newSet;
       });
     } catch (err) {
-      showToast(err.message || 'Failed to delete fee type', 'error');
+      showToast(err.message || 'Failed to delete fee group', 'error');
     }
   };
 
   // Handle status toggle
-  const handleStatusToggle = async (feeType) => {
-    setStatusToggleLoading(feeType.id);
+  const handleStatusToggle = async (feeGroup) => {
+    setStatusToggleLoading(feeGroup.id);
 
     try {
-      const newStatus = feeType.status === 'Active' ? 'Inactive' : 'Active';
-      await updateFeeTypeStatus(feeType.id, newStatus);
+      const newStatus = feeGroup.status === 'Active' ? 'Inactive' : 'Active';
+      await updateFeeGroupStatus(feeGroup.id, newStatus);
       showToast(`Status changed to ${newStatus}`, 'success');
     } catch (err) {
       showToast(err.message || 'Failed to update status', 'error');
@@ -204,16 +187,16 @@ const FeeTypes = () => {
 
   // Export functions
   const handleExportCopy = () => {
-    const data = paged.map(ft => `${ft.id}\t${ft.name}\t${ft.code}\t${ft.group}`).join('\n');
+    const data = paged.map(fg => `${fg.id}\t${fg.name}`).join('\n');
     navigator.clipboard.writeText(data);
     showToast('Copied to clipboard', 'success');
   };
 
   const handleExportCSV = () => {
-    const headers = ['ID', 'Fees Type', 'Fees Code', 'Fees Group', 'Description', 'Status'];
-    const rows = paged.map(ft => [ft.id, ft.name, ft.code, ft.group, ft.description, ft.status]);
+    const headers = ['ID', 'Fee Group', 'Status'];
+    const rows = paged.map(fg => [fg.id, fg.name, fg.status]);
     const csv = [headers, ...rows].map(r => r.map(cell => `"${cell}"`).join(',')).join('\n');
-    downloadFile(csv, 'fee-types.csv', 'text/csv');
+    downloadFile(csv, 'fee-groups.csv', 'text/csv');
   };
 
   const handleExportPDF = () => {
@@ -252,7 +235,7 @@ const FeeTypes = () => {
               <div>
                 <h4>Fees Collection</h4>
                 <nav className="breadcrumb">
-                  <span>Dashboard</span> / <span>Fees Collection</span> / <span className="current">Fees Type</span>
+                  <span>Dashboard</span> / <span>Fees Collection</span> / <span className="current">Fees Group</span>
                 </nav>
               </div>
             </div>
@@ -287,7 +270,7 @@ const FeeTypes = () => {
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
-              Add Fees Type
+              Add Fees Group
             </button>
           </div>
         </div>
@@ -313,7 +296,7 @@ const FeeTypes = () => {
             </svg>
             <input
               type="text"
-              placeholder="Search fees types..."
+              placeholder="Search fee groups..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
@@ -322,7 +305,7 @@ const FeeTypes = () => {
         </div>
 
         {/* Empty State or Table */}
-        {feeTypes.length === 0 ? (
+        {feeGroups.length === 0 ? (
           <div className="empty-state-container">
             <div className="empty-state-card">
               <div className="empty-state-icon">
@@ -331,14 +314,14 @@ const FeeTypes = () => {
                   <path d="M9 9h6M9 15h6"></path>
                 </svg>
               </div>
-              <h3>No fee types found</h3>
-              <p>Click 'Add Fees Type' to create one.</p>
+              <h3>No fee groups found</h3>
+              <p>Click 'Add Fees Group' to create one.</p>
               <button className="btn btn-primary btn-large" onClick={openModal}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
-                Add Fees Type
+                Add Fees Group
               </button>
             </div>
           </div>
@@ -366,7 +349,7 @@ const FeeTypes = () => {
                   Print
                 </button>
               </div>
-              <span className="table-stats">{filtered.length} fees types | {selectedRows.size > 0 && <strong>{selectedRows.size} selected</strong>}</span>
+              <span className="table-stats">{filtered.length} fee groups | {selectedRows.size > 0 && <strong>{selectedRows.size} selected</strong>}</span>
             </div>
 
             {/* Table */}
@@ -377,42 +360,36 @@ const FeeTypes = () => {
                     <th className="checkbox-col">
                       <input
                         type="checkbox"
-                        checked={paged.length > 0 && paged.every(ft => selectedRows.has(ft.id))}
+                        checked={paged.length > 0 && paged.every(fg => selectedRows.has(fg.id))}
                         onChange={handleSelectAll}
                       />
                     </th>
                     {selectedColumns.id && <th>ID</th>}
-                    {selectedColumns.name && <th>Fees Type</th>}
-                    {selectedColumns.code && <th>Fees Code</th>}
-                    {selectedColumns.group && <th>Fees Group</th>}
-                    {selectedColumns.description && <th>Description</th>}
+                    {selectedColumns.name && <th>Fee Group</th>}
                     {selectedColumns.status && <th>Status</th>}
                     {selectedColumns.actions && <th className="actions-col">Actions</th>}
                   </tr>
                 </thead>
                 <tbody>
-                  {paged.map(ft => (
-                    <tr key={ft.id} className="hover-row">
+                  {paged.map(fg => (
+                    <tr key={fg.id} className="hover-row">
                       <td className="checkbox-col">
                         <input
                           type="checkbox"
-                          checked={selectedRows.has(ft.id)}
-                          onChange={() => handleRowCheckbox(ft.id)}
+                          checked={selectedRows.has(fg.id)}
+                          onChange={() => handleRowCheckbox(fg.id)}
                         />
                       </td>
-                      {selectedColumns.id && <td>{ft.id}</td>}
-                      {selectedColumns.name && <td className="name-cell"><strong>{ft.name}</strong></td>}
-                      {selectedColumns.code && <td><span className="code-badge">{ft.code}</span></td>}
-                      {selectedColumns.group && <td>{ft.group}</td>}
-                      {selectedColumns.description && <td className="desc-cell">{ft.description}</td>}
+                      {selectedColumns.id && <td>{fg.id}</td>}
+                      {selectedColumns.name && <td className="name-cell"><strong>{fg.name}</strong></td>}
                       {selectedColumns.status && <td>
                         <button
-                          onClick={() => handleStatusToggle(ft)}
-                          disabled={statusToggleLoading === ft.id}
-                          className={`status-badge status-${ft.status.toLowerCase()} status-clickable`}
+                          onClick={() => handleStatusToggle(fg)}
+                          disabled={statusToggleLoading === fg.id}
+                          className={`status-badge status-${fg.status.toLowerCase()} status-clickable`}
                           title="Click to toggle status"
                         >
-                          {statusToggleLoading === ft.id ? 'Updating...' : ft.status}
+                          {statusToggleLoading === fg.id ? 'Updating...' : fg.status}
                         </button>
                       </td>}
                       {selectedColumns.actions && <td className="actions-cell">
@@ -420,21 +397,21 @@ const FeeTypes = () => {
                           <button
                             className="icon-btn view-btn"
                             title="View"
-                            onClick={() => handleViewFeeType(ft.id)}
+                            onClick={() => handleViewFeeGroup(fg.id)}
                           >
                             <EyeIcon size={16} />
                           </button>
                           <button
                             className="icon-btn edit-btn"
                             title="Edit"
-                            onClick={() => handleEditFeeType(ft)}
+                            onClick={() => handleEditFeeGroup(fg)}
                           >
                             <EditIcon size={16} />
                           </button>
                           <button
                             className="icon-btn delete-btn"
                             title="Delete"
-                            onClick={() => handleDeleteClick(ft)}
+                            onClick={() => handleDeleteClick(fg)}
                           >
                             <DeleteIcon size={16} />
                           </button>
@@ -473,51 +450,23 @@ const FeeTypes = () => {
         )}
       </div>
 
-      {/* Add/Edit Fee Type Modal */}
+      {/* Add/Edit Fee Group Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>{isEditMode ? 'Edit Fees Type' : 'Add New Fees Type'}</h3>
+              <h3>{isEditMode ? 'Edit Fee Group' : 'Add New Fee Group'}</h3>
               <button className="close-btn" onClick={closeModal}>×</button>
             </div>
             <div className="modal-body">
               <div className="form-group">
-                <label>Fees Type Name *</label>
+                <label>Fee Group Name *</label>
                 <input
                   type="text"
-                  placeholder="Enter fees type name"
+                  placeholder="Enter fee group name"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   className="form-input"
-                  disabled={loading}
-                />
-              </div>
-              <div className="form-group">
-                <label>Fees Group *</label>
-                <div className="select-with-add">
-                  <select
-                    value={formData.group}
-                    onChange={(e) => setFormData({...formData, group: e.target.value})}
-                    className="form-select"
-                    disabled={loading}
-                  >
-                    <option value="">Select a group</option>
-                    {feeGroups.map(group => (
-                      <option key={group.id} value={group.name}>{group.name}</option>
-                    ))}
-                  </select>
-                  <button className="btn-add-new" title="Add New Group" disabled={loading}>+</button>
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Description</label>
-                <textarea
-                  placeholder="Enter description (optional)"
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="form-textarea"
-                  rows="3"
                   disabled={loading}
                 />
               </div>
@@ -552,7 +501,7 @@ const FeeTypes = () => {
             <div className="modal-footer">
               <button className="btn btn-outline" onClick={closeModal} disabled={loading}>Cancel</button>
               <button className="btn btn-primary" onClick={handleSubmit} disabled={loading}>
-                {loading ? 'Processing...' : (isEditMode ? 'Update Fees Type' : 'Add Fees Type')}
+                {loading ? 'Processing...' : (isEditMode ? 'Update Fee Group' : 'Add Fee Group')}
               </button>
             </div>
           </div>
@@ -564,7 +513,7 @@ const FeeTypes = () => {
         <div className="modal-overlay" onClick={() => setDeleteConfirm(null)}>
           <div className="modal-content confirmation-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Delete Fee Type</h3>
+              <h3>Delete Fee Group</h3>
               <button className="close-btn" onClick={() => setDeleteConfirm(null)}>×</button>
             </div>
             <div className="modal-body">
@@ -611,4 +560,4 @@ const FeeTypes = () => {
   );
 };
 
-export default FeeTypes;
+export default FeeGroups;

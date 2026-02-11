@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { StudentContext } from '../../context/StudentContext';
+import { StudentContext } from '../../../context/StudentContext';
 import { useNavigate } from 'react-router-dom';
 import './QuickStudentAdmissionList.css';
 import HeaderActionButton from './components/HeaderActionButton';
 import BackButton from './components/BackButton';
-import { EditIcon, BanIcon, SortIcon, PlaceholderAvatar, DeleteIcon } from '../../components/Icons';
+import { EditIcon, BanIcon, SortIcon, PlaceholderAvatar, DeleteIcon } from '../../../components/Icons';
 
 const QuickStudentAdmissionList = () => {
     const navigate = useNavigate();
