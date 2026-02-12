@@ -75,6 +75,13 @@ const FeePermissions = Loadable(lazy(() => import('../school/pages/Finance/FeePe
 
 // Accounts Pages
 const Income = Loadable(lazy(() => import('../school/pages/Accounts/Income')));
+const IncomeHeads = Loadable(lazy(() => import('../school/pages/Accounts/IncomeHeads')));
+const Expense = Loadable(lazy(() => import('../school/pages/Accounts/Expense')));
+const ExpenseHeads = Loadable(lazy(() => import('../school/pages/Accounts/ExpenseHeads')));
+
+// Examination Pages
+const ExamDashboard = Loadable(lazy(() => import('../school/pages/Examination/ExamDashboard')));
+const AssignExam = Loadable(lazy(() => import('../school/pages/Examination/AssignExam')));
 
 // Super Admin Dashboards
 const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));
@@ -160,6 +167,14 @@ const Router = [
 
       // Accounts Routes
       { path: 'accounts/income', element: <Income /> },
+      { path: 'accounts/income-heads', element: <IncomeHeads /> },
+      { path: 'accounts/expense', element: <Expense /> },
+      { path: 'accounts/expense-heads', element: <ExpenseHeads /> },
+
+      // Exam Routes
+      { path: 'exam/dashboard', element: <ExamDashboard /> },
+      { path: 'exam/assign', element: <AssignExam /> },
+      { path: 'exam/schedule', element: <div className="p-4">Exam Schedule Page Content</div> },
 
       // Teachers Routes
       { path: 'teachers/all', element: <AllTeachers /> },

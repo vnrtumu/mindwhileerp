@@ -244,41 +244,6 @@ const TeacherDetails = () => {
                         </div>
                     </div>
 
-                    <div className="widget-tabs-container">
-                        <div className="widget-tabs">
-                            <button
-                                className={activeWidgetTab === 'hostel' ? 'active' : ''}
-                                onClick={() => setActiveWidgetTab('hostel')}
-                            >
-                                Hostel
-                            </button>
-                            <button
-                                className={activeWidgetTab === 'transport' ? 'active' : ''}
-                                onClick={() => setActiveWidgetTab('transport')}
-                            >
-                                Transportation
-                            </button>
-                        </div>
-                        <div className="widget-tab-content">
-                            {activeWidgetTab === 'hostel' ? (
-                                <div className="hostel-info">
-                                    <div className="icon-box"><IconBuilding size={18} /></div>
-                                    <div>
-                                        <span className="place-name">HI-Hostel, Floor</span>
-                                        <span className="room-no">Room No : 25</span>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="hostel-info transport-info">
-                                    <div className="icon-box"><IconBus size={18} /></div>
-                                    <div>
-                                        <span className="place-name">Route-01 (Main Road)</span>
-                                        <span className="room-no">Vehicle No : MH-43-1234</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
                 </div>
 
                 {/* Right Content */}

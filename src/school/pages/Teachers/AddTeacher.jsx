@@ -18,7 +18,9 @@ const AddTeacher = () => {
     const teacher = isEditMode ? teachers.find(t => t.id === id) : null;
 
     const fileInputRef = useRef(null);
+    const signatureInputRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState(teacher?.avatar || null);
+    const [selectedSignature, setSelectedSignature] = useState(teacher?.signature || null);
     const [selectedLanguage, setSelectedLanguage] = useState(teacher?.languages || '');
 
     const handleImageChange = (e) => {
@@ -39,6 +41,24 @@ const AddTeacher = () => {
         }
     };
 
+    const handleSignatureChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedSignature(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleRemoveSignature = () => {
+        setSelectedSignature(null);
+        if (signatureInputRef.current) {
+            signatureInputRef.current.value = '';
+        }
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -56,6 +76,7 @@ const AddTeacher = () => {
             whatsapp: data.whatsapp,
             status: data.status || 'Active',
             avatar: selectedImage || 'https://i.pravatar.cc/150?u=' + (data.firstName || 'new'),
+            signature: selectedSignature || null,
             joinDate: data.joinDate,
             fatherName: data.fatherName,
             motherName: data.motherName,
@@ -126,41 +147,81 @@ const AddTeacher = () => {
                         <h3 className="section-title">Personal Information</h3>
                     </div>
                     <div className="section-body">
-                        <div className="image-upload-row">
-                            <div className="image-preview">
-                                {selectedImage ? (
-                                    <img src={selectedImage} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '8px', objectFit: 'cover' }} />
-                                ) : (
-                                    <IconUser size={40} />
-                                )}
-                            </div>
-                            <div className="upload-actions">
-                                <div style={{ display: 'flex', gap: '10px' }}>
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        onChange={handleImageChange}
-                                        accept="image/*"
-                                        style={{ display: 'none' }}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                        style={{ padding: '6px 12px', fontSize: '12px' }}
-                                        onClick={() => fileInputRef.current.click()}
-                                    >
-                                        Upload
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                        style={{ padding: '6px 12px', fontSize: '12px', background: '#3b82f6', color: 'white' }}
-                                        onClick={handleRemoveImage}
-                                    >
-                                        Remove
-                                    </button>
+                        <div style={{ display: 'flex', gap: '40px', marginBottom: '24px' }}>
+                            <div className="image-upload-row" style={{ flex: 1, marginBottom: 0 }}>
+                                <div className="image-preview">
+                                    {selectedImage ? (
+                                        <img src={selectedImage} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '8px', objectFit: 'cover' }} />
+                                    ) : (
+                                        <IconUser size={40} />
+                                    )}
                                 </div>
-                                <span className="upload-text">Upload image size 4MB, Format JPG, PNG, SVG</span>
+                                <div className="upload-actions">
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleImageChange}
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            style={{ padding: '6px 12px', fontSize: '12px' }}
+                                            onClick={() => fileInputRef.current.click()}
+                                        >
+                                            Upload
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            style={{ padding: '6px 12px', fontSize: '12px', background: '#3b82f6', color: 'white' }}
+                                            onClick={handleRemoveImage}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                    <span className="upload-text">Upload image size 4MB, Format JPG, PNG, SVG</span>
+                                </div>
+                            </div>
+
+                            <div className="image-upload-row" style={{ flex: 1, marginBottom: 0 }}>
+                                <div className="image-preview">
+                                    {selectedSignature ? (
+                                        <img src={selectedSignature} alt="Signature Preview" style={{ width: '100%', height: '100%', borderRadius: '8px', objectFit: 'cover' }} />
+                                    ) : (
+                                        <IconFileText size={40} />
+                                    )}
+                                </div>
+                                <div className="upload-actions">
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        <input
+                                            type="file"
+                                            ref={signatureInputRef}
+                                            onChange={handleSignatureChange}
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            style={{ padding: '6px 12px', fontSize: '12px' }}
+                                            onClick={() => signatureInputRef.current.click()}
+                                        >
+                                            Upload
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            style={{ padding: '6px 12px', fontSize: '12px', background: '#3b82f6', color: 'white' }}
+                                            onClick={handleRemoveSignature}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                    <span className="upload-text">Upload Teacher Signature - Size 4MB, Format JPG, PNG, SVG</span>
+                                </div>
                             </div>
                         </div>
 
@@ -421,106 +482,7 @@ const AddTeacher = () => {
                     </div>
                 </div>
 
-                {/* Transport Information */}
-                <div className="form-section">
-                    <div className="section-header">
-                        <IconBus size={20} />
-                        <h3 className="section-title">Transport Information</h3>
-                    </div>
-                    <div className="section-body">
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label className="form-label">Route</label>
-                                <select name="route" className="form-control" defaultValue={getVal('route')}>
-                                    <option value="">Select</option>
-                                    <option value="Newyork">Newyork</option>
-                                    <option value="Route 1">Route 1</option>
-                                    <option value="Route 2">Route 2</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Vehicle Number</label>
-                                <select name="vehicleNo" className="form-control" defaultValue={getVal('vehicleNo')}>
-                                    <option value="">Select</option>
-                                    <option value="AM 34346">AM 34346</option>
-                                    <option value="VH001">VH001</option>
-                                    <option value="VH002">VH002</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Pickup Point</label>
-                                <select name="pickupPoint" className="form-control" defaultValue={getVal('pickupPoint')}>
-                                    <option value="">Select</option>
-                                    <option value="Cincinnati">Cincinnati</option>
-                                    <option value="Point A">Point A</option>
-                                    <option value="Point B">Point B</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Hostel Information */}
-                <div className="form-section">
-                    <div className="section-header">
-                        <IconBuilding size={20} />
-                        <h3 className="section-title">Hostel Information</h3>
-                    </div>
-                    <div className="section-body">
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label className="form-label">Hostel</label>
-                                <select name="hostel" className="form-control" defaultValue={getVal('hostel')}>
-                                    <option value="">Select</option>
-                                    <option value="Phoenix Residence">Phoenix Residence</option>
-                                    <option value="Hostel A">Hostel A</option>
-                                    <option value="Hostel B">Hostel B</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Room No</label>
-                                <select name="roomNo" className="form-control" defaultValue={getVal('roomNo')}>
-                                    <option value="">Select</option>
-                                    <option value="20">20</option>
-                                    <option value="101">101</option>
-                                    <option value="102">102</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Social Media Links */}
-                <div className="form-section">
-                    <div className="section-header">
-                        <IconBrandFacebook size={20} />
-                        <h3 className="section-title">Social Media Links</h3>
-                    </div>
-                    <div className="section-body">
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label className="form-label">Facebook</label>
-                                <input type="text" name="facebook" className="form-control" defaultValue={getVal('facebook')} />
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Instagram</label>
-                                <input type="text" name="instagram" className="form-control" defaultValue={getVal('instagram')} />
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">LinkedIn</label>
-                                <input type="text" name="linkedin" className="form-control" defaultValue={getVal('linkedin')} />
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Youtube</label>
-                                <input type="text" name="youtube" className="form-control" defaultValue={getVal('youtube')} />
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Twitter URL</label>
-                                <input type="text" name="twitter" className="form-control" defaultValue={getVal('twitter')} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Documents */}
                 <div className="form-section">

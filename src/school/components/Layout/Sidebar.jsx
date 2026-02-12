@@ -122,13 +122,11 @@ const menuData = [
                 ]
             },
             {
-                title: 'Offline Examinations',
+                title: 'Exam',
                 icon: IconPencil,
                 subItems: [
-                    { title: 'Exam', path: '/exam/offline' },
-                    { title: 'Exam Types', path: '/exam/types' },
-                    { title: 'Schedule & Marks Setup', path: '/exam/schedule-marks' },
-                    { title: 'Marks', path: '/exam/marks' }
+                    { title: 'Exam Dashboard', path: '/school/exam/dashboard' },
+                    { title: 'Exam Schedule', path: '/school/exam/schedule' }
                 ]
             },
             {

@@ -43,6 +43,7 @@ import ManagePeriods from './pages/Academics/ManagePeriods';
 import ClassTimetable from './pages/Academics/ClassTimetable';
 import PromoteStudents from './pages/Academics/PromoteStudents';
 import Homework from './pages/Academics/Homework';
+import ExamDashboard from './pages/Examination/ExamDashboard';
 
 import { AcademicsProvider } from './context/AcademicsContext';
 
@@ -56,16 +57,20 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/login" element={<Login />} />
 
-<<<<<<< HEAD:src/App.jsx
               {/* Protected Routes Wrapper */}
               <Route path="/" element={<MainLayout />}>
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="teacher-dashboard" element={<TeacherDashboard />} />
                 <Route path="student-dashboard" element={<StudentDashboard />} />
                 <Route path="students" element={<div>Students Page</div>} />
                 <Route path="teachers" element={<div>Teachers Page</div>} />
                 <Route path="departments" element={<div>Departments Page</div>} />
                 <Route path="accounts" element={<div>Accounts Page</div>} />
                 <Route path="accounts/income" element={<Income />} />
+
+                {/* Exam Routes */}
+                <Route path="school/exam/dashboard" element={<ExamDashboard />} />
+                <Route path="school/exam/schedule" element={<div>Exam Schedule Page</div>} />
 
                 {/* Finance & Fees Routes */}
                 <Route path="finance/collect-fees" element={<CollectFees />} />
@@ -108,21 +113,7 @@ function App() {
           </Router>
         </AcademicsProvider>
       </StudentProvider>
-=======
-          {/* Protected Routes Wrapper */}
-          <Route path="/" element={<MainLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="teacher-dashboard" element={<TeacherDashboard />} />
-            <Route path="student-dashboard" element={<StudentDashboard />} />
-            <Route path="students" element={<div>Students Page</div>} />
-            <Route path="teachers" element={<div>Teachers Page</div>} />
-            <Route path="departments" element={<div>Departments Page</div>} />
-            <Route path="accounts" element={<div>Accounts Page</div>} />
-            <Route path="accounts/income" element={<Income />} />
-          </Route>
-        </Routes>
-      </Router>
->>>>>>> dd19bf874bfe1257e03bb23ed12aae1f1cc51940:src/school/App.jsx
+
     </ThemeProvider>
   );
 }
