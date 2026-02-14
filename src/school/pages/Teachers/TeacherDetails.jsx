@@ -39,8 +39,6 @@ const TeacherDetails = () => {
     const teacher = teachers.find(t => t.id === id) || teachers[0];
     console.log('TeacherDetails id:', id, 'Teacher found:', teacher);
 
-    if (!teacher) return <div>Teacher not found</div>;
-
     // Close menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -56,6 +54,8 @@ const TeacherDetails = () => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    if (!teacher) return <div>Teacher not found</div>;
 
     const ApplyLeaveModal = () => (
         <div className="modal-overlay">

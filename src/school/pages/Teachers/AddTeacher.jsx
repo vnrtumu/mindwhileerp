@@ -8,7 +8,7 @@ import {
 import { getTeachers, saveTeacher } from './teachersData';
 import './AddTeacher.css';
 
-const AddTeacher = () => {
+const AddTeacher = ({ onCancel }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const isEditMode = !!id;
@@ -131,7 +131,7 @@ const AddTeacher = () => {
         <div className="add-teacher-page">
             <div className="page-header">
                 <div className="add-teacher-title-row">
-                    <button type="button" className="back-btn" onClick={() => navigate(-1)}>
+                    <button type="button" className="back-btn" onClick={() => onCancel ? onCancel() : navigate(-1)}>
                         <IconArrowLeft size={20} />
                     </button>
                     <h2 className="page-title">{isEditMode ? 'Edit Teacher' : 'Add Teacher'}</h2>
@@ -545,7 +545,7 @@ const AddTeacher = () => {
                 )}
 
                 <div className="form-actions">
-                    <button type="button" className="btn btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
+                    <button type="button" className="btn btn-secondary" onClick={() => onCancel ? onCancel() : navigate(-1)}>Cancel</button>
                     <button type="submit" className="btn btn-primary">
                         {isEditMode ? 'Update Teacher' : 'Add Teacher'}
                     </button>

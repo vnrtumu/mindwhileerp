@@ -16,16 +16,16 @@ const Register2 = Loadable(lazy(() => import('../views/authentication/auth2/Regi
 const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintainance')));
 
 // School Admin Pages
-const SchoolDashboard = Loadable(lazy(() => import('../school/pages/Dashboard')));
-const TeacherDashboard = Loadable(lazy(() => import('../school/pages/TeacherDashboard')));
-const StudentDashboard = Loadable(lazy(() => import('../school/pages/StudentDashboard')));
-const TeachersModule = Loadable(lazy(() => import('../school/pages/Teachers/index')));
-const TeachersGrid = Loadable(lazy(() => import('../school/pages/Teachers/index').then(m => ({ default: m.TeachersGrid }))));
-const TeachersList = Loadable(lazy(() => import('../school/pages/Teachers/index').then(m => ({ default: m.TeachersList }))));
-const TestComponent = Loadable(lazy(() => import('../school/pages/Teachers/TestComponent')));
-const TeacherDetails = Loadable(lazy(() => import('../school/pages/Teachers/TeacherDetails')));
-const AddTeacher = Loadable(lazy(() => import('../school/pages/Teachers/AddTeacher')));
+// School Admin Pages
+const SchoolDashboard = Loadable(lazy(() => import('../school/pages/Dashboard/index')));
+const TeacherDashboard = Loadable(lazy(() => import('../school/pages/TeacherDashboard/index')));
+const StudentDashboard = Loadable(lazy(() => import('../school/pages/StudentDashboard/index')));
+
+// Teachers Pages
 const AllTeachers = Loadable(lazy(() => import('../school/pages/Teachers/AllTeachers')));
+const TeachersList = Loadable(lazy(() => import('../school/pages/Teachers/TeachersList')));
+const TeachersGrid = Loadable(lazy(() => import('../school/pages/Teachers/TeachersGrid')));
+const TeacherDetails = Loadable(lazy(() => import('../school/pages/Teachers/TeacherDetails')));
 const Routine = Loadable(lazy(() => import('../school/pages/Teachers/Routine')));
 
 // Academics Pages
@@ -178,13 +178,14 @@ const Router = [
 
       // Teachers Routes
       { path: 'teachers/all', element: <AllTeachers /> },
-      { path: 'teachers/add', element: <AddTeacher /> },
-      { path: 'teachers/edit/:id', element: <AddTeacher /> },
       { path: 'teachers/list', element: <TeachersList /> },
+      { path: 'teachers/grid', element: <TeachersGrid /> },
+      { path: 'teachers/add', element: <AllTeachers /> },
+      { path: 'teachers/edit/:id', element: <AllTeachers /> },
       { path: 'teachers/routine', element: <Routine /> },
       { path: 'teachers/details/:id', element: <TeacherDetails /> },
+      { path: 'teachers', element: <Navigate to="/school/teachers/all" replace /> },
 
-      { path: 'teachers', element: <div>Teachers Page</div> },
       { path: 'departments', element: <div>Departments Page</div> },
       { path: 'accounts', element: <div>Accounts Page</div> },
       { path: '*', element: <Navigate to="/auth/404" /> },
