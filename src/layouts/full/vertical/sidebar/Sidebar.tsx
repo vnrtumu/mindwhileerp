@@ -101,7 +101,7 @@ const renderSidebarItems = (
   });
 };
 
-const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
+const SidebarLayout = ({ onClose, collapsed = false }: { onClose?: () => void; collapsed?: boolean }) => {
   const location = useLocation();
   const pathname = location.pathname;
   const { theme } = useTheme();
@@ -123,98 +123,106 @@ const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
   const sidebarMode = theme === 'light' || theme === 'dark' ? theme : undefined;
 
   return (
-    <AMSidebar
-      collapsible="none"
-      animation={true}
-      showProfile={false}
-      width={'270px'}
-      showTrigger={false}
-      mode={sidebarMode}
-      className="fixed left-0 top-0 border border-border dark:border-border bg-sidebar dark:bg-sidebar z-10 h-screen"
+    <div
+      className="fixed left-0 top-0 z-10 h-screen transition-transform duration-300 ease-in-out"
+      style={{
+        width: 270,
+        transform: collapsed ? 'translateX(-270px)' : 'translateX(0)',
+      }}
     >
-      {/* Logo */}
-      <div className="px-6 flex items-center brand-logo overflow-hidden">
-        <AMLogo component={Link} href="/" img="">
-          <FullLogo />
-        </AMLogo>
-      </div>
+      <AMSidebar
+        collapsible="none"
+        animation={true}
+        showProfile={false}
+        width={'270px'}
+        showTrigger={false}
+        mode={sidebarMode}
+        className="border border-border dark:border-border bg-sidebar dark:bg-sidebar h-screen"
+      >
+        {/* Logo */}
+        <div className="px-6 flex items-center brand-logo overflow-hidden">
+          <AMLogo component={Link} href="/" img="">
+            <FullLogo />
+          </AMLogo>
+        </div>
 
-      {/* Sidebar items */}
+        {/* Sidebar items */}
 
-      <SimpleBar className="h-[calc(100vh-100px)]">
-        <div className="px-6">
-          {SidebarContent.map((section, index) => (
-            <div key={index}>
-              {renderSidebarItems(
-                [
-                  ...(section.heading ? [{ heading: section.heading }] : []),
-                  ...(section.children || []),
-                ],
-                pathname,
-                onClose,
-              )}
-            </div>
-          ))}
-
-          {/* Inspirational Quotes Section */}
-          <div className="mt-6 mb-4">
-            <div
-              className="relative w-full rounded-xl p-5 overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, #5D87FF 0%, #7C4DFF 50%, #E040FB 100%)',
-              }}
-            >
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-16 h-16 rounded-full bg-white/10 -mr-4 -mt-4" />
-              <div className="absolute bottom-0 left-0 w-10 h-10 rounded-full bg-white/10 -ml-2 -mb-2" />
-
-              {/* Quote icon */}
-              <div className="mb-2">
-                <Icon icon="mdi:format-quote-open" width={28} height={28} className="text-white/60" />
+        <SimpleBar className="h-[calc(100vh-100px)]">
+          <div className="px-6">
+            {SidebarContent.map((section, index) => (
+              <div key={index}>
+                {renderSidebarItems(
+                  [
+                    ...(section.heading ? [{ heading: section.heading }] : []),
+                    ...(section.children || []),
+                  ],
+                  pathname,
+                  onClose,
+                )}
               </div>
+            ))}
 
-              {/* Quote text */}
+            {/* Inspirational Quotes Section */}
+            <div className="mt-6 mb-4">
               <div
-                className="min-h-[72px] flex items-start"
+                className="relative w-full rounded-xl p-5 overflow-hidden"
                 style={{
-                  opacity: fade ? 1 : 0,
-                  transition: 'opacity 0.4s ease-in-out',
+                  background: 'linear-gradient(135deg, #5D87FF 0%, #7C4DFF 50%, #E040FB 100%)',
                 }}
               >
-                <p className="text-white text-[13px] leading-[1.5] italic font-light">
-                  "{quotes[quoteIndex].text}"
-                </p>
-              </div>
+                {/* Decorative elements */}
+                <div className="absolute top-0 right-0 w-16 h-16 rounded-full bg-white/10 -mr-4 -mt-4" />
+                <div className="absolute bottom-0 left-0 w-10 h-10 rounded-full bg-white/10 -ml-2 -mb-2" />
 
-              {/* Author */}
-              <div
-                className="mt-2 flex items-center gap-2"
-                style={{
-                  opacity: fade ? 1 : 0,
-                  transition: 'opacity 0.4s ease-in-out 0.1s',
-                }}
-              >
-                <div className="w-5 h-[1px] bg-white/40" />
-                <span className="text-white/80 text-[11px] font-medium tracking-wide">
-                  {quotes[quoteIndex].author}
-                </span>
-              </div>
+                {/* Quote icon */}
+                <div className="mb-2">
+                  <Icon icon="mdi:format-quote-open" width={28} height={28} className="text-white/60" />
+                </div>
 
-              {/* Dot indicators */}
-              <div className="flex justify-center gap-1.5 mt-3">
-                {quotes.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === quoteIndex ? 'bg-white scale-110' : 'bg-white/30'
-                      }`}
-                  />
-                ))}
+                {/* Quote text */}
+                <div
+                  className="min-h-[72px] flex items-start"
+                  style={{
+                    opacity: fade ? 1 : 0,
+                    transition: 'opacity 0.4s ease-in-out',
+                  }}
+                >
+                  <p className="text-white text-[13px] leading-[1.5] italic font-light">
+                    "{quotes[quoteIndex].text}"
+                  </p>
+                </div>
+
+                {/* Author */}
+                <div
+                  className="mt-2 flex items-center gap-2"
+                  style={{
+                    opacity: fade ? 1 : 0,
+                    transition: 'opacity 0.4s ease-in-out 0.1s',
+                  }}
+                >
+                  <div className="w-5 h-[1px] bg-white/40" />
+                  <span className="text-white/80 text-[11px] font-medium tracking-wide">
+                    {quotes[quoteIndex].author}
+                  </span>
+                </div>
+
+                {/* Dot indicators */}
+                <div className="flex justify-center gap-1.5 mt-3">
+                  {quotes.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === quoteIndex ? 'bg-white scale-110' : 'bg-white/30'
+                        }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </SimpleBar>
-    </AMSidebar>
+        </SimpleBar>
+      </AMSidebar>
+    </div>
   );
 };
 

@@ -10,7 +10,12 @@ import { Sheet, SheetContent, SheetTitle } from 'src/components/ui/sheet';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import Search from './Search';
 
-const Header = () => {
+interface HeaderProps {
+  sidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
+}
+
+const Header = ({ sidebarCollapsed, onToggleSidebar }: HeaderProps) => {
   const { theme, setTheme } = useTheme();
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenu, setMobileMenu] = useState('');
@@ -59,11 +64,22 @@ const Header = () => {
   return (
     <>
       <header
-        className={`sticky top-0 z-[2] ${
-          isSticky ? 'bg-white dark:bg-dark shadow-md fixed w-full' : 'bg-transparent'
-        }`}
+        className={`sticky top-0 z-[2] ${isSticky ? 'bg-white dark:bg-dark shadow-md fixed w-full' : 'bg-transparent'
+          }`}
       >
         <nav className="rounded-none bg-transparent dark:bg-transparent py-4 px-6 !max-w-full flex justify-between items-center">
+          {/* Desktop Hamburger Toggle */}
+          <span
+            onClick={onToggleSidebar}
+            className="hidden xl:flex px-[15px] hover:text-primary dark:hover:text-primary text-foreground dark:text-muted-foreground relative after:absolute after:w-10 after:h-10 after:rounded-full hover:after:bg-lightprimary after:bg-transparent rounded-full justify-center items-center cursor-pointer transition-transform duration-200"
+            title={sidebarCollapsed ? 'Open sidebar' : 'Close sidebar'}
+          >
+            <Icon
+              icon={sidebarCollapsed ? 'tabler:layout-sidebar-left-expand' : 'tabler:layout-sidebar-left-collapse'}
+              height={22}
+            />
+          </span>
+
           {/* Mobile Toggle Icon */}
           <span
             onClick={() => setIsOpen(true)}
