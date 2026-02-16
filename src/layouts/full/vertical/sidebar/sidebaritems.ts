@@ -137,7 +137,7 @@ const SidebarContent: MenuItem[] = [
           {
             name: 'Specific School Settings',
             id: uniqueId(),
-            url: '/super/cms/page-sections',
+            url: '/super/settings/school-features',
             isPro: false,
           },
         ],

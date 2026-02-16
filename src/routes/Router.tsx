@@ -102,6 +102,7 @@ const PlatformSettings = Loadable(lazy(() => import('../views/utilities/platform
 const PaymentGateways = Loadable(lazy(() => import('../views/utilities/payment-gateways/PaymentGateways')));
 const SmsGateways = Loadable(lazy(() => import('../views/utilities/sms-gateways/SmsGateways')));
 const NotificationTypes = Loadable(lazy(() => import('../views/utilities/notification-types/NotificationTypes')));
+const SpecificSchoolSettings = Loadable(lazy(() => import('../views/utilities/specific-school-settings/SpecificSchoolSettings')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
@@ -236,6 +237,7 @@ const Router = [
       // CMS Management Routes
       { path: 'cms/page-sections', element: <CmsPageSections /> },
       { path: 'cms/navigation-menu', element: <CmsNavigationMenu /> },
+      { path: 'settings/school-features', element: <SpecificSchoolSettings /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
