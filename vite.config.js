@@ -10,6 +10,7 @@ const __dirname = dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: process.env.VITE_BASE_PATH || '/mindwhileerp',
   resolve: {
     alias: {
       'src/api': resolve(__dirname, './src/api'),
