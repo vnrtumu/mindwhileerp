@@ -12,7 +12,6 @@ import {
     SelectValue,
 } from 'src/components/ui/select';
 import { RadioGroup, RadioGroupItem } from 'src/components/ui/radio-group';
-import CardBox from 'src/components/shared/CardBox';
 
 const BCrumb = [
     {
@@ -49,17 +48,14 @@ const AddSchool = () => {
         <>
             <BreadcrumbComp title="Add New School" items={BCrumb} />
 
-            <CardBox>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Header */}
-                    <div className="bg-primary text-white px-6 py-4 -mx-6 -mt-6 rounded-t-lg">
-                        <h2 className="text-xl font-semibold">School & Admin Details</h2>
-                    </div>
+            <div className="rounded-xl border border-border md:p-6 p-4">
+                <h5 className="card-title">School & Admin Details</h5>
 
-                    <div className="px-6 py-4 space-y-6">
+                <form onSubmit={handleSubmit} className="mt-6">
+                    <div className="flex flex-col gap-6">
                         {/* School Name */}
-                        <div className="space-y-2">
-                            <Label htmlFor="schoolName" className="text-base font-medium">
+                        <div>
+                            <Label htmlFor="schoolName">
                                 School Name <span className="text-error">*</span>
                             </Label>
                             <Input
@@ -68,14 +64,14 @@ const AddSchool = () => {
                                 required
                                 value={formData.schoolName}
                                 onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
-                                className="w-full"
                                 placeholder="Enter school name"
+                                className="mt-2"
                             />
                         </div>
 
                         {/* School Admin Name */}
-                        <div className="space-y-2">
-                            <Label htmlFor="adminName" className="text-base font-medium">
+                        <div>
+                            <Label htmlFor="adminName">
                                 School Admin Name <span className="text-error">*</span>
                             </Label>
                             <Input
@@ -84,14 +80,14 @@ const AddSchool = () => {
                                 required
                                 value={formData.adminName}
                                 onChange={(e) => setFormData({ ...formData, adminName: e.target.value })}
-                                className="w-full"
                                 placeholder="Enter admin name"
+                                className="mt-2"
                             />
                         </div>
 
                         {/* School Admin Email */}
-                        <div className="space-y-2">
-                            <Label htmlFor="adminEmail" className="text-base font-medium">
+                        <div>
+                            <Label htmlFor="adminEmail">
                                 School Admin Email <span className="text-error">*</span>
                             </Label>
                             <Input
@@ -100,14 +96,14 @@ const AddSchool = () => {
                                 required
                                 value={formData.adminEmail}
                                 onChange={(e) => setFormData({ ...formData, adminEmail: e.target.value })}
-                                className="w-full"
                                 placeholder="Enter admin email"
+                                className="mt-2"
                             />
                         </div>
 
                         {/* Subscription Plan */}
-                        <div className="space-y-2">
-                            <Label htmlFor="subscriptionPlan" className="text-base font-medium">
+                        <div>
+                            <Label htmlFor="subscriptionPlan">
                                 Subscription Plan <span className="text-error">*</span>
                             </Label>
                             <Select
@@ -115,7 +111,7 @@ const AddSchool = () => {
                                 value={formData.subscriptionPlan}
                                 onValueChange={(value) => setFormData({ ...formData, subscriptionPlan: value })}
                             >
-                                <SelectTrigger className="w-full">
+                                <SelectTrigger className="mt-2 w-full">
                                     <SelectValue placeholder="-- Select a Plan --" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -128,21 +124,22 @@ const AddSchool = () => {
                         </div>
 
                         {/* Initial Subscription Period */}
-                        <div className="space-y-2">
-                            <Label className="text-base font-medium">
+                        <div>
+                            <Label>
                                 Initial Subscription Period <span className="text-error">*</span>
                             </Label>
                             <RadioGroup
                                 value={formData.subscriptionPeriod}
                                 onValueChange={(value) => setFormData({ ...formData, subscriptionPeriod: value })}
+                                className="mt-2 flex gap-6"
                             >
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center gap-2">
                                     <RadioGroupItem value="monthly" id="monthly" />
                                     <Label htmlFor="monthly" className="font-normal cursor-pointer">
                                         Monthly
                                     </Label>
                                 </div>
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center gap-2">
                                     <RadioGroupItem value="yearly" id="yearly" />
                                     <Label htmlFor="yearly" className="font-normal cursor-pointer">
                                         Yearly
@@ -159,7 +156,7 @@ const AddSchool = () => {
                         </div>
                     </div>
                 </form>
-            </CardBox>
+            </div>
         </>
     );
 };

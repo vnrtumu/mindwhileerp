@@ -43,6 +43,13 @@ const SidebarContent: MenuItem[] = [
         url: '/super/dashboard',
         isPro: false,
       },
+      {
+        id: uniqueId(),
+        name: 'My Profile',
+        icon: 'solar:user-circle-linear',
+        url: '/super/user-profile',
+        isPro: false,
+      },
     ],
   },
 
@@ -56,25 +63,18 @@ const SidebarContent: MenuItem[] = [
         url: '/super/utilities/schools',
       },
       {
-        name: 'Form',
+        name: 'Manage Plans',
         icon: 'solar:document-add-linear',
         id: uniqueId(),
-        url: '/super/utilities/form',
+        url: '/super/utilities/plans',
       },
       {
-        name: 'Teacher Dashboard',
-        icon: 'solar:widget-2-linear',
+        name: 'Payment History',
+        icon: 'solar:document-add-linear',
         id: uniqueId(),
-        url: '/school/teacher-dashboard',
-        isPro: false,
+        url: '/super/utilities/payment-history',
       },
-      {
-        id: uniqueId(),
-        name: 'User Profile',
-        icon: 'solar:user-circle-linear',
-        url: '/super/user-profile',
-        isPro: false,
-      },
+
     ],
   },
   {
