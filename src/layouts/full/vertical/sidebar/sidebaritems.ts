@@ -131,7 +131,7 @@ const SidebarContent: MenuItem[] = [
           {
             id: uniqueId(),
             name: 'Master Menu Builder',
-            url: '/super/apps/blog/post',
+            url: '/super/settings/menu-builder',
             isPro: false,
           },
           {
