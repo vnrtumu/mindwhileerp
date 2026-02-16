@@ -1,10 +1,6 @@
-import TableComp from 'src/components/utilities/table';
 import BreadcrumbComp from 'src/layouts/full/shared/breadcrumb/BreadcrumbComp';
-import StripedRowTable from 'src/components/utilities/table/StripedRowTable';
-import HoverTable from 'src/components/utilities/table/HoverTable';
-import CheckboxTable from 'src/components/utilities/table/CheckboxTable';
-import { DataTable } from 'src/components/utilities/table/DataTable';
-import { EmployeesData } from 'src/components/utilities/table/data';
+import { SchoolsTable } from './SchoolsTable';
+import { SchoolsData } from './data';
 
 const BCrumb = [
     {
@@ -19,13 +15,9 @@ const BCrumb = [
 const Schools = () => {
     return (
         <>
-            <BreadcrumbComp title="Schools" items={BCrumb} />
-            <div className="flex gap-6 flex-col ">
-                <DataTable data={EmployeesData} />
-                <TableComp />
-                <StripedRowTable />
-                <HoverTable />
-                <CheckboxTable />
+            <BreadcrumbComp title="Schools Management" items={BCrumb} />
+            <div className="flex gap-6 flex-col">
+                <SchoolsTable data={SchoolsData} />
             </div>
         </>
     );

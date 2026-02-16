@@ -93,6 +93,7 @@ const UserProfile = Loadable(lazy(() => import('../views/pages/user-profile/User
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
 const Form = Loadable(lazy(() => import('../views/utilities/form/Form')));
 const Schools = Loadable(lazy(() => import('../views/utilities/schools/Schools')));
+const AddSchool = Loadable(lazy(() => import('../views/utilities/schools/AddSchool')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
@@ -203,6 +204,7 @@ const Router = [
       { path: 'apps/notes', element: <Notes /> },
       { path: 'utilities/form', element: <Form /> },
       { path: 'utilities/schools', element: <Schools /> },
+      { path: 'utilities/schools/create', element: <AddSchool /> },
       { path: 'apps/tickets', element: <Tickets /> },
       { path: 'apps/tickets/create', element: <CreateTickets /> },
       { path: 'apps/blog/post', element: <Blog /> },

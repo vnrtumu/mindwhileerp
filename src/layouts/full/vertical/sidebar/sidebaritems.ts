@@ -50,7 +50,7 @@ const SidebarContent: MenuItem[] = [
     heading: 'SASS Management',
     children: [
       {
-        name: 'Schools',
+        name: 'Schools list',
         icon: 'solar:server-linear',
         id: uniqueId(),
         url: '/super/utilities/schools',
