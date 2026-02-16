@@ -33,25 +33,23 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
 
-    root.classList.remove("light", "dark")
+    root.classList.remove("light-theme", "dark-theme")
 
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light"
-
-      root.classList.add(systemTheme)
+      const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      root.classList.add(isDark ? "dark-theme" : "light-theme")
       return
     }
 
-    root.classList.add(theme)
+    root.classList.add(theme === 'dark' ? 'dark-theme' : 'light-theme')
   }, [theme])
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
       localStorage.setItem(storageKey, theme)
+      // keep legacy key in sync for other modules
+      try { localStorage.setItem('theme', theme); } catch (e) {}
       setTheme(theme)
     },
   }

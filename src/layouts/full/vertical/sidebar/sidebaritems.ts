@@ -62,6 +62,13 @@ const SidebarContent: MenuItem[] = [
         url: '/super/utilities/form',
       },
       {
+        name: 'Teacher Dashboard',
+        icon: 'solar:widget-2-linear',
+        id: uniqueId(),
+        url: '/school/teacher-dashboard',
+        isPro: false,
+      },
+      {
         id: uniqueId(),
         name: 'User Profile',
         icon: 'solar:user-circle-linear',

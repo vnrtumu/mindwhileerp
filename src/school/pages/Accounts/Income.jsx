@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 import {
     IconPlus, IconSearch, IconFilter, IconDownload, IconEdit, IconTrash,
-    IconTrendingUp, IconWallet, IconCalendar, IconFileText, IconEye
+    IconTrendingUp, IconWallet, IconCalendar, IconFileText, IconEye, IconChevronDown
 } from '@tabler/icons-react';
 import './Accounts.css';
 
 const Income = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterHead, setFilterHead] = useState('all');
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingId, setEditingId] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        date: '',
+        amount: '',
+        paymentMethod: '',
+        description: ''
+    });
 
     // Sample income data
-    const incomeData = [
+    const [incomeData, setIncomeData] = useState([
         {
             id: 1,
             name: 'Tuition Fees - Class 10',
@@ -65,7 +75,7 @@ const Income = () => {
             amount: 200000,
             description: 'New admission fee collection'
         }
-    ];
+    ]);
 
     const incomeHeads = ['all', 'Tuition Fees', 'Transport Fees', 'Library', 'Hostel Fees', 'Donations', 'Admission Fees'];
 
@@ -94,6 +104,61 @@ const Income = () => {
         });
     };
 
+    const handleOpenAddModal = () => {
+        setIsEditing(false);
+        setEditingId(null);
+        setFormData({
+            name: '',
+            date: '',
+            amount: '',
+            paymentMethod: '',
+            description: ''
+        });
+        setShowAddModal(true);
+    };
+
+    const handleOpenEditModal = (item) => {
+        setIsEditing(true);
+        setEditingId(item.id);
+        setFormData({
+            name: item.name,
+            date: item.date,
+            amount: item.amount,
+            paymentMethod: 'Cash', // Mocking payment method
+            description: item.description
+        });
+        setShowAddModal(true);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isEditing) {
+            setIncomeData(incomeData.map(item =>
+                item.id === editingId
+                    ? { ...item, name: formData.name, date: formData.date, amount: Number(formData.amount), description: formData.description }
+                    : item
+            ));
+        } else {
+            const newIncome = {
+                id: incomeData.length + 1,
+                name: formData.name,
+                head: 'General', // Default head
+                date: formData.date,
+                invoiceNo: `INV-${String(incomeData.length + 1).padStart(3, '0')}`, // Auto-generate invoice number
+                amount: Number(formData.amount),
+                description: formData.description
+            };
+            setIncomeData([...incomeData, newIncome]);
+        }
+        setShowAddModal(false);
+    };
+
+    const handleDelete = (id) => {
+        if (window.confirm('Are you sure you want to delete this record?')) {
+            setIncomeData(incomeData.filter(item => item.id !== id));
+        }
+    };
+
     return (
         <div className="accounts-page">
             {/* Page Header */}
@@ -104,11 +169,90 @@ const Income = () => {
                         <span>Accounts</span> / <span className="current">Income</span>
                     </nav>
                 </div>
-                <button className="btn-primary">
+                <button className="btn-primary" onClick={handleOpenAddModal}>
                     <IconPlus size={18} />
                     Add Income
                 </button>
             </div>
+
+            {/* Add/Edit Income Modal */}
+            {showAddModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content add-income-modal">
+                        <div className="modal-header">
+                            <h3>{isEditing ? 'Edit Income' : 'Add Income'}</h3>
+                            <button className="close-btn" onClick={() => setShowAddModal(false)}>
+                                <IconPlus size={20} style={{ transform: 'rotate(45deg)' }} />
+                            </button>
+                        </div>
+                        <form className="modal-body" onSubmit={handleSubmit}>
+                            <div className="form-group full-width">
+                                <label>Income Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter income name"
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Date</label>
+                                    <div className="input-with-icon">
+                                        <input
+                                            type="date"
+                                            value={formData.date}
+                                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                        />
+                                        <IconCalendar size={18} className="field-icon" />
+                                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label>Amount</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Enter amount"
+                                        value={formData.amount}
+                                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Payment Method</label>
+                                    <div className="select-with-icon">
+                                        <select
+                                            value={formData.paymentMethod}
+                                            onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Credit">Credit</option>
+                                        </select>
+                                        <IconChevronDown size={18} className="field-icon" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-group full-width">
+                                <label>Description</label>
+                                <textarea
+                                    placeholder="Enter description"
+                                    rows="4"
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                ></textarea>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>Cancel</button>
+                                <button type="submit" className="btn-submit">
+                                    {isEditing ? 'Save Changes' : 'Add Income'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             {/* Stats Cards */}
             <div className="stats-row">
@@ -139,6 +283,15 @@ const Income = () => {
                         <h3 className="stat-value">{incomeHeads.length - 1}</h3>
                     </div>
                 </div>
+                <div className="stat-card monthly">
+                    <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #d6ebff 100%)', color: '#5a7dff' }}>
+                        <IconCalendar size={24} />
+                    </div>
+                    <div className="stat-info">
+                        <span className="stat-label">Monthly Income</span>
+                        <h3 className="stat-value">{formatCurrency(totalIncome * 0.8)}</h3> {/* Mocking monthly as 80% of total for demo */}
+                    </div>
+                </div>
             </div>
 
             {/* Filters */}
@@ -165,16 +318,20 @@ const Income = () => {
                         </div>
                         <div className="filter-group">
                             <IconFilter size={18} />
-                            <select
-                                value={filterHead}
-                                onChange={(e) => setFilterHead(e.target.value)}
-                            >
-                                {incomeHeads.map((head, idx) => (
-                                    <option key={idx} value={head}>
-                                        {head === 'all' ? 'All Income Heads' : head}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="select-wrapper">
+                                <select
+                                    className="filter-select"
+                                    value={filterHead}
+                                    onChange={(e) => setFilterHead(e.target.value)}
+                                >
+                                    {incomeHeads.map((head, idx) => (
+                                        <option key={idx} value={head}>
+                                            {head === 'all' ? 'All Income Heads' : head}
+                                        </option>
+                                    ))}
+                                </select>
+                                <IconChevronDown size={14} className="select-chevron" />
+                            </div>
                         </div>
                     </div>
 
@@ -219,13 +376,11 @@ const Income = () => {
                                         </td>
                                         <td>
                                             <div className="action-buttons">
-                                                <button className="action-btn view" title="View">
-                                                    <IconEye size={16} />
-                                                </button>
-                                                <button className="action-btn edit" title="Edit">
+
+                                                <button className="action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
                                                     <IconEdit size={16} />
                                                 </button>
-                                                <button className="action-btn delete" title="Delete">
+                                                <button className="action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
                                                     <IconTrash size={16} />
                                                 </button>
                                             </div>

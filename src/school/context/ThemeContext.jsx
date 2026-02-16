@@ -12,8 +12,8 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
     const [isDarkMode, setIsDarkMode] = useState(() => {
-        // Check localStorage for saved preference
-        const saved = localStorage.getItem('theme');
+        // Check primary storage key first, then legacy key
+        const saved = localStorage.getItem('vite-ui-theme') || localStorage.getItem('theme');
         return saved === 'dark';
     });
 
@@ -27,7 +27,9 @@ export const ThemeProvider = ({ children }) => {
             document.documentElement.classList.remove('dark-theme');
         }
         // Save preference
+        // keep both keys in sync for backwards compatibility
         localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        localStorage.setItem('vite-ui-theme', isDarkMode ? 'dark' : 'light');
     }, [isDarkMode]);
 
     const toggleTheme = () => {

@@ -17,6 +17,13 @@ main {
 
 body {
   font-family: 'DM Sans', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 @theme {
@@ -203,7 +210,7 @@ body {
   --error: #ef4444;
   --white: #ffffff;
   --dark: #1c2536;
-  --bodytext: #5a6a85bf;
+  --bodytext: #c1cedd;
 
   /* Light Variants */
   --lightprimary: color-mix(in oklab, var(--primary) 20%, transparent);
@@ -226,12 +233,14 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -309,6 +318,33 @@ body {
   }
 
   .sales-overview select {
-    @apply pr-9!;
+    @apply !pr-9;
+  }
+
+  /* Header action button used across Student Information headers */
+  .header-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(15,23,42,0.06);
+    background: color-mix(in oklab, var(--primary) 6%, transparent);
+    color: var(--color-foreground, #1c2536);
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .12s ease, background .12s ease;
+  }
+
+  .header-action-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-btn-shadow); }
+  .header-action-btn:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+  .header-action-btn .header-action-icon { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; }
+  .header-action-btn .header-action-label { display:inline-block; }
+
+  @media (max-width: 640px) {
+    .header-action-btn { padding:8px 8px; gap:6px; }
+    .header-action-btn .header-action-label { display:none; }
   }
 }

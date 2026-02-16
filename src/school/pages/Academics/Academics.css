@@ -1,0 +1,140 @@
+.academics-page {
+    padding: 24px;
+    background-color: #f8fafc;
+    min-height: calc(100vh - 80px);
+}
+
+.page-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.breadcrumb h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.breadcrumb span {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+}
+
+.icon-btn:hover {
+    background: #f8fafc;
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.export-dropdown-container {
+    position: relative;
+}
+
+.export-btn {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 0 16px !important;
+    width: auto !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+    font-weight: 500;
+    color: #475569 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-size: 14px;
+}
+
+.export-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    border: 1px solid #e2e8f0;
+    min-width: 200px;
+    z-index: 5000;
+    padding: 10px 0;
+}
+
+.export-item {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #1e293b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+    font-weight: 500;
+    text-align: left;
+}
+
+.export-item:hover {
+    background: #f1f5f9;
+}
+
+.academics-page .placeholder-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+}
+
+.academics-page .placeholder-card {
+    background: white;
+    padding: 48px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.academics-page .placeholder-card h2 {
+    color: #1e293b;
+    margin-bottom: 16px;
+    font-size: 24px;
+}
+
+.academics-page .placeholder-card p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.academics-page .academics-footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
