@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRouteError, useNavigate } from 'react-router';
 import { IconAlertTriangle, IconRefresh, IconHome } from '@tabler/icons-react';
 
