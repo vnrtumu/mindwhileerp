@@ -112,25 +112,25 @@ const SidebarContent: MenuItem[] = [
         ],
       },
       {
-        name: 'CMS Management',
+        name: 'Front-End CMS',
         id: uniqueId(),
         icon: 'solar:layers-linear',
         children: [
           {
             id: uniqueId(),
-            name: 'Role-Based Menu',
-            url: '/super/apps/blog/post',
-            isPro: false,
-          },
-          {
-            id: uniqueId(),
             name: 'Page Sections',
-            url: '/super/apps/blog/post',
+            url: '/super/cms/page-sections',
             isPro: false,
           },
           {
             id: uniqueId(),
             name: 'Navigation Menu',
+            url: '/super/cms/navigation-menu',
+            isPro: false,
+          },
+          {
+            id: uniqueId(),
+            name: 'Master Menu Builder',
             url: '/super/apps/blog/post',
             isPro: false,
           },

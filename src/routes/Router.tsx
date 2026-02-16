@@ -106,16 +106,23 @@ const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTi
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
 const BlogDetail = Loadable(lazy(() => import('../views/apps/blog/BlogDetail')));
 
+// Landing Page
+const LandingPage = Loadable(lazy(() => import('../views/landing/LandingPage')));
+
+// CMS Pages
+const CmsPageSections = Loadable(lazy(() => import('../views/cms/PageSections')));
+const CmsNavigationMenu = Loadable(lazy(() => import('../views/cms/NavigationMenu')));
+
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 
 // // icons
 const SolarIcon = Loadable(lazy(() => import('../views/icons/SolarIcon')));
 
 const Router = [
-  // Root redirect to auth
+  // Landing page at root
   {
     path: '/',
-    element: <Navigate to="/auth/auth2/login" replace />,
+    element: <LandingPage />,
   },
 
   // School Admin Routes
@@ -225,6 +232,9 @@ const Router = [
       { path: 'apps/blog/detail/:id', element: <BlogDetail /> },
       { path: 'user-profile', element: <UserProfile /> },
       { path: 'icons/iconify', element: <SolarIcon /> },
+      // CMS Management Routes
+      { path: 'cms/page-sections', element: <CmsPageSections /> },
+      { path: 'cms/navigation-menu', element: <CmsNavigationMenu /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
