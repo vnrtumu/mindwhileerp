@@ -5,28 +5,30 @@ import HoverTable from 'src/components/utilities/table/HoverTable';
 import CheckboxTable from 'src/components/utilities/table/CheckboxTable';
 import { DataTable } from 'src/components/utilities/table/DataTable';
 import { EmployeesData } from 'src/components/utilities/table/data';
+
 const BCrumb = [
-  {
-    to: '/',
-    title: 'Home',
-  },
-  {
-    title: 'Table',
-  },
+    {
+        to: '/',
+        title: 'Home',
+    },
+    {
+        title: 'Schools',
+    },
 ];
-const Notes = () => {
-  return (
-    <>
-      <BreadcrumbComp title="Table" items={BCrumb} />
-      <div className="flex gap-6 flex-col ">
-        <DataTable data={EmployeesData} />
-        <TableComp />
-        <StripedRowTable />
-        <HoverTable />
-        <CheckboxTable />
-      </div>
-    </>
-  );
+
+const Schools = () => {
+    return (
+        <>
+            <BreadcrumbComp title="Schools" items={BCrumb} />
+            <div className="flex gap-6 flex-col ">
+                <DataTable data={EmployeesData} />
+                <TableComp />
+                <StripedRowTable />
+                <HoverTable />
+                <CheckboxTable />
+            </div>
+        </>
+    );
 };
 
-export default Notes;
+export default Schools;

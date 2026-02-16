@@ -47,13 +47,13 @@ const SidebarContent: MenuItem[] = [
   },
 
   {
-    heading: 'pages',
+    heading: 'SASS Management',
     children: [
       {
-        name: 'Tables',
+        name: 'Schools',
         icon: 'solar:server-linear',
         id: uniqueId(),
-        url: '/super/utilities/table',
+        url: '/super/utilities/schools',
       },
       {
         name: 'Form',

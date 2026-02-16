@@ -92,7 +92,7 @@ const UserProfile = Loadable(lazy(() => import('../views/pages/user-profile/User
 /* ****Apps***** */
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
 const Form = Loadable(lazy(() => import('../views/utilities/form/Form')));
-const Table = Loadable(lazy(() => import('../views/utilities/table/Table')));
+const Schools = Loadable(lazy(() => import('../views/utilities/schools/Schools')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
@@ -200,17 +200,15 @@ const Router = [
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <Modern /> },
-
       { path: 'apps/notes', element: <Notes /> },
       { path: 'utilities/form', element: <Form /> },
-      { path: 'utilities/table', element: <Table /> },
+      { path: 'utilities/schools', element: <Schools /> },
       { path: 'apps/tickets', element: <Tickets /> },
       { path: 'apps/tickets/create', element: <CreateTickets /> },
       { path: 'apps/blog/post', element: <Blog /> },
       { path: 'apps/blog/detail/:id', element: <BlogDetail /> },
       { path: 'user-profile', element: <UserProfile /> },
       { path: 'icons/iconify', element: <SolarIcon /> },
-
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
