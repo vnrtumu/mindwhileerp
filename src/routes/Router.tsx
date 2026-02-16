@@ -97,6 +97,7 @@ const AddSchool = Loadable(lazy(() => import('../views/utilities/schools/AddScho
 const Plans = Loadable(lazy(() => import('../views/utilities/plans/Plans')));
 const AddPlan = Loadable(lazy(() => import('../views/utilities/plans/AddPlan')));
 const PaymentHistory = Loadable(lazy(() => import('../views/utilities/payment-history/PaymentHistory')));
+const PlatformSettings = Loadable(lazy(() => import('../views/utilities/platform-settings/PlatformSettings')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
@@ -211,6 +212,7 @@ const Router = [
       { path: 'utilities/plans', element: <Plans /> },
       { path: 'utilities/plans/create', element: <AddPlan /> },
       { path: 'utilities/payment-history', element: <PaymentHistory /> },
+      { path: 'settings/platform', element: <PlatformSettings /> },
       { path: 'apps/tickets', element: <Tickets /> },
       { path: 'apps/tickets/create', element: <CreateTickets /> },
       { path: 'apps/blog/post', element: <Blog /> },

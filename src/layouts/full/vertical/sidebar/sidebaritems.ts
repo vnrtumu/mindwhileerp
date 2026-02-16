@@ -37,7 +37,7 @@ const SidebarContent: MenuItem[] = [
     heading: 'Home',
     children: [
       {
-        name: 'Modern',
+        name: 'Dashboard',
         icon: 'solar:widget-2-linear',
         id: uniqueId(),
         url: '/super/dashboard',
@@ -83,12 +83,12 @@ const SidebarContent: MenuItem[] = [
       {
         name: 'Platform Configuration',
         id: uniqueId(),
-        icon: 'solar:sort-by-alphabet-linear',
+        icon: 'solar:settings-linear',
         children: [
           {
             id: uniqueId(),
             name: 'Platform Settings',
-            url: '/super/apps/blog/post',
+            url: '/super/settings/platform',
             isPro: false,
           },
           {
@@ -114,7 +114,7 @@ const SidebarContent: MenuItem[] = [
       {
         name: 'CMS Management',
         id: uniqueId(),
-        icon: 'solar:sort-by-alphabet-linear',
+        icon: 'solar:layers-linear',
         children: [
           {
             id: uniqueId(),
