@@ -94,19 +94,19 @@ const SidebarContent: MenuItem[] = [
           {
             id: uniqueId(),
             name: 'Payment Gateways',
-            url: '/super/apps/blog/post',
+            url: '/super/settings/payment-gateways',
             isPro: false,
           },
           {
             id: uniqueId(),
             name: 'SMS Gateway',
-            url: '/super/apps/blog/post',
+            url: '/super/settings/sms-gateways',
             isPro: false,
           },
           {
             id: uniqueId(),
             name: 'Notification Types',
-            url: '/super/apps/blog/post',
+            url: '/super/settings/notification-types',
             isPro: false,
           },
         ],

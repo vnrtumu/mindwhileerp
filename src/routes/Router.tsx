@@ -98,6 +98,9 @@ const Plans = Loadable(lazy(() => import('../views/utilities/plans/Plans')));
 const AddPlan = Loadable(lazy(() => import('../views/utilities/plans/AddPlan')));
 const PaymentHistory = Loadable(lazy(() => import('../views/utilities/payment-history/PaymentHistory')));
 const PlatformSettings = Loadable(lazy(() => import('../views/utilities/platform-settings/PlatformSettings')));
+const PaymentGateways = Loadable(lazy(() => import('../views/utilities/payment-gateways/PaymentGateways')));
+const SmsGateways = Loadable(lazy(() => import('../views/utilities/sms-gateways/SmsGateways')));
+const NotificationTypes = Loadable(lazy(() => import('../views/utilities/notification-types/NotificationTypes')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
@@ -213,6 +216,9 @@ const Router = [
       { path: 'utilities/plans/create', element: <AddPlan /> },
       { path: 'utilities/payment-history', element: <PaymentHistory /> },
       { path: 'settings/platform', element: <PlatformSettings /> },
+      { path: 'settings/payment-gateways', element: <PaymentGateways /> },
+      { path: 'settings/sms-gateways', element: <SmsGateways /> },
+      { path: 'settings/notification-types', element: <NotificationTypes /> },
       { path: 'apps/tickets', element: <Tickets /> },
       { path: 'apps/tickets/create', element: <CreateTickets /> },
       { path: 'apps/blog/post', element: <Blog /> },
