@@ -3,7 +3,7 @@
 import { lazy } from 'react';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
-import ErrorElement from '../components/Common/ErrorElement';
+import ErrorElement from '../components/common/ErrorElement';
 
 /* ***Layouts**** */
 const SchoolAdminLayout = Loadable(lazy(() => import('../layouts/school/SchoolAdminLayout')));
