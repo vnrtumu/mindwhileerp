@@ -12,13 +12,14 @@ const ForgotPassword = () => {
           <div className="mx-auto mb-6">
             <FullLogo />
           </div>
-          <p className="text-muted-foreground text-sm text-center my-4">
-            Please enter the email address associated with your account and We will email you a link
-            to reset your password.
+          <p className="text-muted-foreground text-sm text-center mb-4">
+            Enter your email and we'll send you a code to reset your password.
           </p>
           <AuthForgotPassword />
-          <Button variant={'lightprimary'} className="w-full mt-3">
-            <Link to={'/'}>Back to Login</Link>
+          <Button variant={'outline'} asChild className="w-full mt-3">
+            <Link to={'/auth/auth2/login'}>
+              Back to Login
+            </Link>
           </Button>
         </CardBox>
       </div>

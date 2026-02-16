@@ -12,6 +12,7 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 
 // authentication
 const Login2 = Loadable(lazy(() => import('../views/authentication/auth2/Login')));
+const ForgotPassword2 = Loadable(lazy(() => import('../views/authentication/auth2/ForgotPassword')));
 const Register2 = Loadable(lazy(() => import('../views/authentication/auth2/Register')));
 const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintainance')));
 
@@ -245,6 +246,7 @@ const Router = [
     element: <BlankLayout />,
     children: [
       { path: 'auth2/login', element: <Login2 /> },
+      { path: 'auth2/forgot-password', element: <ForgotPassword2 /> },
       { path: 'auth2/register', element: <Register2 /> },
       { path: 'maintenance', element: <Maintainance /> },
       { path: '404', element: <Error /> },
