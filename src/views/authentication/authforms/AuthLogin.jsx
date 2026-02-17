@@ -27,7 +27,7 @@ const AuthLogin = () => {
               Remeber this Device
             </Label>
           </div>
-          <Link to={'/'} className="text-primary text-sm font-medium">
+          <Link to={'/auth/auth2/forgot-password'} className="text-primary text-sm font-medium">
             Forgot Password ?
           </Link>
         </div>
