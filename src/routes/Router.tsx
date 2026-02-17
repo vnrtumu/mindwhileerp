@@ -12,6 +12,7 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 
 // authentication
 const Login2 = Loadable(lazy(() => import('../views/authentication/auth2/Login')));
+const ForgotPassword2 = Loadable(lazy(() => import('../views/authentication/auth2/ForgotPassword')));
 const Register2 = Loadable(lazy(() => import('../views/authentication/auth2/Register')));
 const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintainance')));
 
@@ -82,6 +83,8 @@ const ExpenseHeads = Loadable(lazy(() => import('../school/pages/Accounts/Expens
 // Examination Pages
 const ExamDashboard = Loadable(lazy(() => import('../school/pages/Examination/ExamDashboard')));
 const AssignExam = Loadable(lazy(() => import('../school/pages/Examination/AssignExam')));
+const ExamSchedule = Loadable(lazy(() => import('../school/pages/Examination/ExamSchedule')));
+const AddExamSchedule = Loadable(lazy(() => import('../school/pages/Examination/AddExamSchedule')));
 
 // Super Admin Dashboards
 const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));
@@ -92,11 +95,28 @@ const UserProfile = Loadable(lazy(() => import('../views/pages/user-profile/User
 /* ****Apps***** */
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
 const Form = Loadable(lazy(() => import('../views/utilities/form/Form')));
-const Table = Loadable(lazy(() => import('../views/utilities/table/Table')));
+const Schools = Loadable(lazy(() => import('../views/utilities/schools/Schools')));
+const AddSchool = Loadable(lazy(() => import('../views/utilities/schools/AddSchool')));
+const Plans = Loadable(lazy(() => import('../views/utilities/plans/Plans')));
+const AddPlan = Loadable(lazy(() => import('../views/utilities/plans/AddPlan')));
+const PaymentHistory = Loadable(lazy(() => import('../views/utilities/payment-history/PaymentHistory')));
+const PlatformSettings = Loadable(lazy(() => import('../views/utilities/platform-settings/PlatformSettings')));
+const PaymentGateways = Loadable(lazy(() => import('../views/utilities/payment-gateways/PaymentGateways')));
+const SmsGateways = Loadable(lazy(() => import('../views/utilities/sms-gateways/SmsGateways')));
+const NotificationTypes = Loadable(lazy(() => import('../views/utilities/notification-types/NotificationTypes')));
+const SpecificSchoolSettings = Loadable(lazy(() => import('../views/utilities/specific-school-settings/SpecificSchoolSettings')));
+const MasterMenuBuilder = Loadable(lazy(() => import('../views/utilities/master-menu-builder/MasterMenuBuilder')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
 const BlogDetail = Loadable(lazy(() => import('../views/apps/blog/BlogDetail')));
+
+// Landing Page
+const LandingPage = Loadable(lazy(() => import('../views/landing/LandingPage')));
+
+// CMS Pages
+const CmsPageSections = Loadable(lazy(() => import('../views/cms/PageSections')));
+const CmsNavigationMenu = Loadable(lazy(() => import('../views/cms/NavigationMenu')));
 
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 
@@ -104,10 +124,10 @@ const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 const SolarIcon = Loadable(lazy(() => import('../views/icons/SolarIcon')));
 
 const Router = [
-  // Root redirect to auth
+  // Landing page at root
   {
     path: '/',
-    element: <Navigate to="/auth/auth2/login" replace />,
+    element: <LandingPage />,
   },
 
   // School Admin Routes
@@ -174,7 +194,8 @@ const Router = [
       // Exam Routes
       { path: 'exam/dashboard', element: <ExamDashboard /> },
       { path: 'exam/assign', element: <AssignExam /> },
-      { path: 'exam/schedule', element: <div className="p-4">Exam Schedule Page Content</div> },
+      { path: 'exam/schedule', element: <ExamSchedule /> },
+      { path: 'exam/schedule/add', element: <AddExamSchedule /> },
 
       // Teachers Routes
       { path: 'teachers/all', element: <AllTeachers /> },
@@ -200,17 +221,28 @@ const Router = [
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },
       { path: 'dashboard', element: <Modern /> },
-
       { path: 'apps/notes', element: <Notes /> },
       { path: 'utilities/form', element: <Form /> },
-      { path: 'utilities/table', element: <Table /> },
+      { path: 'utilities/schools', element: <Schools /> },
+      { path: 'utilities/schools/create', element: <AddSchool /> },
+      { path: 'utilities/plans', element: <Plans /> },
+      { path: 'utilities/plans/create', element: <AddPlan /> },
+      { path: 'utilities/payment-history', element: <PaymentHistory /> },
+      { path: 'settings/platform', element: <PlatformSettings /> },
+      { path: 'settings/payment-gateways', element: <PaymentGateways /> },
+      { path: 'settings/sms-gateways', element: <SmsGateways /> },
+      { path: 'settings/notification-types', element: <NotificationTypes /> },
       { path: 'apps/tickets', element: <Tickets /> },
       { path: 'apps/tickets/create', element: <CreateTickets /> },
       { path: 'apps/blog/post', element: <Blog /> },
       { path: 'apps/blog/detail/:id', element: <BlogDetail /> },
       { path: 'user-profile', element: <UserProfile /> },
       { path: 'icons/iconify', element: <SolarIcon /> },
-
+      // CMS Management Routes
+      { path: 'cms/page-sections', element: <CmsPageSections /> },
+      { path: 'cms/navigation-menu', element: <CmsNavigationMenu /> },
+      { path: 'settings/school-features', element: <SpecificSchoolSettings /> },
+      { path: 'settings/menu-builder', element: <MasterMenuBuilder /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
@@ -221,6 +253,7 @@ const Router = [
     element: <BlankLayout />,
     children: [
       { path: 'auth2/login', element: <Login2 /> },
+      { path: 'auth2/forgot-password', element: <ForgotPassword2 /> },
       { path: 'auth2/register', element: <Register2 /> },
       { path: 'maintenance', element: <Maintainance /> },
       { path: '404', element: <Error /> },

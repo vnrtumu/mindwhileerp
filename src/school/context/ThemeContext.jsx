@@ -20,11 +20,11 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         // Apply theme to document
         if (isDarkMode) {
-            document.documentElement.classList.add('dark-theme');
-            document.documentElement.classList.remove('light-theme');
+            document.documentElement.classList.add('dark-theme', 'dark');
+            document.documentElement.classList.remove('light-theme', 'light');
         } else {
-            document.documentElement.classList.add('light-theme');
-            document.documentElement.classList.remove('dark-theme');
+            document.documentElement.classList.add('light-theme', 'light');
+            document.documentElement.classList.remove('dark-theme', 'dark');
         }
         // Save preference
         // keep both keys in sync for backwards compatibility

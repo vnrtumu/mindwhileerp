@@ -1,0 +1,232 @@
+/* Exam Schedule Redesign Styles */
+
+.add-exam-schedule-page {
+    padding: 0;
+}
+
+.add-exam-schedule-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e4ed;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+/* Default Settings Top Bar */
+.default-settings-bar {
+    background: #3d5ee1;
+    /* Blue theme */
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.default-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.default-field-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.default-field-group input {
+    background: #ffffff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    width: 100%;
+}
+
+.btn-assign-all {
+    background: #2b3a67;
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 40px;
+    white-space: nowrap;
+}
+
+.btn-assign-all:hover {
+    background: #1f2a4d;
+    transform: translateY(-1px);
+}
+
+/* Main Form Content */
+.schedule-form-content {
+    padding: 24px;
+    background: #f8fbff;
+    /* Very light blue/white background */
+}
+
+.form-grid-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.form-grid-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 1.5fr 40px;
+    gap: 16px;
+    align-items: flex-end;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed #e1e4ed;
+}
+
+.form-grid-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.input-group label .required {
+    color: #ea5455;
+    margin-left: 2px;
+}
+
+.custom-input,
+.custom-select {
+    background: #ffffff;
+    border: 1px solid #d1d8e0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2c3e50;
+    outline: none;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.custom-input:focus,
+.custom-select:focus {
+    border-color: #3d5ee1;
+    box-shadow: 0 0 0 3px rgba(61, 94, 225, 0.1);
+}
+
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+}
+
+.select-wrapper .chevron-icon {
+    position: absolute;
+    right: 12px;
+    color: #adb5bd;
+    pointer-events: none;
+}
+
+/* Action Buttons Bottom */
+.form-actions-bottom {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.btn-add-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #3d5ee1;
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-add-row:hover {
+    background: #2e47b3;
+    transform: translateY(-1px);
+}
+
+.btn-submit-schedule {
+    background: linear-gradient(135deg, #3d5ee1 0%, #5a7dff 100%);
+    color: #ffffff;
+    border: none;
+    padding: 10px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(61, 94, 225, 0.2);
+}
+
+.btn-submit-schedule:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(61, 94, 225, 0.3);
+}
+
+.btn-remove-row {
+    background: transparent;
+    border: none;
+    color: #ea5455;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-remove-row:hover {
+    background: #ffe8e8;
+}
+
+@media (max-width: 1200px) {
+    .form-grid-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .form-grid-top {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

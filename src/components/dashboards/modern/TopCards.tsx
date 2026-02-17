@@ -18,7 +18,7 @@ const TopCards = () => {
   const TopCardInfo = [
     {
       key: "card1",
-      title: "Notes",
+      title: "Total Schools",
       desc: "4+",
       img: iconConnect,
       bgcolor: "bg-info/10 dark:bg-info/10",
@@ -27,7 +27,7 @@ const TopCards = () => {
     },
     {
       key: "card2",
-      title: "Icons",
+      title: "Total Students",
       desc: "+1K",
       img: iconSpeechBubble,
       bgcolor: "bg-success/10 dark:bg-success/10",
@@ -36,7 +36,7 @@ const TopCards = () => {
     },
     {
       key: "card3",
-      title: "Blogs",
+      title: "Monthly Revenue",
       desc: "10+",
       img: iconFavorites,
       bgcolor: "bg-error/10 dark:bg-error/10",
@@ -45,7 +45,7 @@ const TopCards = () => {
     },
     {
       key: "card4",
-      title: "Tickets",
+      title: "Total Revenue",
       desc: "8+",
       img: iconMailbox,
       bgcolor: "bg-secondary/10 dark:bg-secondary/10",
@@ -54,7 +54,7 @@ const TopCards = () => {
     },
     {
       key: "card5",
-      title: "Products",
+      title: "Online Users",
       desc: "$96k",
       img: iconBriefcase,
       bgcolor: "bg-warning/10 dark:bg-warning/10",
@@ -64,7 +64,7 @@ const TopCards = () => {
     },
     {
       key: "card7",
-      title: "Employees",
+      title: "Memory usage",
       desc: "96",
       img: iconUser,
       bgcolor: "bg-primary/10 dark:bg-lightprimary",
@@ -73,7 +73,7 @@ const TopCards = () => {
     },
     {
       key: "card8",
-      title: "Blogs",
+      title: "Disk Usage",
       desc: "696",
       img: iconFavorites,
       bgcolor: "bg-lighterror dark:bg-lighterror",
