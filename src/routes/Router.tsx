@@ -108,6 +108,8 @@ const SpecificSchoolSettings = Loadable(lazy(() => import('../views/utilities/sp
 const MasterMenuBuilder = Loadable(lazy(() => import('../views/utilities/master-menu-builder/MasterMenuBuilder')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const CreateTickets = Loadable(lazy(() => import('../views/apps/tickets/CreateTickets')));
+const Leads = Loadable(lazy(() => import('../views/apps/leads/Leads')));
+const CreateLead = Loadable(lazy(() => import('../views/apps/leads/CreateLead')));
 const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
 const BlogDetail = Loadable(lazy(() => import('../views/apps/blog/BlogDetail')));
 
@@ -234,6 +236,8 @@ const Router = [
       { path: 'settings/notification-types', element: <NotificationTypes /> },
       { path: 'apps/tickets', element: <Tickets /> },
       { path: 'apps/tickets/create', element: <CreateTickets /> },
+      { path: 'apps/leads', element: <Leads /> },
+      { path: 'apps/leads/create', element: <CreateLead /> },
       { path: 'apps/blog/post', element: <Blog /> },
       { path: 'apps/blog/detail/:id', element: <BlogDetail /> },
       { path: 'user-profile', element: <UserProfile /> },

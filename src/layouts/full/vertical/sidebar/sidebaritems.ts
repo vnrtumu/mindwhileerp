@@ -162,6 +162,13 @@ const SidebarContent: MenuItem[] = [
         isPro: false,
       },
       {
+        id: uniqueId(),
+        name: 'Leads',
+        icon: 'solar:ticker-star-linear',
+        url: '/super/apps/leads',
+        isPro: false,
+      },
+      {
         name: 'Blogs',
         id: uniqueId(),
         icon: 'solar:sort-by-alphabet-linear',
