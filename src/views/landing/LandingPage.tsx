@@ -1,583 +1,473 @@
-import { useState, useEffect } from 'react';
-import * as Accordion from '@radix-ui/react-accordion';
-import { Icon } from '@iconify/react';
+import { useState, useEffect, useCallback, memo, useMemo, useRef } from 'react';
+import darkLogo from '../../assets/images/logos/dark-logo.svg';
 import '../../css/pages/landing.css';
 
-// ─── Types ───
-interface PageSection {
-    id: string;
-    title: string;
-    subtitle: string;
-    visible: boolean;
-}
+/* ─── Lucide-style SVG icons (memoized) ─── */
+const Icon = memo(({ d, size = 20 }: { d: string; size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>
+));
+Icon.displayName = 'Icon';
 
-interface NavMenuItem {
-    id: string;
-    title: string;
-    url: string;
-    visible: boolean;
-    isButton: boolean;
-}
+// Common icon paths (Lucide)
+const icons = {
+    menu: 'M4 6h16M4 12h16M4 18h16',
+    x: 'M18 6L6 18M6 6l12 12',
+    moon: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
+    sun: 'M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z',
+    arrowRight: 'M5 12h14M12 5l7 7-7 7',
+    phone: 'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z',
+    mail: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6',
+    mapPin: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0zM12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
+    graduationCap: 'M22 10v6M2 10l10-5 10 5-10 5z M6 12v5c0 0 3 3 6 3s6-3 6-3v-5',
+    users: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+    settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z',
+    dollarSign: 'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6',
+    checkCircle: 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3',
+    clipboard: 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 2h6a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z',
+    book: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z',
+    monitor: 'M2 3h20v14H2zM8 21h8M12 17v4',
+    creditCard: 'M1 4h22v16H1zM1 10h22',
+    idCard: 'M2 5h20v14H2zM6 12h4M6 15h8M16 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+    receipt: 'M4 2v20l4-2 4 2 4-2 4 2V2l-4 2-4-2-4 2z',
+    globe: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z',
+    messageCircle: 'M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z',
+    zap: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
+    shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+    barChart: 'M12 20V10M18 20V4M6 20v-4',
+    lock: 'M5 11h14v10H5zM7 11V7a5 5 0 0 1 10 0v4',
+    headphones: 'M3 18v-6a9 9 0 0 1 18 0v6M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z',
+    fingerprint: 'M2 12a10 10 0 0 1 18-6M12 2a10 10 0 0 1 10 10M12 12a0 0 0 0 1 0 0',
+    buildingIcon: 'M3 21h18M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16',
+} as const;
 
-// ─── Default Data ───
-const DEFAULT_SECTIONS: PageSection[] = [
-    { id: 'hero', title: 'Hero', subtitle: 'School ERP | Multi School Management System with Apps', visible: true },
-    { id: 'features', title: 'Features', subtitle: 'Explore Our Top Features', visible: true },
-    { id: 'panel_preview', title: 'Panel Preview', subtitle: 'Intuitive School Admin Panel', visible: true },
-    { id: 'pricing', title: 'Pricing', subtitle: 'Flexible Pricing Packages', visible: true },
-    { id: 'contact', title: 'Contact', subtitle: "Let's Get In Touch", visible: true },
-    { id: 'faq', title: 'FAQ', subtitle: 'Frequently Asked Questions', visible: true },
-];
+/* ─── Features Data (exact from OurSchoolERP) ─── */
+const features = [
+    { icon: icons.clipboard, title: 'Admission Management', desc: 'Streamlined admission process from inquiry to enrollment with online applications and document management.', color: 'fi-red' },
+    { icon: icons.users, title: 'Student Management', desc: 'Complete student lifecycle management with profiles, attendance, and academic records.', color: 'fi-green' },
+    { icon: icons.settings, title: 'Staff Management', desc: 'Complete HR solution for managing staff records, attendance, leaves, and performance evaluation.', color: 'fi-blue' },
+    { icon: icons.dollarSign, title: 'Fee Management', desc: 'Automated fee collection with multiple payment modes, receipt generation, and comprehensive financial reporting.', color: 'fi-amber' },
+    { icon: icons.checkCircle, title: 'Smart Attendance', desc: 'Digital attendance tracking with biometric integration, real-time reports, and automated notifications to parents.', color: 'fi-cyan' },
+    { icon: icons.book, title: 'Exam & Result Management', desc: 'End-to-end examination management from scheduling to result publication with detailed analytics.', color: 'fi-purple' },
+    { icon: icons.monitor, title: 'Online Class Management', desc: 'Integrated virtual classroom solution with video conferencing, assignments, and resource sharing.', color: 'fi-teal' },
+    { icon: icons.messageCircle, title: 'Reception Management', desc: 'Digital front desk solution for visitor management, enquiry tracking, and appointment scheduling.', color: 'fi-pink' },
+    { icon: icons.idCard, title: 'ID Card Management', desc: 'Automated ID card generation with customizable templates and barcode/QR code integration.', color: 'fi-orange' },
+    { icon: icons.receipt, title: 'Invoice Management', desc: 'Professional invoice generation with customizable templates, automated billing, and payment tracking.', color: 'fi-indigo' },
+    { icon: icons.book, title: 'Library Management', desc: 'Complete library automation with book cataloging, issue/return tracking, and fine management.', color: 'fi-lime' },
+    { icon: icons.globe, title: 'Website Management', desc: 'Build and manage your school website with dynamic content, news updates, and event management.', color: 'fi-rose' },
+] as const;
 
-const DEFAULT_NAV_ITEMS: NavMenuItem[] = [
-    { id: 'nav-features', title: 'Features', url: '#features', visible: true, isButton: false },
-    { id: 'nav-faq', title: 'FAQ', url: '#faq', visible: true, isButton: false },
-    { id: 'nav-contact', title: 'Contact', url: '#contact', visible: true, isButton: false },
-    { id: 'nav-start-trial', title: 'Start Trial', url: '/auth/auth2/register', visible: true, isButton: true },
-    { id: 'nav-parent', title: 'Parent & Student Portal', url: '/auth/auth2/login', visible: true, isButton: false },
-];
+/* ─── Pre-computed feature columns (avoid slicing on every render) ─── */
+const featureColumns = [
+    features.slice(0, 4),
+    features.slice(4, 8),
+    features.slice(8, 12),
+] as const;
 
-const FEATURES = [
-    { icon: 'solar:user-id-bold', title: 'Student Management' },
-    { icon: 'solar:book-2-bold', title: 'Academics Management' },
-    { icon: 'solar:users-group-rounded-bold', title: 'Staff Management' },
-    { icon: 'solar:card-bold', title: 'Online Fee Collection' },
-    { icon: 'solar:clipboard-check-bold', title: 'Exams & Marksheets' },
-    { icon: 'solar:chat-round-dots-bold', title: 'Parent Communication' },
-    { icon: 'solar:fingerprint-scan-bold', title: 'Biometric Integration' },
-    { icon: 'solar:map-point-wave-bold', title: 'Live GPS Tracking' },
-    { icon: 'solar:smartphone-bold', title: 'Mobile Apps' },
-    { icon: 'solar:wallet-money-bold', title: 'Automated Payroll' },
-    { icon: 'solar:document-text-bold', title: 'Template Builder' },
-    { icon: 'solar:monitor-bold', title: 'Online Examination' },
-];
+/* ─── Why Us Data ─── */
+const whyUsItems = [
+    { icon: icons.messageCircle, title: 'Effective Communication', desc: 'Bridge the gap between schools, parents, and students with instant messaging, notifications, and announcements.' },
+    { icon: icons.zap, title: 'Streamlined Operations', desc: 'Automate repetitive tasks and eliminate paperwork to focus on what matters most – quality education.' },
+    { icon: icons.graduationCap, title: 'Student-Centric Approach', desc: 'Every feature is designed keeping student success and well-being at the center of decision-making.' },
+    { icon: icons.users, title: 'Multi-User Functionality', desc: 'Role-based access for administrators, teachers, students, parents, and staff with customizable permissions.' },
+    { icon: icons.barChart, title: 'Data-Driven Insights', desc: 'Comprehensive analytics and reporting to make informed decisions and track institutional performance.' },
+    { icon: icons.shield, title: 'Secure and Reliable', desc: 'Enterprise-grade security with data encryption, regular backups, and 99.9% uptime guarantee.' },
+] as const;
 
-const PRICING = [
-    {
-        name: 'Trial Plan',
-        price: '₹0',
-        period: '/mo',
-        features: ['Up to 50 Students', 'All Core Modules', 'Unlimited Staff Logins', 'Email & SMS Notifications', 'Basic Support'],
-        featured: false,
-    },
-    {
-        name: 'Growth Plan',
-        price: '₹2,999',
-        period: '/mo',
-        features: ['Up to 500 Students', 'All Core Modules', 'Unlimited Staff Logins', 'Email & SMS Notifications', 'Priority Support'],
-        featured: true,
-    },
-    {
-        name: 'Enterprise Plan',
-        price: '₹5,999',
-        period: '/mo',
-        features: ['Up to 1500 Students', 'All Core Modules', 'Unlimited Staff Logins', 'Email & SMS Notifications', 'Dedicated Support'],
-        featured: false,
-    },
-];
+/* ─── Services Data ─── */
+const services = [
+    { icon: icons.settings, title: 'School ERP System', desc: 'Complete school management solution covering all administrative and academic operations.', color: 'fi-blue' },
+    { icon: icons.globe, title: 'School Website Management', desc: 'Professional website development and management with integrated parent and student portals.', color: 'fi-purple' },
+    { icon: icons.fingerprint, title: 'Biometric Attendance', desc: 'Advanced biometric systems for accurate attendance tracking with real-time synchronization.', color: 'fi-green' },
+    { icon: icons.headphones, title: 'Technical Support', desc: '24/7 dedicated support team to assist with implementation, training, and troubleshooting.', color: 'fi-amber' },
+] as const;
 
-const FAQS = [
-    { q: 'Is there a setup fee?', a: 'No, there are no setup fees. You can start with our free trial plan and upgrade to a paid plan at any time. Our setup process is fully automated and takes just a few minutes.' },
-    { q: 'Can I upgrade or downgrade my plan later?', a: 'Absolutely! You can change your plan at any time from your admin dashboard. The changes will be reflected immediately. Any unused credits from your current plan will be prorated.' },
-    { q: 'Is my school\'s data safe and secure?', a: 'Yes, security is our top priority. We use industry-standard encryption (AES-256), and your data is stored in secure, SOC-2 compliant data centers. We also perform regular backups and security audits.' },
-    { q: 'Do you provide customer support?', a: 'Yes, we offer email and chat support for all plans. Growth and Enterprise plans receive priority support with dedicated account managers and faster response times.' },
-    { q: 'Can I use it for multiple school branches?', a: 'Yes! Our multi-school architecture is designed to handle multiple branches or school groups under a single admin panel. Each branch gets its own isolated data while you maintain a centralized overview.' },
-];
+/* ─── Schools (Trusted By marquee) ─── */
+const schools = [
+    'Delhi Public School', 'St. Mary\'s Convent', 'Modern High School',
+    'Cambridge Academy', 'National Public School', 'Holy Cross School',
+    'Oxford International', 'Sunshine Academy', 'Green Valley School',
+    'Royal Academy', 'Heritage School', 'Future Kids School',
+] as const;
+const schoolColors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#14b8a6', '#6366f1', '#84cc16', '#f43f5e'] as const;
 
-// ─── Helpers ───
-const loadSections = (): PageSection[] => {
-    try {
-        const saved = localStorage.getItem('landing_sections');
-        if (saved) return JSON.parse(saved);
-    } catch { /* fallback */ }
-    return DEFAULT_SECTIONS;
+/* ─── Pre-computed marquee arrays (avoid spreading on every render) ─── */
+const schoolsDoubled = [...schools, ...schools];
+const schoolsReversedDoubled = (() => {
+    const reversed = [...schools].reverse();
+    return [...reversed, ...reversed];
+})();
+
+/* ─── Nav Items (exact from OurSchoolERP) ─── */
+const navItems = [
+    { label: 'Home', href: '#' },
+    { label: 'About Us', href: '#about' },
+    { label: 'Why Our School ERP', href: '#whyus' },
+    { label: 'Features', href: '#features' },
+    { label: 'Modules', href: '#features' },
+    { label: 'Benefits', href: '#whyus' },
+    { label: 'Purpose', href: '#services' },
+    { label: 'Contact Us', href: '#footer' },
+] as const;
+
+/* ─── Memoized sub-components ─── */
+const FeatureCard = memo(({ icon, title, desc, color }: { icon: string; title: string; desc: string; color: string }) => (
+    <div className="landing-feature-card">
+        <div className={`landing-feature-icon ${color}`}>
+            <Icon d={icon} />
+        </div>
+        <h3>{title}</h3>
+        <p>{desc}</p>
+    </div>
+));
+FeatureCard.displayName = 'FeatureCard';
+
+const WhyUsCard = memo(({ icon, title, desc }: { icon: string; title: string; desc: string }) => (
+    <div className="landing-whyus-card">
+        <div className="icon-wrap">
+            <Icon d={icon} />
+        </div>
+        <h3>{title}</h3>
+        <p>{desc}</p>
+    </div>
+));
+WhyUsCard.displayName = 'WhyUsCard';
+
+const ServiceCard = memo(({ icon, title, desc, color }: { icon: string; title: string; desc: string; color: string }) => (
+    <div className="landing-service-card">
+        <div className={`service-icon ${color}`}>
+            <Icon d={icon} size={24} />
+        </div>
+        <h3>{title}</h3>
+        <p>{desc}</p>
+    </div>
+));
+ServiceCard.displayName = 'ServiceCard';
+
+/* ─── Smooth scroll helper (reused across CTA buttons) ─── */
+const scrollToId = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 };
 
-const loadNavItems = (): NavMenuItem[] => {
-    try {
-        const saved = localStorage.getItem('landing_nav_items');
-        if (saved) return JSON.parse(saved);
-    } catch { /* fallback */ }
-    return DEFAULT_NAV_ITEMS;
-};
-
-const isSectionVisible = (sections: PageSection[], id: string) =>
-    sections.find(s => s.id === id)?.visible ?? true;
-
-// ─── Component ───
 const LandingPage = () => {
-    const [sections] = useState<PageSection[]>(loadSections);
-    const [navItems] = useState<NavMenuItem[]>(loadNavItems);
-    const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [activeNav, setActiveNav] = useState('Home');
+    const [darkMode, setDarkMode] = useState(false);
 
+    const toggleTheme = useCallback(() => setDarkMode(prev => !prev), []);
+    const toggleMobile = useCallback(() => setMobileOpen(prev => !prev), []);
+
+    // Throttled scroll handler using rAF for smooth 60fps performance
+    const rafRef = useRef<number>(0);
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 50);
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
+        const onScroll = () => {
+            if (rafRef.current) return;
+            rafRef.current = requestAnimationFrame(() => {
+                setScrolled(window.scrollY > 50);
+                rafRef.current = 0;
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        };
     }, []);
 
-    const visibleNavLinks = navItems.filter(n => n.visible && !n.isButton);
-    const visibleNavButtons = navItems.filter(n => n.visible && n.isButton);
-
-    const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
-        if (url.startsWith('#')) {
+    const handleNav = useCallback((e: React.MouseEvent<HTMLAnchorElement>, item: { label: string; href: string }) => {
+        setActiveNav(item.label);
+        setMobileOpen(false);
+        if (item.href.startsWith('#') && item.href !== '#') {
             e.preventDefault();
-            const el = document.getElementById(url.slice(1));
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-            setMobileOpen(false);
+            document.getElementById(item.href.slice(1))?.scrollIntoView({ behavior: 'smooth' });
         }
-    };
+    }, []);
+
+    // Pre-compute feature columns with doubled items for marquee
+    const featureColumnsDoubled = useMemo(() =>
+        featureColumns.map(col => [...col, ...col]),
+        []
+    );
 
     return (
-        <div className="landing-page">
-            {/* ════════ NAVBAR ════════ */}
-            <nav className={`landing-navbar ${scrolled ? 'scrolled' : ''}`}>
-                <div className="landing-navbar-inner">
-                    <a href="/" className="landing-navbar-logo">
-                        <img src="/src/assets/images/logos/dark-logo.svg" alt="Mindwhile ERP" />
-                    </a>
-
-                    <ul className="landing-navbar-links">
-                        {visibleNavLinks.map(item => (
-                            <li key={item.id}>
-                                <a href={item.url} onClick={(e) => handleSmoothScroll(e, item.url)}>{item.title}</a>
-                            </li>
-                        ))}
-                    </ul>
-
-                    <div className="landing-navbar-actions">
-                        {visibleNavButtons.map(item => (
-                            <a key={item.id} href={item.url} className="landing-btn landing-btn-primary">
-                                {item.title}
-                            </a>
-                        ))}
-                        <a href="/auth/auth2/login" className="landing-btn landing-btn-outline">Log In</a>
-                    </div>
-
-                    <button
-                        className="landing-mobile-toggle"
-                        onClick={() => setMobileOpen(!mobileOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        <Icon icon={mobileOpen ? 'solar:close-circle-linear' : 'solar:hamburger-menu-linear'} width={28} />
-                    </button>
-                </div>
-
-                {/* Mobile menu */}
-                <div className={`landing-mobile-menu ${mobileOpen ? 'open' : ''}`}>
-                    {visibleNavLinks.map(item => (
-                        <a key={item.id} href={item.url} onClick={(e) => handleSmoothScroll(e, item.url)}>{item.title}</a>
-                    ))}
-                    {visibleNavButtons.map(item => (
-                        <a key={item.id} href={item.url} className="landing-btn landing-btn-primary" style={{ textAlign: 'center' }}>
-                            {item.title}
+        <div className={`landing-page${darkMode ? ' dark' : ''}`}>
+            {/* ===== HEADER ===== */}
+            <header className={`landing-header${scrolled ? ' scrolled' : ''}`}>
+                <a href="/" className="landing-logo">
+                    <img src={darkLogo} alt="Mindwhile ERP" />
+                </a>
+                <nav className="landing-nav">
+                    {navItems.map(item => (
+                        <a key={item.label} href={item.href} className={activeNav === item.label ? 'active' : ''} onClick={e => handleNav(e, item)}>
+                            {item.label}
                         </a>
                     ))}
-                    <a href="/auth/auth2/login" className="landing-btn landing-btn-outline" style={{ textAlign: 'center' }}>Log In</a>
+                </nav>
+                <div className="landing-header-actions">
+                    <button className="landing-theme-toggle" aria-label="Toggle Theme" onClick={toggleTheme}>
+                        <Icon d={darkMode ? icons.sun : icons.moon} size={18} />
+                    </button>
+                    <a href="/auth/auth2/login" className="landing-login-btn">
+                        School Login <Icon d={icons.arrowRight} size={16} />
+                    </a>
+                    <button className="landing-mobile-toggle" onClick={toggleMobile} aria-label="Menu">
+                        <Icon d={mobileOpen ? icons.x : icons.menu} size={24} />
+                    </button>
                 </div>
-            </nav>
+                <div className={`landing-mobile-menu ${mobileOpen ? 'open' : ''}`}>
+                    {navItems.map(item => (
+                        <a key={item.label} href={item.href} onClick={e => handleNav(e, item)}>
+                            {item.label}
+                        </a>
+                    ))}
+                    <a href="/auth/auth2/login" style={{ color: 'hsl(225 80% 55%)', fontWeight: 600 }}>
+                        School Login →
+                    </a>
+                </div>
+            </header>
 
-            {/* ════════ HERO ════════ */}
-            {isSectionVisible(sections, 'hero') && (
-                <section id="hero" className="landing-hero">
-                    <div className="landing-hero-inner">
-                        <div className="landing-hero-content">
-                            <div className="landing-hero-badge">
-                                <Icon icon="solar:star-bold" width={14} />
-                                #1 Multi-School ERP Platform
-                            </div>
-                            <h1>
-                                School ERP |<br />
-                                <span>Multi School Management</span><br />
-                                System with Apps
-                            </h1>
+            {/* ===== HERO ===== */}
+            <section className="landing-hero">
+                <video className="landing-hero-video" autoPlay muted loop playsInline preload="metadata" poster="/assets/landing/image1-D7lCEF3b.jpg">
+                    <source src="/assets/landing/main-video.mp4" type="video/mp4" />
+                </video>
+                <div className="landing-hero-overlay" />
+                <div className="hero-blob hero-blob-1" />
+                <div className="hero-blob hero-blob-2" />
+                <div className="landing-hero-content">
+                    <span className="lp-badge">ERP Software for Schools</span>
+                    <h1>School ERP</h1>
+                    <p>Complete school management solution covering all administrative and academic operations with seamless integration.</p>
+                    <div className="landing-hero-buttons">
+                        <a href="/auth/auth2/login" className="btn-primary">Get Started <Icon d={icons.arrowRight} size={16} /></a>
+                        <a href="#about" className="btn-outline" onClick={e => scrollToId(e, 'about')}>Learn More</a>
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== ABOUT ===== */}
+            <section id="about" className="landing-about lp-section">
+                <div className="lp-container">
+                    <div className="landing-about-grid">
+                        <div className="landing-about-images">
+                            <img src="/assets/landing/image1-D7lCEF3b.jpg" alt="School ERP Dashboard" loading="lazy" />
+                            <img src="/assets/landing/image2-CUR1fDxC.png" alt="School Management" loading="lazy" />
+                            <img src="/assets/landing/image3-Cu1pBdLp.png" alt="Student Portal" loading="lazy" />
+                            <img src="/assets/landing/image4-rvNuSUTq.png" alt="Mobile App" loading="lazy" />
+                        </div>
+                        <div className="landing-about-text">
+                            <span className="lp-badge">About Our Solution</span>
+                            <h2>What is Our School ERP?</h2>
                             <p>
-                                Experience the future of education management. Streamline admissions,
-                                academics, finance, and communication — all from one powerful platform
-                                designed for modern schools.
+                                Our School ERP is a comprehensive Enterprise Resource Planning solution specifically designed for educational institutions. It serves as a unified platform that integrates all aspects of school management, from academic operations to administrative tasks.
                             </p>
-                            <div className="landing-hero-actions">
-                                <a href="/auth/auth2/register" className="landing-btn landing-btn-lg landing-btn-white">
-                                    <Icon icon="solar:play-bold" width={18} style={{ marginRight: '0.5rem' }} />
-                                    Start Free Trial
+                            <p>
+                                The system brings together administration, academics, finance, and communication modules into one seamless ecosystem. This integration eliminates data silos, reduces redundancy, and ensures real-time information flow across all departments.
+                            </p>
+                            <div className="about-stats">
+                                <div className="about-stat">
+                                    <div className="about-stat-value">500+</div>
+                                    <div className="about-stat-label">Schools</div>
+                                </div>
+                                <div className="about-stat">
+                                    <div className="about-stat-value">50K+</div>
+                                    <div className="about-stat-label">Students</div>
+                                </div>
+                                <div className="about-stat">
+                                    <div className="about-stat-value">99.9%</div>
+                                    <div className="about-stat-label">Uptime</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== FEATURES ===== */}
+            <section id="features" className="landing-features lp-section">
+                <div className="lp-container">
+                    <div className="landing-features-header">
+                        <span className="lp-badge">Features</span>
+                        <h2>Awesome Features</h2>
+                        <p>Discover the comprehensive set of features that make our School ERP the most complete solution for educational institutions.</p>
+                    </div>
+                    <div className="landing-features-grid">
+                        {featureColumnsDoubled.map((colFeatures, col) => (
+                            <div key={col} className="features-marquee-col">
+                                <div className={`features-marquee-track${col === 1 ? ' reverse' : ''}`}>
+                                    {colFeatures.map((f, i) => (
+                                        <FeatureCard key={`${f.title}-${i}`} icon={f.icon} title={f.title} desc={f.desc} color={f.color} />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== WHY US ===== */}
+            <section id="whyus" className="landing-whyus lp-section">
+                <div className="lp-container">
+                    <div className="landing-whyus-header">
+                        <span className="lp-badge">Why Us</span>
+                        <h2>Why to Choose OurSchoolERP?</h2>
+                        <p>Here's what makes us the preferred choice for educational institutions across the country.</p>
+                    </div>
+                    <div className="landing-whyus-grid">
+                        {whyUsItems.map((item, i) => (
+                            <WhyUsCard key={i} icon={item.icon} title={item.title} desc={item.desc} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== SERVICES ===== */}
+            <section id="services" className="landing-services lp-section">
+                <div className="lp-container">
+                    <div className="landing-services-header">
+                        <span className="lp-badge">Our Services</span>
+                        <h2>What We Offer</h2>
+                        <p>Comprehensive solutions to transform your educational institution.</p>
+                    </div>
+                    <div className="landing-services-grid">
+                        {services.map((s, i) => (
+                            <ServiceCard key={i} icon={s.icon} title={s.title} desc={s.desc} color={s.color} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== TRUSTED BY (Marquee) ===== */}
+            <section className="landing-trusted lp-section">
+                <div className="lp-container">
+                    <div className="landing-trusted-header">
+                        <span className="lp-badge">Trusted By</span>
+                        <h2>Our Clients</h2>
+                        <p>Schools and institutions that trust OurSchoolERP for their management needs.</p>
+                    </div>
+                </div>
+                {/* Row 1 — forward */}
+                <div className="marquee-wrapper" style={{ marginBottom: '1rem' }}>
+                    <div className="marquee-track forward">
+                        {schoolsDoubled.map((name, i) => (
+                            <div key={`f-${i}`} className="marquee-item">
+                                <span className="school-icon" style={{ background: schoolColors[i % schoolColors.length] }}>
+                                    {name.charAt(0)}
+                                </span>
+                                {name}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                {/* Row 2 — reverse */}
+                <div className="marquee-wrapper">
+                    <div className="marquee-track reverse">
+                        {schoolsReversedDoubled.map((name, i) => (
+                            <div key={`r-${i}`} className="marquee-item">
+                                <span className="school-icon" style={{ background: schoolColors[i % schoolColors.length] }}>
+                                    {name.charAt(0)}
+                                </span>
+                                {name}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== CTA ===== */}
+            <section className="landing-cta lp-section">
+                <div className="cta-glow cta-glow-1" />
+                <div className="cta-glow cta-glow-2" />
+                <div className="lp-container">
+                    <div className="landing-cta-content">
+                        <h2>Ready to Transform Your School?</h2>
+                        <p>Take the first step towards a smarter, more efficient school management experience with OurSchoolERP.</p>
+                        <div className="landing-cta-buttons">
+                            <a href="#footer" className="btn-white" onClick={e => scrollToId(e, 'footer')}>
+                                <Icon d={icons.phone} size={16} /> Contact Us for Demo
+                            </a>
+                            <a href="#features" className="btn-ghost" onClick={e => scrollToId(e, 'features')}>
+                                View All Features
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ===== FOOTER ===== */}
+            <footer id="footer" className="landing-footer lp-section">
+                <div className="landing-footer-bg" style={{ backgroundImage: 'url(/assets/landing/footer-bg-new-jNI1tpY-.jpeg)' }} />
+                <div className="lp-container landing-footer-content">
+                    <div className="landing-footer-grid">
+                        {/* Brand */}
+                        <div className="footer-brand">
+                            <div className="footer-logo">
+                                <img src={darkLogo} alt="Mindwhile ERP" />
+                            </div>
+                            <p>A school management system works by integrating various modules, allowing administrators, teachers, students, and parents to access and manage information, automate tasks, communicate, and generate reports for efficient school management.</p>
+                            <div className="footer-social">
+                                <a href="#" className="social-icon" aria-label="Facebook">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" /></svg>
                                 </a>
-                                <a href="#contact" className="landing-btn landing-btn-lg landing-btn-ghost"
-                                    onClick={(e) => handleSmoothScroll(e, '#contact')}>
-                                    Request a Demo
+                                <a href="#" className="social-icon" aria-label="Twitter">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z" /></svg>
+                                </a>
+                                <a href="#" className="social-icon" aria-label="YouTube">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.543 6.498C22 8.28 22 12 22 12s0 3.72-.457 5.502c-.254.985-.997 1.76-1.938 2.022C17.896 20 12 20 12 20s-5.893 0-7.605-.476c-.945-.266-1.687-1.04-1.938-2.022C2 15.72 2 12 2 12s0-3.72.457-5.502c.254-.985.997-1.76 1.938-2.022C6.107 4 12 4 12 4s5.896 0 7.605.476c.945.266 1.687 1.04 1.938 2.022zM10 15.5l6-3.5-6-3.5v7z" /></svg>
                                 </a>
                             </div>
                         </div>
 
-                        <div className="landing-hero-visual">
-                            <div className="landing-float-shape" />
-                            <div className="landing-float-shape" />
-                            <div className="landing-float-shape" />
-                            {/* Gradient card as dashboard mockup placeholder */}
-                            <div style={{
-                                width: '100%',
-                                maxWidth: 540,
-                                aspectRatio: '16/10',
-                                borderRadius: 20,
-                                background: 'linear-gradient(145deg, rgba(79,70,229,0.2) 0%, rgba(6,182,212,0.15) 50%, rgba(30,27,75,0.9) 100%)',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                padding: '1.5rem',
-                                gap: '0.75rem',
-                            }}>
-                                {/* Fake toolbar */}
-                                <div style={{ display: 'flex', gap: 6, marginBottom: '0.5rem' }}>
-                                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444' }} />
-                                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308' }} />
-                                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e' }} />
-                                </div>
-                                {/* Fake sidebar + content */}
-                                <div style={{ display: 'flex', flex: 1, gap: '0.75rem' }}>
-                                    <div style={{
-                                        width: '25%',
-                                        background: 'rgba(255,255,255,0.05)',
-                                        borderRadius: 10,
-                                        padding: '0.75rem',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '0.5rem',
-                                    }}>
-                                        {[...Array(6)].map((_, i) => (
-                                            <div key={i} style={{
-                                                height: 8,
-                                                background: i === 0 ? 'rgba(79,70,229,0.5)' : 'rgba(255,255,255,0.08)',
-                                                borderRadius: 4,
-                                                width: i === 0 ? '80%' : `${60 + Math.random() * 30}%`,
-                                            }} />
-                                        ))}
-                                    </div>
-                                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                        {/* Stat cards */}
-                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                            {['#4f46e5', '#06b6d4', '#22c55e', '#f59e0b'].map((c, i) => (
-                                                <div key={i} style={{
-                                                    flex: 1,
-                                                    height: 52,
-                                                    borderRadius: 10,
-                                                    background: `linear-gradient(135deg, ${c}33, ${c}11)`,
-                                                    border: `1px solid ${c}44`,
-                                                }} />
-                                            ))}
-                                        </div>
-                                        {/* Chart area */}
-                                        <div style={{
-                                            flex: 1,
-                                            borderRadius: 10,
-                                            background: 'rgba(255,255,255,0.03)',
-                                            border: '1px solid rgba(255,255,255,0.06)',
-                                        }} />
-                                    </div>
-                                </div>
+                        {/* Useful Links */}
+                        <div className="footer-links">
+                            <h4>Useful Links</h4>
+                            <ul>
+                                <li><a href="#"><span className="link-dot" />Home</a></li>
+                                <li><a href="#about"><span className="link-dot" />About Us</a></li>
+                                <li><a href="#features"><span className="link-dot" />Features</a></li>
+                                <li><a href="#features"><span className="link-dot" />Modules</a></li>
+                                <li><a href="#footer"><span className="link-dot" />Contact Us</a></li>
+                            </ul>
+                        </div>
+
+                        {/* Important Links */}
+                        <div className="footer-links">
+                            <h4>Important Links</h4>
+                            <ul>
+                                <li><a href="#"><span className="link-dot" />Privacy Policy</a></li>
+                                <li><a href="#"><span className="link-dot" />Terms &amp; Conditions</a></li>
+                                <li><a href="#"><span className="link-dot" />FAQ</a></li>
+                                <li><a href="#"><span className="link-dot" />Support</a></li>
+                            </ul>
+                        </div>
+
+                        {/* Our Location */}
+                        <div className="footer-contact">
+                            <h4>Our Location</h4>
+                            <div className="footer-contact-item">
+                                <span className="contact-icon"><Icon d={icons.mapPin} size={14} /></span>
+                                <span>4th Floor, Mayuri tech park, Mangalagiri, Guntur Andhra Pradesh 522503</span>
+                            </div>
+                            <div className="footer-contact-item">
+                                <span className="contact-icon"><Icon d={icons.phone} size={14} /></span>
+                                <span>+91 9494022475</span>
+                            </div>
+                            <div className="footer-contact-item">
+                                <span className="contact-icon"><Icon d={icons.mail} size={14} /></span>
+                                <span>Ourschoolerp123@gmail.com</span>
+                            </div>
+                            <div className="store-badges">
+                                <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" loading="lazy" />
+                                </a>
                             </div>
                         </div>
                     </div>
-                </section>
-            )}
-
-            {/* ════════ FEATURES ════════ */}
-            {isSectionVisible(sections, 'features') && (
-                <section id="features" className="landing-section landing-section-dark">
-                    <div className="landing-container">
-                        <div className="landing-section-header">
-                            <h2>Explore Our <span className="text-gradient">Top Features</span></h2>
-                            <p>Everything you need to manage a modern school — from admissions to report cards, all in one place.</p>
-                        </div>
-                        <div className="landing-features-grid">
-                            {FEATURES.map((f, i) => (
-                                <div key={i} className="landing-feature-card">
-                                    <div className="landing-feature-icon">
-                                        <Icon icon={f.icon} width={26} />
-                                    </div>
-                                    <h4>{f.title}</h4>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="footer-bottom">
+                        © Copyright 2025 <a href="https://mindwhile.com" target="_blank" rel="noopener noreferrer">Mindwhile IT Solutions Pvt Ltd</a> – All Rights Reserved
                     </div>
-                </section>
-            )}
-
-            {/* ════════ PANEL PREVIEW ════════ */}
-            {isSectionVisible(sections, 'panel_preview') && (
-                <section id="panel_preview" className="landing-panel-section">
-                    <div className="landing-container">
-                        <div className="landing-panel-grid">
-                            <div className="landing-panel-content">
-                                <h2>Intuitive School Admin Panel</h2>
-                                <p>Manage your entire school's operations from a single, powerful, and easy-to-use dashboard.</p>
-
-                                <div className="landing-panel-feature">
-                                    <div className="landing-panel-feature-icon">
-                                        <Icon icon="solar:user-plus-bold" width={22} />
-                                    </div>
-                                    <div>
-                                        <h5>Effortless Student Management</h5>
-                                        <p>Create admission forms, add students individually or in bulk, and manage parent details seamlessly.</p>
-                                    </div>
-                                </div>
-
-                                <div className="landing-panel-feature">
-                                    <div className="landing-panel-feature-icon">
-                                        <Icon icon="solar:calendar-bold" width={22} />
-                                    </div>
-                                    <div>
-                                        <h5>Flexible Timetable Creation</h5>
-                                        <p>Customize schedules for divisions and teachers effortlessly with our dynamic timetable.</p>
-                                    </div>
-                                </div>
-
-                                <div className="landing-panel-feature">
-                                    <div className="landing-panel-feature-icon">
-                                        <Icon icon="solar:bell-bold" width={22} />
-                                    </div>
-                                    <div>
-                                        <h5>Announcements Made Simple</h5>
-                                        <p>Keep your school community informed with targeted SMS, email, and in-app messaging.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="landing-panel-image">
-                                {/* Dashboard preview mockup */}
-                                <div style={{
-                                    width: '100%',
-                                    aspectRatio: '16/10',
-                                    borderRadius: 16,
-                                    background: '#fff',
-                                    boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    overflow: 'hidden',
-                                }}>
-                                    {/* Top bar */}
-                                    <div style={{ height: 40, background: '#0f172a', display: 'flex', alignItems: 'center', padding: '0 12px', gap: 6 }}>
-                                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444' }} />
-                                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#eab308' }} />
-                                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
-                                        <div style={{ flex: 1, height: 20, background: 'rgba(255,255,255,0.06)', borderRadius: 6, marginLeft: 16 }} />
-                                    </div>
-                                    {/* Body */}
-                                    <div style={{ flex: 1, display: 'flex' }}>
-                                        {/* Sidebar */}
-                                        <div style={{
-                                            width: '22%',
-                                            background: '#1e293b',
-                                            padding: '12px 8px',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: 6,
-                                        }}>
-                                            {['Dashboard', 'Students', 'Teachers', 'Finance', 'Exams', 'Reports'].map((label, i) => (
-                                                <div key={i} style={{
-                                                    padding: '6px 8px',
-                                                    borderRadius: 6,
-                                                    background: i === 0 ? 'rgba(79,70,229,0.3)' : 'transparent',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: 6,
-                                                }}>
-                                                    <div style={{ width: 6, height: 6, borderRadius: 2, background: i === 0 ? '#818cf8' : 'rgba(255,255,255,0.2)' }} />
-                                                    <span style={{ fontSize: 7, color: i === 0 ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: i === 0 ? 600 : 400 }}>{label}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        {/* Main content */}
-                                        <div style={{ flex: 1, padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                            {/* Stat cards */}
-                                            <div style={{ display: 'flex', gap: 8 }}>
-                                                {[
-                                                    { label: 'Students', val: '1,234', color: '#4f46e5' },
-                                                    { label: 'Teachers', val: '89', color: '#06b6d4' },
-                                                    { label: 'Revenue', val: '₹4.5L', color: '#22c55e' },
-                                                    { label: 'Classes', val: '48', color: '#f59e0b' },
-                                                ].map((s, i) => (
-                                                    <div key={i} style={{
-                                                        flex: 1,
-                                                        padding: '8px 6px',
-                                                        borderRadius: 8,
-                                                        background: `${s.color}11`,
-                                                        border: `1px solid ${s.color}22`,
-                                                        textAlign: 'center',
-                                                    }}>
-                                                        <div style={{ fontSize: 10, fontWeight: 700, color: s.color }}>{s.val}</div>
-                                                        <div style={{ fontSize: 6, color: '#64748b', marginTop: 2 }}>{s.label}</div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            {/* Chart placeholder */}
-                                            <div style={{
-                                                flex: 1,
-                                                borderRadius: 8,
-                                                background: '#f8fafc',
-                                                border: '1px solid #e2e8f0',
-                                                display: 'flex',
-                                                alignItems: 'flex-end',
-                                                padding: '8px 4px 4px',
-                                                gap: 3,
-                                            }}>
-                                                {[40, 65, 45, 80, 60, 75, 55, 90, 70, 85, 50, 95].map((h, i) => (
-                                                    <div key={i} style={{
-                                                        flex: 1,
-                                                        height: `${h}%`,
-                                                        background: `linear-gradient(to top, #4f46e5, #818cf8)`,
-                                                        borderRadius: '3px 3px 0 0',
-                                                        opacity: 0.7 + (h / 300),
-                                                    }} />
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* ════════ PRICING ════════ */}
-            {isSectionVisible(sections, 'pricing') && (
-                <section id="pricing" className="landing-section landing-section-gradient">
-                    <div className="landing-container">
-                        <div className="landing-section-header">
-                            <h2>Flexible <span className="text-gradient">Pricing Packages</span></h2>
-                            <p>Choose the plan that fits your school. Upgrade, downgrade, or cancel anytime.</p>
-                        </div>
-                        <div className="landing-pricing-grid">
-                            {PRICING.map((plan, i) => (
-                                <div key={i} className={`landing-pricing-card ${plan.featured ? 'featured' : ''}`}>
-                                    {plan.featured && <div className="landing-pricing-badge">Most Popular</div>}
-                                    <h3>{plan.name}</h3>
-                                    <div className="landing-pricing-price">
-                                        {plan.price}<span>{plan.period}</span>
-                                    </div>
-                                    <ul className="landing-pricing-features">
-                                        {plan.features.map((f, j) => (
-                                            <li key={j}>
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polyline points="20 6 9 17 4 12" />
-                                                </svg>
-                                                {f}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <a href="/auth/auth2/register" className={`landing-btn ${plan.featured ? 'landing-btn-primary' : 'landing-btn-outline'}`}>
-                                        Get Started
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* ════════ CONTACT ════════ */}
-            {isSectionVisible(sections, 'contact') && (
-                <section id="contact" className="landing-section landing-section-dark">
-                    <div className="landing-container">
-                        <div className="landing-section-header">
-                            <h2>Let's Get <span className="text-gradient">In Touch</span></h2>
-                            <p>Have a question or need a custom solution? We'd love to hear from you.</p>
-                        </div>
-                        <div className="landing-contact-grid">
-                            <div className="landing-contact-info">
-                                <div className="landing-contact-card">
-                                    <div className="landing-contact-card-icon">
-                                        <Icon icon="solar:phone-bold" width={22} />
-                                    </div>
-                                    <div>
-                                        <h5>Phone</h5>
-                                        <p>+91 6263056779</p>
-                                    </div>
-                                </div>
-                                <div className="landing-contact-card">
-                                    <div className="landing-contact-card-icon">
-                                        <Icon icon="solar:letter-bold" width={22} />
-                                    </div>
-                                    <div>
-                                        <h5>Email</h5>
-                                        <p>support@mindwhile.com</p>
-                                    </div>
-                                </div>
-                                <div className="landing-contact-card">
-                                    <div className="landing-contact-card-icon">
-                                        <Icon icon="solar:map-point-bold" width={22} />
-                                    </div>
-                                    <div>
-                                        <h5>Address</h5>
-                                        <p>123 Tech Avenue, Innovation Park, India</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <form className="landing-contact-form" onSubmit={(e) => e.preventDefault()}>
-                                <h3>Send us a message</h3>
-                                <p>Fill in the form and our team will get back to you shortly.</p>
-                                <div className="landing-form-row">
-                                    <div className="landing-form-group">
-                                        <label htmlFor="contact-name">Your Name</label>
-                                        <input id="contact-name" type="text" className="landing-form-input" placeholder="John Doe" />
-                                    </div>
-                                    <div className="landing-form-group">
-                                        <label htmlFor="contact-email">Email Address</label>
-                                        <input id="contact-email" type="email" className="landing-form-input" placeholder="john@school.com" />
-                                    </div>
-                                </div>
-                                <div className="landing-form-group">
-                                    <label htmlFor="contact-subject">Subject</label>
-                                    <input id="contact-subject" type="text" className="landing-form-input" placeholder="How can we help?" />
-                                </div>
-                                <div className="landing-form-group">
-                                    <label htmlFor="contact-message">Message</label>
-                                    <textarea id="contact-message" className="landing-form-input" placeholder="Tell us about your school's needs..." />
-                                </div>
-                                <button type="submit" className="landing-btn landing-btn-primary" style={{ width: '100%' }}>
-                                    <Icon icon="solar:plain-bold" width={18} style={{ marginRight: '0.5rem' }} />
-                                    Send Message
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* ════════ FAQ ════════ */}
-            {isSectionVisible(sections, 'faq') && (
-                <section id="faq" className="landing-section landing-section-gradient">
-                    <div className="landing-container">
-                        <div className="landing-section-header">
-                            <h2>Frequently Asked <span className="text-gradient">Questions</span></h2>
-                            <p>Have questions? We have answers. If you can't find what you're looking for, feel free to contact us.</p>
-                        </div>
-                        <Accordion.Root type="single" collapsible className="landing-faq-list">
-                            {FAQS.map((faq, i) => (
-                                <Accordion.Item key={i} value={`faq-${i}`} className="landing-faq-item">
-                                    <Accordion.Header>
-                                        <Accordion.Trigger className="landing-faq-trigger">
-                                            {faq.q}
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <polyline points="6 9 12 15 18 9" />
-                                            </svg>
-                                        </Accordion.Trigger>
-                                    </Accordion.Header>
-                                    <Accordion.Content className="landing-faq-content">
-                                        <div className="landing-faq-answer">{faq.a}</div>
-                                    </Accordion.Content>
-                                </Accordion.Item>
-                            ))}
-                        </Accordion.Root>
-                    </div>
-                </section>
-            )}
-
-            {/* ════════ FOOTER ════════ */}
-            <footer className="landing-footer">
-                <p>© {new Date().getFullYear()} Mindwhile School ERP. All Rights Reserved.</p>
+                </div>
             </footer>
         </div>
     );

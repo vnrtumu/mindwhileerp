@@ -117,8 +117,8 @@ const PageSections = () => {
                                     <button
                                         onClick={() => toggleVisibility(index)}
                                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${section.visible
-                                                ? 'bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25'
-                                                : 'bg-orange-500/15 text-orange-500 hover:bg-orange-500/25'
+                                            ? 'bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25'
+                                            : 'bg-orange-500/15 text-orange-500 hover:bg-orange-500/25'
                                             }`}
                                     >
                                         <Icon icon={section.visible ? 'solar:eye-bold' : 'solar:eye-closed-linear'} width={14} />
