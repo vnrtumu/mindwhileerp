@@ -93,7 +93,7 @@ const Login = () => {
                     </div>
 
                     <button type="submit" className="submit-btn">
-                        Open Super Admin Dashboard
+                        Login
                     </button>
                 </form>
 
