@@ -241,10 +241,12 @@
   cursor: pointer;
   transition: background .3s;
   font-size: 1.125rem;
+  color: hsl(var(--lp-primary));
 }
 
 .landing-theme-toggle:hover {
   background: hsl(var(--lp-foreground) / .05);
+  color: hsl(var(--lp-primary));
 }
 
 .landing-login-btn {
@@ -279,6 +281,7 @@
   background: transparent;
   cursor: pointer;
   font-size: 1.5rem;
+  color: hsl(var(--lp-foreground));
 }
 
 @media (min-width: 1024px) {

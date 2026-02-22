@@ -3,8 +3,8 @@ import darkLogo from '../../assets/images/logos/dark-logo.svg';
 import '../../css/pages/landing.css';
 
 /* ─── Lucide-style SVG icons (memoized) ─── */
-const Icon = memo(({ d, size = 20 }: { d: string; size?: number }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>
+const Icon = memo(({ d, size = 20, color = 'currentColor' }: { d: string; size?: number; color?: string }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>
 ));
 Icon.displayName = 'Icon';
 
