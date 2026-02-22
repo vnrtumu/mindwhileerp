@@ -1,28 +1,17 @@
 import { createContext, useState, useEffect } from 'react';
 import React from 'react';
 
-import { NotesData } from 'src/api/notes/notes-data';
-
-
-
-
-
-
-
-
-
-
-
+import { api } from 'src/lib/api-client';
 
 const initialContext = {
   notes: [],
   loading: true,
   error: null,
-  selectedNoteId: 1,
-  selectNote: () => {},
-  addNote: async () => {},
-  updateNote: async () => {},
-  deleteNote: async () => {}
+  selectedNoteId: null,
+  selectNote: () => { },
+  addNote: async () => { },
+  updateNote: async () => { },
+  deleteNote: async () => { }
 };
 
 export const NotesContext = createContext(initialContext);
@@ -36,7 +25,11 @@ export const NotesProvider = ({ children }) => {
   const fetchNotes = async () => {
     try {
       setLoading(true);
-      setNotes(NotesData);
+      const data = await api.get('/master/notes/');
+      setNotes(data || []);
+      if (data && data.length > 0) {
+        setSelectedNoteId(data[0].id);
+      }
     } catch (err) {
       setError(err instanceof Error ? err : String(err));
     } finally {
@@ -54,14 +47,12 @@ export const NotesProvider = ({ children }) => {
 
   const addNote = async (newNote) => {
     try {
-      const noteToAdd = {
-        id: Date.now(),
+      const addedNote = await api.post('/master/notes/', {
         title: newNote.title || '',
-        color: newNote.color || 'primary',
-        datef: new Date().toISOString(),
-        deleted: false
-      };
-      setNotes((prev) => [...prev, noteToAdd]);
+        color: newNote.color || 'primary'
+      });
+      setNotes((prev) => [addedNote, ...prev]);
+      setSelectedNoteId(addedNote.id);
     } catch (err) {
       console.error('Error adding note:', err);
     }
@@ -70,7 +61,8 @@ export const NotesProvider = ({ children }) => {
   // Update a note
   const updateNote = async (id, title, color) => {
     try {
-      setNotes((prev) => prev.map((note) => note.id === id ? { ...note, title, color } : note));
+      const updatedNote = await api.put(`/master/notes/${id}`, { title, color });
+      setNotes((prev) => prev.map((note) => note.id === id ? updatedNote : note));
     } catch (err) {
       console.error('Error updating note:', err);
     }
@@ -79,7 +71,21 @@ export const NotesProvider = ({ children }) => {
   // Delete a note
   const deleteNote = async (id) => {
     try {
+      await api.delete(`/master/notes/${id}`);
       setNotes((prev) => prev.filter((note) => note.id !== id));
+
+      // Select the first available note if we deleted the currently selected one
+      if (selectedNoteId === id) {
+        setNotes((currentNotes) => {
+          const remaining = currentNotes.filter((n) => n.id !== id);
+          if (remaining.length > 0) {
+            setSelectedNoteId(remaining[0].id);
+          } else {
+            setSelectedNoteId(null);
+          }
+          return remaining;
+        });
+      }
     } catch (err) {
       console.error('Error deleting note:', err);
     }
@@ -97,7 +103,7 @@ export const NotesProvider = ({ children }) => {
         updateNote,
         deleteNote
       }}>
-      
+
       {children}
     </NotesContext.Provider>);
 

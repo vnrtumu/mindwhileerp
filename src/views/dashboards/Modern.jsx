@@ -3,13 +3,13 @@ import { RevenueUpdate } from "../../components/dashboards/modern/RevenueUpdate"
 import { YearlyBreakup } from "../../components/dashboards/modern/YearlyBreakup";
 import { MonthlyEarning } from "../../components/dashboards/modern/MonthlyEarning";
 import { RecentTransaction } from "../../components/dashboards/modern/RecentTransaction";
-import { ProductPerformance } from "../../components/dashboards/modern/ProuctPerformance";
+import { TenantList } from "../../components/dashboards/modern/TenantList";
 import { Footer } from "../../components/dashboards/modern/Footer";
 import ProfileWelcome from "../../components/dashboards/modern/ProfileWelcome";
 
 const Moderndash = () => {
-  return (
-    <>
+    return (
+        <>
             <div className="grid grid-cols-12 gap-6">
                 {/* Welcome Banner */}
                 <div className="col-span-12">
@@ -35,7 +35,7 @@ const Moderndash = () => {
                     <RecentTransaction />
                 </div>
                 <div className="lg:col-span-8 col-span-12 flex">
-                    <ProductPerformance />
+                    <TenantList />
                 </div>
 
                 {/* Footer */}

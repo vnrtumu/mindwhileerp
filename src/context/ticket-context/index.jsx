@@ -1,20 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-
-import { TicketData } from 'src/api/ticket/ticket-data';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { api } from 'src/lib/api-client';
 
 export const TicketContext = createContext({});
 
@@ -27,37 +12,48 @@ export const TicketProvider = ({ children }) => {
 
   // Initialize tickets
   useEffect(() => {
-    try {
-      setTickets(TicketData);
-    } catch (err) {
-      setError(err instanceof Error ? err : String(err));
-    } finally {
-      setLoading(false);
-    }
+    const fetchTickets = async () => {
+      try {
+        setLoading(true);
+        const data = await api.get('/master/tickets/');
+        setTickets(data || []);
+      } catch (err) {
+        setError(err instanceof Error ? err : String(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTickets();
   }, []);
 
   // Add ticket
-  const addTicket = (newTicket) => {
-    // Push to TicketData array
-    TicketData.push(newTicket);
-    setTickets([...TicketData]);
+  const addTicket = async (newTicket) => {
+    try {
+      const addedTicket = await api.post('/master/tickets/', newTicket);
+      setTickets((prev) => [addedTicket, ...prev]);
+    } catch (err) {
+      console.error('Error adding ticket:', err);
+    }
   };
 
   // Edit ticket
-  const editTicket = (updatedTicket) => {
-    const index = TicketData.findIndex((t) => t.Id === updatedTicket.Id);
-    if (index !== -1) {
-      TicketData[index] = updatedTicket;
-      setTickets([...TicketData]);
+  const editTicket = async (updatedTicket) => {
+    try {
+      const ticketId = updatedTicket.Id;
+      const returnedTicket = await api.put(`/master/tickets/${ticketId}`, updatedTicket);
+      setTickets((prev) => prev.map((t) => t.Id === ticketId ? returnedTicket : t));
+    } catch (err) {
+      console.error('Error updating ticket:', err);
     }
   };
 
   // Delete ticket
-  const deleteTicket = (id) => {
-    const index = TicketData.findIndex((t) => t.Id === id);
-    if (index !== -1) {
-      TicketData.splice(index, 1); // remove from array
-      setTickets([...TicketData]);
+  const deleteTicket = async (id) => {
+    try {
+      await api.delete(`/master/tickets/${id}`);
+      setTickets((prev) => prev.filter((t) => t.Id !== id));
+    } catch (err) {
+      console.error('Error deleting ticket:', err);
     }
   };
 
@@ -80,7 +76,7 @@ export const TicketProvider = ({ children }) => {
         addTicket,
         editTicket
       }}>
-      
+
       {children}
     </TicketContext.Provider>);
 
