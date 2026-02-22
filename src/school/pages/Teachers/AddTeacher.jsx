@@ -93,6 +93,7 @@ const AddTeacher = ({ onCancel }) => {
             panNo: data.panNo,
             otherInfo: data.otherInfo,
             languages: selectedLanguage, // Use the state for language
+            employeeType: data.employeeType,
             epfNo: data.epfNo,
             basicSalary: data.basicSalary,
             contractType: data.contractType,
@@ -349,6 +350,16 @@ const AddTeacher = ({ onCancel }) => {
                             <div className="form-group">
                                 <label className="form-label">Previous School Phone No</label>
                                 <input type="text" name="prevSchoolPhone" className="form-control" defaultValue={getVal('prevSchoolPhone')} />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Employee Type</label>
+                                <select name="employeeType" className="form-control" defaultValue={getVal('employeeType')}>
+                                    <option value="">Select</option>
+                                    <option value="Full time">Full time</option>
+                                    <option value="Parttime">Parttime</option>
+                                    <option value="specific Time">specific Time</option>
+                                    <option value="visting time">visting time</option>
+                                </select>
                             </div>
                             <div className="form-group grid-col-2">
                                 <label className="form-label">Address <span className="required-star">*</span></label>
