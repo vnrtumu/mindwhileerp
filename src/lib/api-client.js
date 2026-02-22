@@ -39,8 +39,8 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid → clear auth and redirect
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      // Token expired or invalid permissions → clear auth and redirect
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
       window.location.href = '/auth/login';
@@ -59,17 +59,17 @@ export default apiClient;
  */
 export const api = {
   get: (url, config) =>
-  apiClient.get(url, config).then((res) => res.data),
+    apiClient.get(url, config).then((res) => res.data),
 
   post: (url, data, config) =>
-  apiClient.post(url, data, config).then((res) => res.data),
+    apiClient.post(url, data, config).then((res) => res.data),
 
   put: (url, data, config) =>
-  apiClient.put(url, data, config).then((res) => res.data),
+    apiClient.put(url, data, config).then((res) => res.data),
 
   patch: (url, data, config) =>
-  apiClient.patch(url, data, config).then((res) => res.data),
+    apiClient.patch(url, data, config).then((res) => res.data),
 
   delete: (url, config) =>
-  apiClient.delete(url, config).then((res) => res.data)
+    apiClient.delete(url, config).then((res) => res.data)
 };
