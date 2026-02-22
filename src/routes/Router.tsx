@@ -15,6 +15,7 @@ const Login2 = Loadable(lazy(() => import('../views/authentication/auth2/Login')
 const ForgotPassword2 = Loadable(lazy(() => import('../views/authentication/auth2/ForgotPassword')));
 const Register2 = Loadable(lazy(() => import('../views/authentication/auth2/Register')));
 const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintainance')));
+const SchoolLogin = Loadable(lazy(() => import('../views/authentication/SchoolLogin')));
 
 // School Admin Pages
 // School Admin Pages
@@ -253,10 +254,13 @@ const Router = [
     path: '/auth',
     element: <BlankLayout />,
     children: [
+      { path: 'login', element: <SchoolLogin /> },
+      { path: 'school-login', element: <SchoolLogin /> },
       { path: 'auth2/login', element: <Login2 /> },
       { path: 'auth2/forgot-password', element: <ForgotPassword2 /> },
       { path: 'auth2/register', element: <Register2 /> },
       { path: 'maintenance', element: <Maintainance /> },
+      { path: '403', element: <Error /> },
       { path: '404', element: <Error /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],

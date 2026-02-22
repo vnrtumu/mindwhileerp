@@ -5,21 +5,26 @@ import { ThemeProvider } from './components/provider/theme-provider';
 import { StudentProvider } from './context/StudentContext';
 import { AcademicsProvider } from './context/AcademicsContext';
 import { FeeProvider } from './context/FeeContext';
+import { AuthProvider } from './context/AuthContext';
+import { QueryProvider } from './lib/query-provider';
 
 function App() {
   return (
-    <>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <StudentProvider>
-          <AcademicsProvider>
-            <FeeProvider>
-              <RouterProvider router={router} />
-            </FeeProvider>
-          </AcademicsProvider>
-        </StudentProvider>
-      </ThemeProvider>
-    </>
+    <QueryProvider>
+      <AuthProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <StudentProvider>
+            <AcademicsProvider>
+              <FeeProvider>
+                <RouterProvider router={router} />
+              </FeeProvider>
+            </AcademicsProvider>
+          </StudentProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryProvider>
   );
 }
 
 export default App;
+
