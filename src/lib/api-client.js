@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // ── Configuration ──
 // Forced override: Ignored Vercel's old VITE_API_URL environment variables
-const API_BASE_URL = 'https://mindwhile-erp-api-s5h1.onrender.com/api/v1';
+const API_BASE_URL = 'https://schoolerp-w7x2.onrender.com/api/v1';
 
 /**
  * Centralized Axios instance for all API calls.
