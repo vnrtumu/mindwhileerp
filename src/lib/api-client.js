@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // ── Configuration ──
-const API_BASE_URL = import.meta.env?.VITE_API_URL || 'https://mindwhile-erp-api-s5h1.onrender.com/api/v1';
+// Forced override: Ignored Vercel's old VITE_API_URL environment variables
+const API_BASE_URL = 'https://mindwhile-erp-api-s5h1.onrender.com/api/v1';
 
 /**
  * Centralized Axios instance for all API calls.
