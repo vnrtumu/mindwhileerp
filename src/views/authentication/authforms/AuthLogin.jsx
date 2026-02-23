@@ -56,9 +56,12 @@ const AuthLogin = () => {
     setIsLoading(true);
 
     try {
-      const response = await api.post('/super-admin/login', {
-        username,
-        password
+      const formData = new URLSearchParams();
+      formData.append('username', username);
+      formData.append('password', password);
+
+      const response = await api.post('/super-admin/login', formData, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 
       localStorage.setItem('auth_token', response.access_token);
