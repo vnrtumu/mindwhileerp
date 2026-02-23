@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // ── Configuration ──
-const API_BASE_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000/api/v1';
+const API_BASE_URL = import.meta.env?.VITE_API_URL || 'https://schoolerp-w7x2.onrender.com/api/v1';
 
 /**
  * Centralized Axios instance for all API calls.
