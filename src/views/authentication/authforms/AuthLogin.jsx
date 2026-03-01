@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from 'src/context/AuthContext';
 import { Button } from 'src/components/ui/button';
 import { Checkbox } from 'src/components/ui/checkbox';
 import { Label } from 'src/components/ui/label';
@@ -29,6 +30,7 @@ const DEMO_USERS = {
 
 const AuthLogin = () => {
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -65,7 +67,8 @@ const AuthLogin = () => {
       // Try to fetch super admin profile to verify success
       try {
         const profile = await api.get('/super-admin/me');
-        localStorage.setItem('auth_user', JSON.stringify(profile));
+        // Update AuthContext state (so AuthGuard sees isAuthenticated = true)
+        authLogin(response.access_token, profile);
         navigate('/dashboard');
       } catch (profileError) {
         console.error("Failed to fetch profile", profileError);
