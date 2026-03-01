@@ -1,8 +1,10 @@
 {
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
     "rewrites": [
         {
-            "source": "/api/v1/:path*",
-            "destination": "https://ourschoolerp-m9y9k.ondigitalocean.app/api/v1/:path*"
+            "source": "/api/:path*",
+            "destination": "https://ourschoolerp-m9y9k.ondigitalocean.app/api/:path*"
         },
         {
             "source": "/(.*)",
