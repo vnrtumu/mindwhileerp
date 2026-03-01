@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from 'src/context/AuthContext';
+import FullLogo from "src/layouts/full/shared/logo/FullLogo";
+
+// Helper to decode JWT and safely extract the role
+function getRoleFromToken(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role || 'super_admin'; // fallback just in case
+  } catch (e) {
+    return 'super_admin';
+  }
+}
 import { Button } from 'src/components/ui/button';
 import { Checkbox } from 'src/components/ui/checkbox';
 import { Label } from 'src/components/ui/label';
@@ -67,8 +78,14 @@ const AuthLogin = () => {
       // Try to fetch super admin profile to verify success
       try {
         const profile = await api.get('/super-admin/me');
-        // Update AuthContext state (so AuthGuard sees isAuthenticated = true)
-        authLogin(response.access_token, profile);
+
+        // The /super-admin/me endpoint doesn't return 'role', but RoleGuard needs it.
+        // Extract it from the JWT token and inject it into the profile.
+        const userRole = getRoleFromToken(response.access_token);
+        const userProfileWithRole = { ...profile, role: userRole };
+
+        // Update AuthContext state (so AuthGuard sees isAuthenticated = true and user.role)
+        authLogin(response.access_token, userProfileWithRole);
         navigate('/dashboard');
       } catch (profileError) {
         console.error("Failed to fetch profile", profileError);
