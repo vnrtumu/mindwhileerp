@@ -58,5 +58,14 @@ export default defineConfig({
   build: {
     outDir: 'dist', // ✅ this is required for Netlify
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://ourschoolerp-m9y9k.ondigitalocean.app',
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
   plugins: [svgr(), react()],
 });
