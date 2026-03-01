@@ -49,7 +49,7 @@ apiClient.interceptors.response.use(
       isRedirecting = true;
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
-      window.location.href = '/auth/login';
+      window.location.href = '/auth/auth2/login';
     }
     return Promise.reject(error);
   }
