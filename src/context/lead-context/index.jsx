@@ -1,20 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-
-import { LeadData } from 'src/api/lead/lead-data';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { api } from 'src/lib/api-client';
 
 export const LeadContext = createContext({});
 
@@ -27,36 +12,48 @@ export const LeadProvider = ({ children }) => {
 
   // Initialize leads
   useEffect(() => {
-    try {
-      setLeads(LeadData);
-    } catch (err) {
-      setError(err instanceof Error ? err : String(err));
-    } finally {
-      setLoading(false);
-    }
+    const fetchLeads = async () => {
+      try {
+        setLoading(true);
+        const data = await api.get('/master/leads/');
+        setLeads(data || []);
+      } catch (err) {
+        setError(err instanceof Error ? err : String(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLeads();
   }, []);
 
   // Add lead
-  const addLead = (newLead) => {
-    LeadData.push(newLead);
-    setLeads([...LeadData]);
+  const addLead = async (newLead) => {
+    try {
+      const addedLead = await api.post('/master/leads/', newLead);
+      setLeads((prev) => [addedLead, ...prev]);
+    } catch (err) {
+      console.error('Error adding lead:', err);
+    }
   };
 
   // Edit lead
-  const editLead = (updatedLead) => {
-    const index = LeadData.findIndex((l) => l.Id === updatedLead.Id);
-    if (index !== -1) {
-      LeadData[index] = updatedLead;
-      setLeads([...LeadData]);
+  const editLead = async (updatedLead) => {
+    try {
+      const leadId = updatedLead.Id;
+      const returnedLead = await api.put(`/master/leads/${leadId}`, updatedLead);
+      setLeads((prev) => prev.map((l) => l.Id === leadId ? returnedLead : l));
+    } catch (err) {
+      console.error('Error updating lead:', err);
     }
   };
 
   // Delete lead
-  const deleteLead = (id) => {
-    const index = LeadData.findIndex((l) => l.Id === id);
-    if (index !== -1) {
-      LeadData.splice(index, 1);
-      setLeads([...LeadData]);
+  const deleteLead = async (id) => {
+    try {
+      await api.delete(`/master/leads/${id}`);
+      setLeads((prev) => prev.filter((l) => l.Id !== id));
+    } catch (err) {
+      console.error('Error deleting lead:', err);
     }
   };
 
@@ -79,8 +76,8 @@ export const LeadProvider = ({ children }) => {
         addLead,
         editLead
       }}>
-      
-            {children}
-        </LeadContext.Provider>);
+
+      {children}
+    </LeadContext.Provider>);
 
 };

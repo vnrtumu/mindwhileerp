@@ -494,7 +494,6 @@ const AddTeacher = ({ onCancel }) => {
                 </div>
 
 
-
                 {/* Documents */}
                 <div className="form-section">
                     <div className="section-header">

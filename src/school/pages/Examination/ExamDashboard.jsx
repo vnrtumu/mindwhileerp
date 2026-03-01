@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     IconPlus, IconSearch, IconEdit, IconTrash,
-    IconCalendar, IconClipboardList, IconDownload, IconUserCheck
+    IconCalendar, IconClipboardList, IconDownload, IconUserCheck,
+    IconFileTypePdf, IconFileTypeXls, IconChevronDown, IconFilter
 } from '@tabler/icons-react';
-import '../Accounts/Accounts.css';
+import '../Transport/ManageStudentTransport.css';
 
 const ExamDashboard = () => {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const ExamDashboard = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [showExportMenu, setShowExportMenu] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         date: '',
@@ -79,6 +81,35 @@ const ExamDashboard = () => {
         }
     };
 
+    const handlePrint = () => {
+        window.print();
+        setShowExportMenu(false);
+    };
+
+    const handleExportCSV = () => {
+        // Mock data export for dashboard (or actual data if available)
+        const headers = ['Exam', 'Class', 'Section', 'Date'];
+        const csvContent = [
+            headers.join(','),
+            // Example data - replace with actual state if available
+            'FA-1,10th,A,2025-06-08',
+            'SA-1,9th,B,2025-06-15'
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'exam_dashboard_export.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        setShowExportMenu(false);
+    };
+
     return (
         <div className="accounts-page">
             {/* Page Header */}
@@ -94,8 +125,6 @@ const ExamDashboard = () => {
                     Add a exam
                 </button>
             </div>
-
-            {/* Removed Redesigned Selection Area from Dashboard */}
 
             {/* Stats row */}
             <div className="stats-row">
@@ -119,78 +148,93 @@ const ExamDashboard = () => {
                 </div>
             </div>
 
-            <div className="accounts-card">
-                <div className="card-header">
-                    <h5>Exam List</h5>
-                    <div className="header-actions">
-                        <button className="btn-outline">
-                            <IconDownload size={16} />
-                            Export
-                        </button>
-                    </div>
+            <div className="card shadow-soft border-0 overflow-hidden mt-6">
+                <div className="premium-header-banner">
+                    <h4 className="mb-0">Exam List</h4>
                 </div>
-                <div className="card-body">
-                    <div className="filters-row">
-                        <div className="search-box">
-                            <IconSearch size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search by name or note..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
+
+                <div className="table-toolbar-premium">
+                    <div className="search-pill-wrapper">
+                        <IconSearch size={18} className="search-icon-pill" />
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="search-input-pill"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
 
-                    <div className="table-container">
-                        <table className="data-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Exam Name</th>
-                                    <th>Date</th>
-                                    <th>Note</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredData.map((item, index) => (
-                                    <tr key={item.id}>
-                                        <td>{index + 1}</td>
-                                        <td>
-                                            <span className="item-name">{item.name}</span>
-                                        </td>
-                                        <td>
-                                            <div className="date-cell">
-                                                <IconCalendar size={14} />
-                                                {formatDate(item.date)}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span className="item-desc">{item.note || '-'}</span>
-                                        </td>
-                                        <td>
-                                            <div className="action-buttons">
-                                                <button
-                                                    className="action-btn assign"
-                                                    title="Assign"
-                                                    onClick={() => navigate('/school/exam/assign')}
-                                                >
-                                                    <IconUserCheck size={16} />
-                                                </button>
-                                                <button className="action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
-                                                    <IconEdit size={16} />
-                                                </button>
-                                                <button className="action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
-                                                    <IconTrash size={16} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className="export-button-group">
+                        <button className="export-btn">Copy</button>
+                        <button className="export-btn" onClick={handleExportCSV}>CSV</button>
+                        <button className="export-btn">Excel</button>
+                        <button className="export-btn">PDF</button>
+                        <button className="export-btn" onClick={handlePrint}>Print</button>
+                        <div className="filter-dropdown-btn">
+                            <IconFilter size={16} />
+                            <span>Filter</span>
+                            <IconChevronDown size={14} />
+                        </div>
                     </div>
+                </div>
+
+                <div className="table-wrap px-0">
+                    <table className="premium-table-v2">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Exam Name</th>
+                                <th>Date</th>
+                                <th>Note</th>
+                                <th className="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredData.map((item, index) => (
+                                <tr key={item.id} className="table-row-v2">
+                                    <td>{index + 1}</td>
+                                    <td>
+                                        <div className="font-semibold text-slate-700">{item.name}</div>
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center gap-2 text-slate-500 font-medium">
+                                            <IconCalendar size={14} />
+                                            {formatDate(item.date)}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span className="text-slate-400 italic text-xs">{item.note || 'No notes added'}</span>
+                                    </td>
+                                    <td className="text-center">
+                                        <div className="action-button-flex">
+                                            <button
+                                                className="action-icon-btn view"
+                                                title="Assign Exam"
+                                                onClick={() => navigate('/school/exam/assign', { state: { exam: item } })}
+                                            >
+                                                <IconUserCheck size={16} />
+                                            </button>
+                                            <button
+                                                className="action-icon-btn edit"
+                                                title="Edit"
+                                                onClick={() => handleOpenEditModal(item)}
+                                            >
+                                                <IconEdit size={16} />
+                                            </button>
+                                            <button
+                                                className="action-icon-btn delete"
+                                                title="Delete"
+                                                onClick={() => handleDelete(item.id)}
+                                            >
+                                                <IconTrash size={16} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -243,8 +287,6 @@ const ExamDashboard = () => {
                     </div>
                 </div>
             )}
-
-            {/* Add Section Modal removed from Dashboard */}
         </div>
     );
 };

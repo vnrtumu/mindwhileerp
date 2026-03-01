@@ -17,6 +17,11 @@ export const FeeProvider = ({ children }) => {
     { id: 3, name: 'Extra Curricular', status: 'Active' }
   ]);
 
+  const [feeMasters, setFeeMasters] = useState([
+    { id: 1, groupId: 1, group: 'Academic Fees', typeId: 1, type: 'Tuition', dueDate: '2026-03-01', amount: 1000, fineType: 'None', status: 'Active' },
+    { id: 2, groupId: 2, group: 'Miscellaneous', typeId: 2, type: 'Transport', dueDate: '2026-03-05', amount: 300, fineType: 'Fixed', status: 'Active' }
+  ]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -199,6 +204,110 @@ export const FeeProvider = ({ children }) => {
     }
   };
 
+  // Fee Master APIs
+  const getFeeMasters = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await delay();
+      return feeMasters;
+    } catch {
+      const errorMsg = 'Failed to fetch fee masters';
+      setError(errorMsg);
+      throw new Error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addFeeMaster = async (data) => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (!data.groupId || !data.typeId || !data.amount) {
+        throw new Error('Group, Type and Amount are required');
+      }
+      await delay();
+      const newId = Math.max(...feeMasters.map(fm => fm.id), 0) + 1;
+      const groupObj = feeGroups.find(g => g.id === data.groupId) || {};
+      const typeObj = feeTypes.find(t => t.id === data.typeId) || {};
+      const newMaster = {
+        id: newId,
+        groupId: data.groupId,
+        group: groupObj.name || data.group || '',
+        typeId: data.typeId,
+        type: typeObj.name || data.type || '',
+        dueDate: data.dueDate || null,
+        amount: Number(data.amount),
+        fineType: data.fineType || 'None',
+        status: data.status || 'Active'
+      };
+      setFeeMasters(prev => [newMaster, ...prev]);
+      return newMaster;
+    } catch (err) {
+      const errorMsg = err.message || 'Failed to add fee master';
+      setError(errorMsg);
+      throw new Error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateFeeMaster = async (id, updates) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await delay();
+      const exists = feeMasters.find(fm => fm.id === id);
+      if (!exists) throw new Error('Fee master not found');
+      setFeeMasters(prev => prev.map(fm => fm.id === id ? { ...fm, ...updates } : fm));
+      return { ...exists, ...updates };
+    } catch (err) {
+      const errorMsg = err.message || 'Failed to update fee master';
+      setError(errorMsg);
+      throw new Error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteFeeMaster = async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await delay();
+      const exists = feeMasters.find(fm => fm.id === id);
+      if (!exists) throw new Error('Fee master not found');
+      setFeeMasters(prev => prev.filter(fm => fm.id !== id));
+      return true;
+    } catch (err) {
+      const errorMsg = err.message || 'Failed to delete fee master';
+      setError(errorMsg);
+      throw new Error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateFeeMasterStatus = async (id, status) => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (!['Active', 'Inactive'].includes(status)) throw new Error('Invalid status');
+      await delay();
+      const exists = feeMasters.find(fm => fm.id === id);
+      if (!exists) throw new Error('Fee master not found');
+      setFeeMasters(prev => prev.map(fm => fm.id === id ? { ...fm, status } : fm));
+      return { ...exists, status };
+    } catch (err) {
+      const errorMsg = err.message || 'Failed to update status';
+      setError(errorMsg);
+      throw new Error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Add new fee group
   const addFeeGroup = async (groupName) => {
     setLoading(true);
@@ -317,6 +426,7 @@ export const FeeProvider = ({ children }) => {
   const value = {
     feeTypes,
     feeGroups,
+    feeMasters,
     loading,
     error,
     getFeeTypes,
@@ -330,6 +440,11 @@ export const FeeProvider = ({ children }) => {
     updateFeeGroup,
     deleteFeeGroup,
     updateFeeGroupStatus,
+    getFeeMasters,
+    addFeeMaster,
+    updateFeeMaster,
+    deleteFeeMaster,
+    updateFeeMasterStatus,
     setError // Allow clearing errors
   };
 

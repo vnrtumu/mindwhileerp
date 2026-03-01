@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import HeaderActionButton from './components/HeaderActionButton';
-import BackButton from './components/BackButton';
 import { StudentContext } from '../../../context/StudentContext';
 import { AcademicsContext } from '../../../context/AcademicsContext';
+import StudentPageContainer from './components/StudentPageContainer';
 import './QuickStudentAdmissionForm.css';
 
 const QuickStudentAdmissionForm = () => {
@@ -140,41 +139,29 @@ const QuickStudentAdmissionForm = () => {
     };
 
     return (
-        <div className="qa-form-page">
-            {/* Page Header */}
-            <div className="page-header">
-                <div className="page-title">
-                    <div className="back-button-wrapper">
-                        <BackButton title="Go back to Quick Admission" />
-                        <div>
-                            <h4>{editId ? 'Edit Student' : 'Add Student'}</h4>
-                            <nav className="breadcrumb">
-                                <span>Quick Admission</span> / <span className="current">{editId ? 'Edit' : 'Add'}</span>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                <div className="page-actions">
-                    <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
-                </div>
-            </div>
+        <StudentPageContainer
+            title={editId ? 'Edit Student' : 'Add Student'}
+            breadcrumb={<><span>Quick Admission</span> / <span className="current">{editId ? 'Edit' : 'Add'}</span></>}
+            backTitle="Go back to Quick Admission"
+            pageClass="qa-form-page"
+        >
 
             {/* Form Container */}
             <form onSubmit={handleSubmit} className="qa-form">
-                
+
                 {/* QUICK ADMISSION FORM */}
                 <div className="form-section">
                     <div className="section-header">
                         <h5>Student Information</h5>
                         <span className="section-description">Enter basic student details</span>
                     </div>
-                    
+
                     {/* Photo Upload Section */}
                     <div className="form-group-full qa-photo-section">
                         <label>Student Photo</label>
                         <div className="file-upload-container">
-                            <input 
-                                type="file" 
+                            <input
+                                type="file"
                                 id="photo-upload"
                                 accept="image/*"
                                 onChange={handlePhotoChange}
@@ -191,8 +178,8 @@ const QuickStudentAdmissionForm = () => {
                             {formData.photoPreview && (
                                 <div className="photo-preview-compact">
                                     <img src={formData.photoPreview} alt="Photo Preview" />
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         onClick={handleRemovePhoto}
                                         className="preview-remove"
                                     >
@@ -208,8 +195,8 @@ const QuickStudentAdmissionForm = () => {
                         {/* Row 1: First Name, Last Name, Phone */}
                         <div className={"form-group " + (errorsState.firstName ? 'has-error' : '')}>
                             <label>First Name <span className="label-required">*</span></label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleChange}
@@ -221,8 +208,8 @@ const QuickStudentAdmissionForm = () => {
 
                         <div className={"form-group " + (errorsState.lastName ? 'has-error' : '')}>
                             <label>Last Name <span className="label-required">*</span></label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleChange}
@@ -234,8 +221,8 @@ const QuickStudentAdmissionForm = () => {
 
                         <div className={"form-group " + (errorsState.phone ? 'has-error' : '')}>
                             <label>Phone <span className="label-required">*</span></label>
-                            <input 
-                                type="tel" 
+                            <input
+                                type="tel"
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
@@ -248,8 +235,8 @@ const QuickStudentAdmissionForm = () => {
                         {/* Row 2: Father Name, DOB, Gender */}
                         <div className={"form-group " + (errorsState.fatherName ? 'has-error' : '')}>
                             <label>Father Name <span className="label-required">*</span></label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="fatherName"
                                 value={formData.fatherName}
                                 onChange={handleChange}
@@ -261,8 +248,8 @@ const QuickStudentAdmissionForm = () => {
 
                         <div className={"form-group " + (errorsState.dob ? 'has-error' : '')}>
                             <label>Date of Birth <span className="label-required">*</span></label>
-                            <input 
-                                type="date" 
+                            <input
+                                type="date"
                                 name="dob"
                                 value={formData.dob}
                                 onChange={handleChange}
@@ -273,7 +260,7 @@ const QuickStudentAdmissionForm = () => {
 
                         <div className={"form-group " + (errorsState.gender ? 'has-error' : '')}>
                             <label>Gender <span className="label-required">*</span></label>
-                            <select 
+                            <select
                                 name="gender"
                                 value={formData.gender}
                                 onChange={handleChange}
@@ -290,7 +277,7 @@ const QuickStudentAdmissionForm = () => {
                         {/* Row 3: Joined Class, Class, Section */}
                         <div className={"form-group " + (errorsState.joinedClass ? 'has-error' : '')}>
                             <label>Joined Class <span className="label-required">*</span></label>
-                            <select 
+                            <select
                                 name="joinedClass"
                                 value={formData.joinedClass}
                                 onChange={handleChange}
@@ -313,7 +300,7 @@ const QuickStudentAdmissionForm = () => {
 
                         <div className={"form-group " + (errorsState.class ? 'has-error' : '')}>
                             <label>Class <span className="label-required">*</span></label>
-                            <select 
+                            <select
                                 name="class"
                                 value={formData.class}
                                 onChange={handleChange}
@@ -347,8 +334,8 @@ const QuickStudentAdmissionForm = () => {
                         {/* Row 4: Roll No */}
                         <div className={"form-group " + (errorsState.rollNo ? 'has-error' : '')}>
                             <label>Roll No <span className="label-required">*</span></label>
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 name="rollNo"
                                 value={formData.rollNo}
                                 onChange={handleChange}
@@ -363,16 +350,16 @@ const QuickStudentAdmissionForm = () => {
 
             {/* STICKY ACTION BAR */}
             <div className="action-bar-sticky">
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     className="btn btn-outline"
                     onClick={() => navigate(-1)}
                 >
                     Cancel
                 </button>
-                <button 
-                    type="button" 
-                    className={"btn btn-primary btn-large " + (submitting? 'btn-loading':'')}
+                <button
+                    type="button"
+                    className={"btn btn-primary btn-large " + (submitting ? 'btn-loading' : '')}
                     onClick={handleSubmit}
                     disabled={submitting}
                 >
@@ -390,7 +377,7 @@ const QuickStudentAdmissionForm = () => {
                 </button>
             </div>
             {saved && <div className="success-badge">Saved ✓</div>}
-        </div>
+        </StudentPageContainer>
     );
 };
 

@@ -1,54 +1,118 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useState } from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const FeesCollectionChart = () => {
-    const data = [
-        { name: 'Q1 2023', collected: 45000, total: 50000 },
-        { name: 'Q2 2023', collected: 48000, total: 52000 },
-        { name: 'Q3 2023', collected: 42000, total: 55000 },
-        { name: 'Q4 2023', collected: 52000, total: 58000 },
-        { name: 'Q1 2024', collected: 55000, total: 60000 },
-        { name: 'Q2 2024', collected: 58000, total: 62000 },
-        { name: 'Q3 2024', collected: 54000, total: 65000 },
-        { name: 'Q4 2024', collected: 60000, total: 68000 }
+    const [activePeriod, setActivePeriod] = useState('2024');
+
+    const data2024 = [
+        { name: 'Collected', value: 167000, color: '#3d5ee1' },
+        { name: 'Outstanding', value: 21000, color: '#ea5455' },
+        { name: 'Waived', value: 8000, color: '#ff9f43' },
     ];
+
+    const data2023 = [
+        { name: 'Collected', value: 187000, color: '#3d5ee1' },
+        { name: 'Outstanding', value: 13000, color: '#ea5455' },
+        { name: 'Waived', value: 5000, color: '#ff9f43' },
+    ];
+
+    const data = activePeriod === '2024' ? data2024 : data2023;
+    const total = data.reduce((sum, d) => sum + d.value, 0);
+    const collected = data.find(d => d.name === 'Collected');
+    const collectionRate = ((collected.value / total) * 100).toFixed(1);
+
+    const CustomTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+            const item = payload[0].payload;
+            return (
+                <div style={{
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '10px',
+                    padding: '10px 14px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+                }}>
+                    <p style={{ margin: 0, fontWeight: 700, color: item.color, fontSize: '14px' }}>{item.name}</p>
+                    <p style={{ margin: '4px 0 0', color: 'var(--text-primary)', fontSize: '13px' }}>
+                        ${item.value.toLocaleString()}
+                    </p>
+                </div>
+            );
+        }
+        return null;
+    };
 
     return (
         <div className="dashboard-card fees-chart-card">
             <div className="card-header">
                 <h5>Fees Collection</h5>
-                <select className="period-select">
-                    <option>Last 8 Quarter</option>
-                    <option>Last 4 Quarter</option>
-                    <option>Last Year</option>
-                </select>
+                <div className="period-toggle">
+                    {['2023', '2024'].map(p => (
+                        <button
+                            key={p}
+                            className={`period-btn ${activePeriod === p ? 'active' : ''}`}
+                            onClick={() => setActivePeriod(p)}
+                        >
+                            {p}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <div className="chart-container">
-                <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={data} barSize={12}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                        <XAxis
-                            dataKey="name"
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fontSize: 12, fill: '#6e6b7b' }}
-                        />
-                        <YAxis
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fontSize: 12, fill: '#6e6b7b' }}
-                            tickFormatter={(value) => `$${value / 1000}k`}
-                        />
-                        <Tooltip
-                            formatter={(value) => [`$${value.toLocaleString()}`, '']}
-                            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}
-                        />
-                        <Legend iconType="circle" />
-                        <Bar dataKey="collected" name="Collected Fee" fill="#3d5ee1" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="total" name="Total Fee" fill="#a855f7" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                </ResponsiveContainer>
+            <div className="pie-chart-body">
+                {/* Summary row */}
+                <div className="fees-summary-row">
+                    {data.map((item, i) => (
+                        <div key={i} className="fees-summary-item">
+                            <span className="fees-dot" style={{ background: item.color }}></span>
+                            <div>
+                                <p className="fees-summary-label">{item.name}</p>
+                                <p className="fees-summary-value" style={{ color: item.color }}>
+                                    ${(item.value / 1000).toFixed(0)}k
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Donut chart */}
+                <div style={{ position: 'relative', height: 220 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie
+                                data={data}
+                                innerRadius={65}
+                                outerRadius={95}
+                                paddingAngle={4}
+                                dataKey="value"
+                                startAngle={90}
+                                endAngle={-270}
+                            >
+                                {data.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                                ))}
+                            </Pie>
+                            <Tooltip content={<CustomTooltip />} />
+                        </PieChart>
+                    </ResponsiveContainer>
+                    <div className="donut-center">
+                        <span className="donut-pct">{collectionRate}%</span>
+                        <span className="donut-label">Collected</span>
+                    </div>
+                </div>
+
+                {/* Legend chips */}
+                <div className="pie-legend-chips">
+                    {data.map((item, i) => (
+                        <div key={i} className="pie-legend-chip">
+                            <span style={{
+                                width: 10, height: 10, borderRadius: '50%',
+                                backgroundColor: item.color, display: 'inline-block', marginRight: 6
+                            }}></span>
+                            <span>{item.name}: <strong>${(item.value / 1000).toFixed(0)}k</strong></span>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

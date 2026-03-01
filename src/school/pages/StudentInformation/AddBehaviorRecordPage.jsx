@@ -3,8 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { StudentContext } from '../../../context/StudentContext';
 import { AcademicsContext } from '../../../context/AcademicsContext';
 import './BehaviorRecords.css';
-import HeaderActionButton from './components/HeaderActionButton';
-import BackButton from './components/BackButton';
+import StudentPageContainer from './components/StudentPageContainer';
 
 const AddBehaviorRecordPage = () => {
   const navigate = useNavigate();
@@ -77,22 +76,12 @@ const AddBehaviorRecordPage = () => {
   };
 
   return (
-    <div className="behavior-page animate-fade">
-      <div className="page-header">
-        <div>
-          <div className="back-button-wrapper">
-            <BackButton title="Go back" />
-            <div>
-              <h3>Add Behavior Record</h3>
-              <nav className="breadcrumb"><button className="link-like" onClick={() => navigate('/school/behavior-records')}>← Back to Behavior Records</button></nav>
-            </div>
-          </div>
-        </div>
-        <div className="page-actions">
-          <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
-        </div>
-      </div>
-
+    <StudentPageContainer
+      title="Add Behavior Record"
+      breadcrumb={<><span>Dashboard</span> &gt; <span>Students</span> &gt; <span>Behavior Records</span> &gt; <span className="current">Add</span></>}
+      backTitle="Go back"
+      pageClass="behavior-page animate-fade"
+    >
       <form className="card soft-card form-card" onSubmit={handleSubmit}>
         <div className="form-grid-two-col">
           <div className="form-group">
@@ -108,7 +97,7 @@ const AddBehaviorRecordPage = () => {
             <label>Section *</label>
             <select name="sectionId" value={form.sectionId} onChange={handleChange} className={errors.sectionId ? 'form-input error' : 'form-input'}>
               <option value="">Select Section</option>
-              {sections.filter(s => ['A','B','C'].includes(s.name)).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+              {sections.filter(s => ['A', 'B', 'C'].includes(s.name)).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
             {errors.sectionId && <div className="error-text">{errors.sectionId}</div>}
           </div>
@@ -124,13 +113,13 @@ const AddBehaviorRecordPage = () => {
 
           <div className="form-group">
             <label>Record Date *</label>
-            <input type="date" name="date" value={form.date} onChange={handleChange} className={errors.date? 'form-input error':'form-input'} />
+            <input type="date" name="date" value={form.date} onChange={handleChange} className={errors.date ? 'form-input error' : 'form-input'} />
             {errors.date && <div className="error-text">{errors.date}</div>}
           </div>
 
           <div className="form-group">
             <label>Reported By *</label>
-            <select name="reportedBy" value={form.reportedBy} onChange={handleChange} className={errors.reportedBy? 'form-input error':'form-input'}>
+            <select name="reportedBy" value={form.reportedBy} onChange={handleChange} className={errors.reportedBy ? 'form-input error' : 'form-input'}>
               <option value="">Select Staff</option>
               {staff.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
             </select>
@@ -141,11 +130,11 @@ const AddBehaviorRecordPage = () => {
             <label>Incident Type *</label>
             <div className="radio-group">
               <label className={"radio-label " + (form.type === 'Positive' ? 'active' : '')}>
-                <input type="radio" name="type" value="Positive" checked={form.type==='Positive'} onChange={handleChange} />
+                <input type="radio" name="type" value="Positive" checked={form.type === 'Positive'} onChange={handleChange} />
                 <span>Positive / Achievement</span>
               </label>
               <label className={"radio-label " + (form.type === 'Negative' ? 'active' : '')}>
-                <input type="radio" name="type" value="Negative" checked={form.type==='Negative'} onChange={handleChange} />
+                <input type="radio" name="type" value="Negative" checked={form.type === 'Negative'} onChange={handleChange} />
                 <span>Negative / Misconduct</span>
               </label>
             </div>
@@ -154,13 +143,13 @@ const AddBehaviorRecordPage = () => {
 
           <div className="form-group">
             <label>Title *</label>
-            <input type="text" name="title" placeholder="e.g., Helped a classmate, Disruptive in class" value={form.title} onChange={handleChange} className={errors.title? 'form-input error':'form-input'} />
+            <input type="text" name="title" placeholder="e.g., Helped a classmate, Disruptive in class" value={form.title} onChange={handleChange} className={errors.title ? 'form-input error' : 'form-input'} />
             {errors.title && <div className="error-text">{errors.title}</div>}
           </div>
 
           <div className="form-group-full">
             <label>Description *</label>
-            <textarea name="description" value={form.description} onChange={handleChange} className={errors.description? 'form-input form-textarea error':'form-input form-textarea'} rows={5} />
+            <textarea name="description" value={form.description} onChange={handleChange} className={errors.description ? 'form-input form-textarea error' : 'form-input form-textarea'} rows={5} />
             {errors.description && <div className="error-text">{errors.description}</div>}
           </div>
 
@@ -178,7 +167,7 @@ const AddBehaviorRecordPage = () => {
         </div>
         {saved && <div className="snackbar success">Record saved successfully</div>}
       </form>
-    </div>
+    </StudentPageContainer>
   );
 };
 

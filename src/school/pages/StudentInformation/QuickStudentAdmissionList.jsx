@@ -2,9 +2,8 @@ import React, { useContext, useState } from 'react';
 import { StudentContext } from '../../../context/StudentContext';
 import { useNavigate } from 'react-router-dom';
 import './QuickStudentAdmissionList.css';
-import HeaderActionButton from './components/HeaderActionButton';
-import BackButton from './components/BackButton';
 import { EditIcon, BanIcon, SortIcon, PlaceholderAvatar, DeleteIcon } from '../../../components/Icons';
+import StudentPageContainer from './components/StudentPageContainer';
 
 const QuickStudentAdmissionList = () => {
     const navigate = useNavigate();
@@ -97,112 +96,103 @@ const QuickStudentAdmissionList = () => {
         document.body.removeChild(element);
     };
 
+    const addStudentBtn = (
+        <button
+            onClick={() => navigate('/school/quick-admission/add')}
+            className="btn btn-primary"
+        >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Student Admission
+        </button>
+    );
+
     return (
-        <div className="qa-list-page">
-            <div className="container">
-                {/* Page Header */}
-                <div className="page-header">
-                    <div className="page-title">
-                        <div className="back-button-wrapper">
-                            <BackButton title="Go back to Student Information" />
-                            <div>
-                                <h4>Quick Student Admission</h4>
-                                <nav className="breadcrumb">
-                                    <span>Student Management</span> / <span className="current">Quick Admission</span>
-                                </nav>
-                            </div>
+        <StudentPageContainer
+            title="Quick Student Admission"
+            breadcrumb={<><span>Student Management</span> / <span className="current">Quick Admission</span></>}
+            backTitle="Go back to Student Information"
+            pageClass="qa-list-page"
+            actions={addStudentBtn}
+        >
+
+            {/* Empty State or Table */}
+            {quickAdmissionStudents.length === 0 ? (
+                <div className="empty-state-container">
+                    <div className="empty-state-card">
+                        <div className="empty-state-icon">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
                         </div>
-                    </div>
-                    <div className="page-header-actions" style={{display:'flex',gap:12,alignItems:'center'}}>
-                        <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
-                        <button 
-                            onClick={() => navigate('/school/quick-admission-form')}
-                            className="btn btn-primary"
+                        <h3>No Students Yet</h3>
+                        <p>Start by adding your first student through quick admission</p>
+                        <button
+                            onClick={() => navigate('/school/quick-admission/add')}
+                            className="btn btn-primary btn-large"
                         >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
-                            Student Admission
+                            Add First Student
                         </button>
                     </div>
                 </div>
-
-                {/* Empty State or Table */}
-                {quickAdmissionStudents.length === 0 ? (
-                    <div className="empty-state-container">
-                        <div className="empty-state-card">
-                            <div className="empty-state-icon">
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
+            ) : (
+                <div className="card soft-card fade-in">
+                    {/* Table Toolbar with Search and Export */}
+                    <div className="table-toolbar-wrapper">
+                        <div className="toolbar-search">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            <input
+                                type="text"
+                                placeholder="Search by name, class, section..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="search-input-field"
+                            />
+                        </div>
+                        <div className="toolbar-actions">
+                            <button className="toolbar-btn" title="Copy Selected" onClick={handleExportCopy} disabled={selectedIds.size === 0}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
                                 </svg>
-                            </div>
-                            <h3>No Students Yet</h3>
-                            <p>Start by adding your first student through quick admission</p>
-                            <button 
-                                onClick={() => navigate('/school/quick-admission-form')}
-                                className="btn btn-primary btn-large"
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                Copy
+                            </button>
+                            <button className="toolbar-btn" title="Export as CSV" onClick={handleExportCSV} disabled={selectedIds.size === 0}>
+                                CSV
+                            </button>
+                            <button className="toolbar-btn" title="Export as Excel" onClick={handleExportExcel} disabled={selectedIds.size === 0}>
+                                Excel
+                            </button>
+                            <button className="toolbar-btn" title="Export as PDF" onClick={handleExportPDF} disabled={selectedIds.size === 0}>
+                                PDF
+                            </button>
+                            <button className="toolbar-btn" title="Print" onClick={handlePrint}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                    <rect x="6" y="14" width="12" height="8"></rect>
                                 </svg>
-                                Add First Student
+                                Print
                             </button>
                         </div>
                     </div>
-                ) : (
-                    <div className="card soft-card fade-in">
-                        {/* Table Toolbar with Search and Export */}
-                        <div className="table-toolbar-wrapper">
-                            <div className="toolbar-search">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <path d="m21 21-4.35-4.35"></path>
-                                </svg>
-                                <input
-                                    type="text"
-                                    placeholder="Search by name, class, section..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="search-input-field"
-                                />
-                            </div>
-                            <div className="toolbar-actions">
-                                <button className="toolbar-btn" title="Copy Selected" onClick={handleExportCopy} disabled={selectedIds.size === 0}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                    </svg>
-                                    Copy
-                                </button>
-                                <button className="toolbar-btn" title="Export as CSV" onClick={handleExportCSV} disabled={selectedIds.size === 0}>
-                                    CSV
-                                </button>
-                                <button className="toolbar-btn" title="Export as Excel" onClick={handleExportExcel} disabled={selectedIds.size === 0}>
-                                    Excel
-                                </button>
-                                <button className="toolbar-btn" title="Export as PDF" onClick={handleExportPDF} disabled={selectedIds.size === 0}>
-                                    PDF
-                                </button>
-                                <button className="toolbar-btn" title="Print" onClick={handlePrint}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                                        <rect x="6" y="14" width="12" height="8"></rect>
-                                    </svg>
-                                    Print
-                                </button>
-                            </div>
-                        </div>
 
-                        <div className="table-stats">
-                            <span><strong>{filteredStudents.length}</strong> students | {selectedIds.size > 0 && <strong>{selectedIds.size} selected</strong>}</span>
-                        </div>
+                    <div className="table-stats">
+                        <span><strong>{filteredStudents.length}</strong> students | {selectedIds.size > 0 && <strong>{selectedIds.size} selected</strong>}</span>
+                    </div>
 
-                        <div className="table-wrap">
-                        <table className="qa-table">
+                    <div className="table-wrap">
+                        <table className="fee-types-table qa-table">
                             <thead>
                                 <tr>
                                     <th className="col-checkbox">
@@ -252,7 +242,7 @@ const QuickStudentAdmissionList = () => {
                                             <td className="rollno">{s.rollNo || '—'}</td>
                                             <td className="phone">{s.phone || '—'}</td>
                                             <td className="actions">
-                                                <button className="icon-btn icon-edit" title="Edit" onClick={() => navigate(`/school/quick-admission-form/${s.id}`)}>
+                                                <button className="icon-btn icon-edit" title="Edit" onClick={() => navigate(`/school/quick-admission/${s.id}`)}>
                                                     <EditIcon />
                                                 </button>
                                                 <button className="icon-btn icon-delete" title="Delete" onClick={() => deleteQuickAdmissionStudent(s.id)}>
@@ -264,11 +254,10 @@ const QuickStudentAdmissionList = () => {
                                 )}
                             </tbody>
                         </table>
-                        </div>
                     </div>
-                )}
-            </div>
-        </div>
+                </div>
+            )}
+        </StudentPageContainer>
     );
 };
 

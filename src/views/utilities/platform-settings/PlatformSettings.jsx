@@ -1,55 +1,99 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BreadcrumbComp from 'src/layouts/full/shared/breadcrumb/BreadcrumbComp';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
 import { Label } from 'src/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue } from
-'src/components/ui/select';
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from
+    'src/components/ui/select';
 import { Switch } from 'src/components/ui/switch';
 import { Icon } from '@iconify/react';
+import { api } from 'src/lib/api-client';
 
 const BCrumb = [
-{ to: '/', title: 'Home' },
-{ title: 'Platform Settings' }];
+    { to: '/', title: 'Home' },
+    { title: 'Platform Settings' }];
 
 
 const PlatformSettings = () => {
-  const [formData, setFormData] = useState({
-    siteName: 'Mindwhile School ERP',
-    footerText: 'School ERP',
-    defaultCurrency: 'inr',
-    paymentMode: 'sandbox',
-    mailHost: '',
-    mailPort: '587',
-    mailUsername: '',
-    mailPassword: '',
-    mailEncryption: 'tls',
-    mailFromAddress: '',
-    mailFromName: 'Mindwhile School ERP',
-    enableOtp: false,
-    masterOtp: ''
-  });
+    const [formData, setFormData] = useState({
+        siteName: 'Mindwhile School ERP',
+        footerText: 'School ERP',
+        defaultCurrency: 'inr',
+        paymentMode: 'sandbox',
+        mailHost: '',
+        mailPort: '587',
+        mailUsername: '',
+        mailPassword: '',
+        mailEncryption: 'tls',
+        mailFromAddress: '',
+        mailFromName: 'Mindwhile School ERP',
+        enableOtp: false,
+        masterOtp: ''
+    });
 
-  const [siteLogo, setSiteLogo] = useState(null);
-  const [favicon, setFavicon] = useState(null);
+    const [siteLogo, setSiteLogo] = useState(null);
+    const [favicon, setFavicon] = useState(null);
 
-  const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const response = await api.get('/master/platform-settings/');
+                if (response) {
+                    setFormData({
+                        siteName: response.site_name || '',
+                        footerText: response.footer_text || '',
+                        defaultCurrency: response.default_currency || 'inr',
+                        paymentMode: response.payment_mode || 'sandbox',
+                        mailHost: response.mail_host || '',
+                        mailPort: response.mail_port || '587',
+                        mailUsername: response.mail_username || '',
+                        mailPassword: response.mail_password || '',
+                        mailEncryption: response.mail_encryption || 'tls',
+                        mailFromAddress: response.mail_from_address || '',
+                        mailFromName: response.mail_from_name || '',
+                        enableOtp: response.enable_otp || false,
+                        masterOtp: response.master_otp || ''
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to fetch platform settings:', err);
+            }
+        };
+        fetchSettings();
+    }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Settings saved:', formData, { siteLogo, favicon });
-    // TODO: API call to save settings
-  };
+    const handleChange = (field, value) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+    };
 
-  return (
-    <>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const data = new FormData();
+            Object.keys(formData).forEach(key => {
+                data.append(key, formData[key]);
+            });
+            if (siteLogo) data.append('site_logo', siteLogo);
+            if (favicon) data.append('favicon', favicon);
+
+            await api.put('/master/platform-settings/', data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            alert("Settings saved successfully!");
+        } catch (err) {
+            console.error("Failed to save settings:", err);
+            alert("Failed to save settings. Please try again.");
+        }
+    };
+
+    return (
+        <>
             <BreadcrumbComp title="Platform Settings" items={BCrumb} />
 
             <form onSubmit={handleSubmit}>
@@ -69,23 +113,23 @@ const PlatformSettings = () => {
                                 <div>
                                     <Label htmlFor="siteName">Site Name</Label>
                                     <Input
-                    id="siteName"
-                    value={formData.siteName}
-                    onChange={(e) => handleChange('siteName', e.target.value)}
-                    className="mt-2"
-                    placeholder="Enter your platform name" />
-                  
+                                        id="siteName"
+                                        value={formData.siteName}
+                                        onChange={(e) => handleChange('siteName', e.target.value)}
+                                        className="mt-2"
+                                        placeholder="Enter your platform name" />
+
                                 </div>
 
                                 <div>
                                     <Label htmlFor="footerText">Footer Text</Label>
                                     <Input
-                    id="footerText"
-                    value={formData.footerText}
-                    onChange={(e) => handleChange('footerText', e.target.value)}
-                    className="mt-2"
-                    placeholder="Text shown in the footer" />
-                  
+                                        id="footerText"
+                                        value={formData.footerText}
+                                        onChange={(e) => handleChange('footerText', e.target.value)}
+                                        className="mt-2"
+                                        placeholder="Text shown in the footer" />
+
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -94,23 +138,23 @@ const PlatformSettings = () => {
                                         <div className="mt-2 flex items-center gap-3">
                                             <div className="h-14 w-14 rounded-lg border border-dashed border-border flex items-center justify-center bg-muted/20 shrink-0">
                                                 {siteLogo ?
-                        <img
-                          src={URL.createObjectURL(siteLogo)}
-                          alt="Logo preview"
-                          className="h-full w-full object-contain rounded-lg" /> :
+                                                    <img
+                                                        src={URL.createObjectURL(siteLogo)}
+                                                        alt="Logo preview"
+                                                        className="h-full w-full object-contain rounded-lg" /> :
 
 
-                        <Icon icon="solar:image-linear" width={24} className="text-muted-foreground" />
-                        }
+                                                    <Icon icon="solar:image-linear" width={24} className="text-muted-foreground" />
+                                                }
                                             </div>
                                             <div className="flex-1">
                                                 <Input
-                          id="siteLogo"
-                          type="file"
-                          accept=".png,.jpg,.jpeg"
-                          onChange={(e) => setSiteLogo(e.target.files?.[0] || null)}
-                          className="text-sm" />
-                        
+                                                    id="siteLogo"
+                                                    type="file"
+                                                    accept=".png,.jpg,.jpeg"
+                                                    onChange={(e) => setSiteLogo(e.target.files?.[0] || null)}
+                                                    className="text-sm" />
+
                                             </div>
                                         </div>
                                     </div>
@@ -119,23 +163,23 @@ const PlatformSettings = () => {
                                         <div className="mt-2 flex items-center gap-3">
                                             <div className="h-14 w-14 rounded-lg border border-dashed border-border flex items-center justify-center bg-muted/20 shrink-0">
                                                 {favicon ?
-                        <img
-                          src={URL.createObjectURL(favicon)}
-                          alt="Favicon preview"
-                          className="h-full w-full object-contain rounded-lg" /> :
+                                                    <img
+                                                        src={URL.createObjectURL(favicon)}
+                                                        alt="Favicon preview"
+                                                        className="h-full w-full object-contain rounded-lg" /> :
 
 
-                        <Icon icon="solar:star-linear" width={24} className="text-muted-foreground" />
-                        }
+                                                    <Icon icon="solar:star-linear" width={24} className="text-muted-foreground" />
+                                                }
                                             </div>
                                             <div className="flex-1">
                                                 <Input
-                          id="favicon"
-                          type="file"
-                          accept=".ico,.png"
-                          onChange={(e) => setFavicon(e.target.files?.[0] || null)}
-                          className="text-sm" />
-                        
+                                                    id="favicon"
+                                                    type="file"
+                                                    accept=".ico,.png"
+                                                    onChange={(e) => setFavicon(e.target.files?.[0] || null)}
+                                                    className="text-sm" />
+
                                             </div>
                                         </div>
                                     </div>
@@ -155,9 +199,9 @@ const PlatformSettings = () => {
                                 <div>
                                     <Label htmlFor="defaultCurrency">Default Currency for Subscriptions</Label>
                                     <Select
-                    value={formData.defaultCurrency}
-                    onValueChange={(val) => handleChange('defaultCurrency', val)}>
-                    
+                                        value={formData.defaultCurrency}
+                                        onValueChange={(val) => handleChange('defaultCurrency', val)}>
+
                                         <SelectTrigger className="mt-2 w-full">
                                             <SelectValue />
                                         </SelectTrigger>
@@ -173,9 +217,9 @@ const PlatformSettings = () => {
                                 <div>
                                     <Label htmlFor="paymentMode">Platform Payment Mode</Label>
                                     <Select
-                    value={formData.paymentMode}
-                    onValueChange={(val) => handleChange('paymentMode', val)}>
-                    
+                                        value={formData.paymentMode}
+                                        onValueChange={(val) => handleChange('paymentMode', val)}>
+
                                         <SelectTrigger className="mt-2 w-full">
                                             <SelectValue />
                                         </SelectTrigger>
@@ -205,22 +249,22 @@ const PlatformSettings = () => {
                                     <div>
                                         <Label htmlFor="mailHost">Mail Host</Label>
                                         <Input
-                      id="mailHost"
-                      value={formData.mailHost}
-                      onChange={(e) => handleChange('mailHost', e.target.value)}
-                      className="mt-2"
-                      placeholder="smtp.example.com" />
-                    
+                                            id="mailHost"
+                                            value={formData.mailHost}
+                                            onChange={(e) => handleChange('mailHost', e.target.value)}
+                                            className="mt-2"
+                                            placeholder="smtp.example.com" />
+
                                     </div>
                                     <div>
                                         <Label htmlFor="mailPort">Mail Port</Label>
                                         <Input
-                      id="mailPort"
-                      value={formData.mailPort}
-                      onChange={(e) => handleChange('mailPort', e.target.value)}
-                      className="mt-2"
-                      placeholder="587" />
-                    
+                                            id="mailPort"
+                                            value={formData.mailPort}
+                                            onChange={(e) => handleChange('mailPort', e.target.value)}
+                                            className="mt-2"
+                                            placeholder="587" />
+
                                     </div>
                                 </div>
 
@@ -228,32 +272,32 @@ const PlatformSettings = () => {
                                     <div>
                                         <Label htmlFor="mailUsername">Mail Username</Label>
                                         <Input
-                      id="mailUsername"
-                      value={formData.mailUsername}
-                      onChange={(e) => handleChange('mailUsername', e.target.value)}
-                      className="mt-2"
-                      placeholder="your@email.com" />
-                    
+                                            id="mailUsername"
+                                            value={formData.mailUsername}
+                                            onChange={(e) => handleChange('mailUsername', e.target.value)}
+                                            className="mt-2"
+                                            placeholder="your@email.com" />
+
                                     </div>
                                     <div>
                                         <Label htmlFor="mailPassword">Mail Password</Label>
                                         <Input
-                      id="mailPassword"
-                      type="password"
-                      value={formData.mailPassword}
-                      onChange={(e) => handleChange('mailPassword', e.target.value)}
-                      className="mt-2"
-                      placeholder="••••••••" />
-                    
+                                            id="mailPassword"
+                                            type="password"
+                                            value={formData.mailPassword}
+                                            onChange={(e) => handleChange('mailPassword', e.target.value)}
+                                            className="mt-2"
+                                            placeholder="••••••••" />
+
                                     </div>
                                 </div>
 
                                 <div>
                                     <Label htmlFor="mailEncryption">Mail Encryption</Label>
                                     <Select
-                    value={formData.mailEncryption}
-                    onValueChange={(val) => handleChange('mailEncryption', val)}>
-                    
+                                        value={formData.mailEncryption}
+                                        onValueChange={(val) => handleChange('mailEncryption', val)}>
+
                                         <SelectTrigger className="mt-2 w-full">
                                             <SelectValue />
                                         </SelectTrigger>
@@ -269,23 +313,23 @@ const PlatformSettings = () => {
                                     <div>
                                         <Label htmlFor="mailFromAddress">Mail From Address</Label>
                                         <Input
-                      id="mailFromAddress"
-                      type="email"
-                      value={formData.mailFromAddress}
-                      onChange={(e) => handleChange('mailFromAddress', e.target.value)}
-                      className="mt-2"
-                      placeholder="noreply@yourplatform.com" />
-                    
+                                            id="mailFromAddress"
+                                            type="email"
+                                            value={formData.mailFromAddress}
+                                            onChange={(e) => handleChange('mailFromAddress', e.target.value)}
+                                            className="mt-2"
+                                            placeholder="noreply@yourplatform.com" />
+
                                     </div>
                                     <div>
                                         <Label htmlFor="mailFromName">Mail From Name</Label>
                                         <Input
-                      id="mailFromName"
-                      value={formData.mailFromName}
-                      onChange={(e) => handleChange('mailFromName', e.target.value)}
-                      className="mt-2"
-                      placeholder="Platform Name" />
-                    
+                                            id="mailFromName"
+                                            value={formData.mailFromName}
+                                            onChange={(e) => handleChange('mailFromName', e.target.value)}
+                                            className="mt-2"
+                                            placeholder="Platform Name" />
+
                                     </div>
                                 </div>
                             </div>
@@ -310,22 +354,22 @@ const PlatformSettings = () => {
                                         </p>
                                     </div>
                                     <Switch
-                    id="enableOtp"
-                    checked={formData.enableOtp}
-                    onCheckedChange={(val) => handleChange('enableOtp', val)} />
-                  
+                                        id="enableOtp"
+                                        checked={formData.enableOtp}
+                                        onCheckedChange={(val) => handleChange('enableOtp', val)} />
+
                                 </div>
 
                                 <div>
                                     <Label htmlFor="masterOtp">Platform Master OTP</Label>
                                     <Input
-                    id="masterOtp"
-                    type="password"
-                    value={formData.masterOtp}
-                    onChange={(e) => handleChange('masterOtp', e.target.value)}
-                    className="mt-2"
-                    placeholder="Emergency master OTP code" />
-                  
+                                        id="masterOtp"
+                                        type="password"
+                                        value={formData.masterOtp}
+                                        onChange={(e) => handleChange('masterOtp', e.target.value)}
+                                        className="mt-2"
+                                        placeholder="Emergency master OTP code" />
+
                                     <p className="text-xs text-muted-foreground mt-1.5">
                                         Global emergency password. Any school user can use this to log in if their regular OTP fails.
                                     </p>

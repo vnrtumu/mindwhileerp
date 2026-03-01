@@ -2,24 +2,11 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Route guard that checks authentication and role.
  *
- * Usage in Router:
- *   <Route element={<RoleGuard allowedRoles={['school_admin', 'branch_admin']} />}>
- *     <Route path="dashboard" element={<Dashboard />} />
- *   </Route>
+ * Double-checks localStorage to handle cases where the axios interceptor
+ * cleared the token but React state hasn't updated yet.
  */
 const RoleGuard = ({
   allowedRoles,
@@ -33,13 +20,16 @@ const RoleGuard = ({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-            </div>);
-
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    );
   }
 
-  // Not authenticated → redirect to login
-  if (!isAuthenticated || !user) {
+  // Double-check: if localStorage token is gone, treat as unauthenticated
+  // (handles the case where axios interceptor cleared localStorage but React state is stale)
+  const hasToken = !!localStorage.getItem('auth_token');
+
+  if (!isAuthenticated || !user || !hasToken) {
     return <Navigate to={loginPath} replace />;
   }
 

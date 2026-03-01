@@ -26,10 +26,10 @@
     align-items: center;
     gap: 8px;
     background: transparent;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     padding: 8px 16px;
     border-radius: 8px;
-    color: #475569;
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -47,13 +47,13 @@
 .breadcrumb h2 {
     font-size: 24px;
     font-weight: 600;
-    color: #1a202c;
+    color: var(--text-primary);
     margin: 0 0 4px;
 }
 
 .breadcrumb span {
     font-size: 14px;
-    color: #718096;
+    color: var(--text-secondary);
 }
 
 .header-actions {
@@ -62,11 +62,11 @@
 }
 
 .icon-btn {
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     padding: 8px 12px;
     border-radius: 8px;
-    color: #64748b;
+    color: var(--text-secondary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -103,18 +103,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: white;
+    background: var(--bg-card);
     padding: 16px 20px;
     border-radius: 12px;
     margin-bottom: 24px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
 }
 
 .title-section h3 {
     font-size: 18px;
     font-weight: 600;
-    color: #1a202c;
+    color: var(--text-primary);
     margin: 0;
 }
 
@@ -131,12 +131,12 @@
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 14px;
-    color: #64748b;
+    color: var(--text-secondary);
     cursor: pointer;
-    background: white;
+    background: var(--bg-card);
     transition: all 0.2s;
 }
 
@@ -147,7 +147,7 @@
 
 .view-toggle {
     display: flex;
-    background: #f1f5f9;
+    background: var(--bg-main);
     padding: 4px;
     border-radius: 8px;
 }
@@ -156,7 +156,7 @@
     padding: 6px 12px;
     border: none;
     background: transparent;
-    color: #64748b;
+    color: var(--text-secondary);
     cursor: pointer;
     border-radius: 6px;
     transition: all 0.2s;
@@ -214,10 +214,10 @@
 
 /* Card Design */
 .teacher-card {
-    background: white;
+    background: var(--bg-card);
     border-radius: 12px;
     padding: 20px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
@@ -322,10 +322,10 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    background: white;
+    background: var(--bg-card);
     padding: 12px 20px;
     border-radius: 8px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
 }
 
 .entries-selector {
@@ -338,19 +338,22 @@
 
 .entries-select {
     padding: 4px 8px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     outline: none;
-    color: #1e293b;
+    color: var(--text-primary);
+    background: var(--input-bg);
 }
 
 .search-bar .search-input {
     padding: 8px 16px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
+    background: var(--input-bg);
     border-radius: 8px;
     width: 250px;
     outline: none;
     font-size: 14px;
+    color: var(--text-primary);
     transition: border-color 0.2s;
 }
 
@@ -380,13 +383,13 @@
 .teacher-name {
     font-size: 16px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-primary);
     margin: 0;
 }
 
 .teacher-class {
     font-size: 13px;
-    color: #64748b;
+    color: var(--text-secondary);
     margin-top: 2px;
 }
 
@@ -411,7 +414,7 @@
 
 .detail-item .value {
     font-size: 14px;
-    color: #334155;
+    color: var(--text-primary);
     font-weight: 500;
     word-break: break-all;
 }
@@ -520,10 +523,10 @@
 /* List View (Table) */
 /* List View (Table) Styles */
 .teachers-list-container {
-    background: white;
+    background: var(--bg-card);
     border-radius: 8px;
     overflow-x: auto;
-    border: 1px solid #f1f5f9;
+    border: 1px solid var(--border-color);
 }
 
 .teachers-table {
@@ -532,20 +535,20 @@
 }
 
 .teachers-table th {
-    background: #f8fafc;
-    color: #64748b;
+    background: var(--table-header-bg);
+    color: var(--text-secondary);
     font-size: 13px;
     font-weight: 600;
     text-align: left;
     padding: 12px 16px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .teachers-table td {
     padding: 12px 16px;
-    color: #475569;
+    color: var(--text-primary);
     font-size: 14px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
 }
 
@@ -677,10 +680,10 @@
     top: 100%;
     right: 0;
     margin-top: 4px;
-    background: white;
+    background: var(--bg-card);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     min-width: 150px;
     z-index: 50;
     padding: 6px 0;
@@ -689,7 +692,7 @@
 .action-item {
     padding: 8px 16px;
     font-size: 13px;
-    color: #475569;
+    color: var(--text-primary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -698,8 +701,8 @@
 }
 
 .action-item:hover {
-    background: #f1f5f9;
-    color: #1e293b;
+    background: var(--bg-main);
+    color: var(--text-primary);
 }
 
 .action-item.delete {
@@ -777,11 +780,11 @@
 
 .filter-select {
     width: 100%;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    background-color: white;
+    background-color: var(--bg-card);
     font-size: 14px;
-    color: var(--foreground);
+    color: var(--text-primary);
     outline: none;
     cursor: pointer;
     padding: 8px 12px;

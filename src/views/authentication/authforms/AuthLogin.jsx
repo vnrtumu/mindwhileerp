@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from 'src/components/ui/button';
 import { Checkbox } from 'src/components/ui/checkbox';
-import { Input } from 'src/components/ui/input';
 import { Label } from 'src/components/ui/label';
 import { api } from 'src/lib/api-client';
 import { IconSchool, IconBuildingBank, IconUser, IconLock, IconEye, IconEyeOff, IconMail } from '@tabler/icons-react';
@@ -56,7 +55,10 @@ const AuthLogin = () => {
     setIsLoading(true);
 
     try {
-      const response = await api.post('/super-admin/login', { username, password });
+      const response = await api.post('/super-admin/login', {
+        username,
+        password
+      });
 
       localStorage.setItem('auth_token', response.access_token);
 
@@ -86,7 +88,7 @@ const AuthLogin = () => {
   return (
     <>
       <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25 mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25 mb-4 mx-auto">
           <IconSchool size={32} className="text-white" />
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Sign in to your school portal</p>
@@ -100,7 +102,7 @@ const AuthLogin = () => {
         )}
 
         {/* Username */}
-        <div>
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
             Username
           </label>
@@ -112,14 +114,14 @@ const AuthLogin = () => {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all text-sm"
-              required />
-
+              disabled={isLoading}
+              required
+            />
           </div>
         </div>
 
-
         {/* Password */}
-        <div>
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
             Password
           </label>
@@ -131,27 +133,32 @@ const AuthLogin = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="w-full pl-10 pr-11 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all text-sm"
-              required />
+              disabled={isLoading}
+              required
+            />
 
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            >
               {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
             </button>
           </div>
         </div>
+
         <div className="flex justify-between my-5">
           <div className="flex items-center gap-2">
-            <Checkbox id="accept" className="checkbox" />
+            <Checkbox id="accept" />
             <Label htmlFor="accept" className="opacity-90 font-normal cursor-pointer">
-              Remeber this Device
+              Remember this Device
             </Label>
           </div>
           <Link to={'/auth/auth2/forgot-password'} className="text-primary text-sm font-medium">
             Forgot Password ?
           </Link>
         </div>
+
         <Button
           type="submit"
           className="w-full mt-4"
@@ -187,3 +194,4 @@ const AuthLogin = () => {
 };
 
 export default AuthLogin;
+

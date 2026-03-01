@@ -2,8 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StudentContext } from '../../../context/StudentContext';
 import './StudentCategories.css';
-import HeaderActionButton from './components/HeaderActionButton';
-import BackButton from './components/BackButton';
+import StudentPageContainer from './components/StudentPageContainer';
 
 const AddStudentCategoryPage = () => {
   const navigate = useNavigate();
@@ -35,23 +34,12 @@ const AddStudentCategoryPage = () => {
   };
 
   return (
-    <div className="student-cats-page animate-fade">
-      <div className="page-header">
-        <div>
-          <div className="back-button-wrapper">
-            <BackButton title="Go back to Categories" />
-            <div>
-              <h3>Add Category</h3>
-              <p className="muted">Create a new student category</p>
-              <nav className="breadcrumb"><button className="link-like" onClick={() => navigate('/school/student-categories')}>← Back to Student Categories</button></nav>
-            </div>
-          </div>
-        </div>
-        <div className="page-actions">
-          <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
-        </div>
-      </div>
-
+    <StudentPageContainer
+      title="Add Category"
+      breadcrumb={<><span>Student Management</span> / <span>Categories</span> / <span className="current">Add</span></>}
+      backTitle="Go back to Categories"
+      pageClass="student-cats-page animate-fade"
+    >
       <form className="card soft-card form-card" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Category Name *</label>
@@ -59,13 +47,13 @@ const AddStudentCategoryPage = () => {
           {errors.name && <div className="error-text">{errors.name}</div>}
         </div>
 
-        
+
         <div className="form-actions">
           <button type="button" className="btn btn-outline" onClick={() => navigate('/school/student-categories')}>Cancel</button>
           <button type="submit" className={"btn btn-primary " + (submitting ? 'btn-loading' : '')} disabled={submitting}>{submitting ? 'Saving...' : 'Create Category'}</button>
         </div>
       </form>
-    </div>
+    </StudentPageContainer>
   );
 };
 

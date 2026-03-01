@@ -1,4 +1,7 @@
 /* Disable Student Page Theme Variables */
+@import '../../../styles/shared-table.css';
+
+/* Disable Student Page Theme Variables */
 :root {
   --dsp-bg-body: #ffffff;
   --dsp-card-bg: #ffffff;

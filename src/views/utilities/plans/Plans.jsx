@@ -35,6 +35,15 @@ const Plans = () => {
     fetchPlans();
   }, []);
 
+  const handleDeletePlan = async (id) => {
+    try {
+      await api.delete(`/master/plans/${id}`);
+      setPlans(prev => prev.filter(p => p.id !== id));
+    } catch (error) {
+      console.error("Failed to delete plan:", error);
+    }
+  };
+
   return (
     <>
       <BreadcrumbComp title="Manage Subscription Plans" items={BCrumb} />
@@ -44,7 +53,7 @@ const Plans = () => {
             <p className="text-lg font-medium animate-pulse">Loading plans...</p>
           </div>
         ) : (
-          <PlansTable data={plans} />
+          <PlansTable data={plans} onDeletePlan={handleDeletePlan} />
         )}
       </div>
     </>

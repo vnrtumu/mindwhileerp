@@ -37,17 +37,23 @@ import { Label } from 'src/components/ui/label';
 import CardBox from 'src/components/shared/CardBox';
 import { toTitleCase } from 'src/components/utilities/table/DataTable';
 import { useNavigate } from 'react-router';
-
-
-
-
-
-export const PlansTable = ({
-  data = []
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose
+} from 'src/components/ui/dialog'; export const PlansTable = ({
+  data = [],
+  onDeletePlan
 }) => {
   const navigate = useNavigate();
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [planToDelete, setPlanToDelete] = useState(null);
 
   const renderValue = (val) => {
     if (val === null || val === undefined) return '-';
@@ -109,15 +115,22 @@ export const PlansTable = ({
       id: 'action',
       header: 'Action',
       enableSorting: false,
-      cell: () => {
+      cell: (info) => {
         return (
           <div className="flex items-center gap-2">
             <Button
+              type="button"
               size={'sm'}
               variant={'lighterror'}
               className="px-4 py-2 rounded"
-              title="Delete plan">
-
+              title="Delete plan"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setPlanToDelete(info.row.original.id);
+                setDeleteDialogOpen(true);
+              }}
+            >
               Delete
             </Button>
           </div>);
@@ -170,32 +183,32 @@ export const PlansTable = ({
   return (
     <CardBox>
       <div>
-        {data.length === 0 ?
-          <p className="text-center py-8 text-gray-500">No data available.</p> :
+        <div className="p-4 pt-0 flex items-center justify-between flex-wrap gap-4">
+          <h3 className="text-xl font-semibold mb-2">Manage Subscription Plans</h3>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Input
+              type="text"
+              className="max-w-96 lg:min-w-96 min-w-full placeholder:text-gray-400 dark:placeholder:text-white/20"
+              value={globalFilter ?? ''}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              placeholder="Search your relevant items..." />
 
+            <Button
+              onClick={() => navigate('/super/utilities/plans/create')}
+              className="flex items-center gap-2">
+
+              Add New Plan
+            </Button>
+            <Button onClick={handleDownload} className="p-2 px-4 rounded-md">
+              <Icon icon="material-symbols:download-rounded" width={24} height={24} />
+            </Button>
+          </div>
+        </div>
+
+        {data.length === 0 ? (
+          <p className="text-center py-8 text-gray-500">No data available.</p>
+        ) : (
           <>
-            <div className="p-4 pt-0 flex items-center justify-between flex-wrap gap-4">
-              <h3 className="text-xl font-semibold mb-2">Manage Subscription Plans</h3>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Input
-                  type="text"
-                  className="max-w-96 lg:min-w-96 min-w-full placeholder:text-gray-400 dark:placeholder:text-white/20"
-                  value={globalFilter ?? ''}
-                  onChange={(e) => setGlobalFilter(e.target.value)}
-                  placeholder="Search your relevant items..." />
-
-                <Button
-                  onClick={() => navigate('/super/utilities/plans/create')}
-                  className="flex items-center gap-2">
-
-                  Add New Plan
-                </Button>
-                <Button onClick={handleDownload} className="p-2 px-4 rounded-md">
-                  <Icon icon="material-symbols:download-rounded" width={24} height={24} />
-                </Button>
-              </div>
-            </div>
-
             <div className="overflow-x-auto border rounded-md border-ld">
               <Table>
                 <TableHeader>
@@ -295,8 +308,39 @@ export const PlansTable = ({
               </div>
             </div>
           </>
-        }
+        )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-destructive">Delete Subscription Plan</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this subscription plan? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <DialogClose asChild>
+              <Button type="button" variant="outline" onClick={() => setPlanToDelete(null)}>Cancel</Button>
+            </DialogClose>
+            <Button
+              type="button"
+              variant="destructive"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (planToDelete && onDeletePlan) {
+                  onDeletePlan(planToDelete);
+                }
+                setDeleteDialogOpen(false);
+                setPlanToDelete(null);
+              }}
+            >
+              Delete Plan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </CardBox>);
 
 };

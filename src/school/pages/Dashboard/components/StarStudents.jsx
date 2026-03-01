@@ -1,43 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
+const students = [
+    { name: 'Tenesa', class: 'XII, A', score: '99.1%', img: 'https://randomuser.me/api/portraits/women/44.jpg' },
+    { name: 'Michael', class: 'XI, B', score: '97.5%', img: 'https://randomuser.me/api/portraits/men/45.jpg' },
+];
+
 const StarStudents = () => {
-    const students = [
-        {
-            name: 'Tenesa',
-            class: 'XII, A',
-            img: 'https://randomuser.me/api/portraits/women/44.jpg',
-            rank: 1
-        },
-        {
-            name: 'Michael',
-            class: 'XI, B',
-            img: 'https://randomuser.me/api/portraits/men/45.jpg',
-            rank: 2
-        }
-    ];
+    const [idx, setIdx] = useState(0);
+    const s = students[idx];
 
     return (
-        <div className="dashboard-card star-students-card">
+        <div className="dashboard-card compact-profile-card">
             <div className="card-header">
-                <h5>Star Students</h5>
+                <h5>⭐ Star Student</h5>
                 <div className="nav-arrows">
-                    <button className="nav-arrow-btn">
-                        <IconChevronLeft size={18} color="#6e6b7b" />
+                    <button className="nav-arrow-btn" onClick={() => setIdx((idx - 1 + students.length) % students.length)}>
+                        <IconChevronLeft size={16} />
                     </button>
-                    <button className="nav-arrow-btn">
-                        <IconChevronRight size={18} color="#6e6b7b" />
+                    <button className="nav-arrow-btn" onClick={() => setIdx((idx + 1) % students.length)}>
+                        <IconChevronRight size={16} />
                     </button>
                 </div>
             </div>
-
-            <div className="star-student-carousel">
-                <div className="star-student-item">
-                    <div className="star-badge">★</div>
-                    <img src={students[0].img} alt={students[0].name} className="student-photo" />
-                    <h6>{students[0].name}</h6>
-                    <p>{students[0].class}</p>
+            <div className="compact-profile-body">
+                <img src={s.img} alt={s.name} className="compact-avatar" />
+                <div className="compact-profile-info">
+                    <span className="compact-name">{s.name}</span>
+                    <span className="compact-sub">Class {s.class}</span>
+                    <div className="compact-score-badge star">
+                        <span>⭐</span>
+                        <span>{s.score}</span>
+                    </div>
                 </div>
+                <span className="compact-rank">#{idx + 1}</span>
             </div>
         </div>
     );

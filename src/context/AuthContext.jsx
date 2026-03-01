@@ -1,38 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-// ── Types ──
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const AuthContext = createContext(undefined);
 
 // ── Helper: decode JWT payload ──
@@ -101,8 +68,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         getToken
       }}>
-      
-            {children}
+          {children}
         </AuthContext.Provider>);
 
 };

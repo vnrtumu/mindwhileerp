@@ -195,7 +195,12 @@ const PATH_TO_PERMISSION_ID = {
     '/front-office/postal': 'visitor_log',
 
     // Book Sales
-    '/book-sales': 'inventory',
+    '/school/book-sales': 'inventory',
+    '/school/book-sales/vendors': 'inventory',
+    '/school/book-sales/inventory': 'inventory',
+    '/school/book-sales/sales': 'inventory',
+    '/school/book-sales/returns': 'inventory',
+    '/school/book-sales/reports': 'report_financial',
 
     // Online Exam
     '/exam/online': 'exam_schedule',
@@ -253,8 +258,6 @@ const menuData = [
                     { title: 'Online Transactions', path: '/school/finance/online-transactions' },
                     { title: 'Fees Carry Forward', path: '/school/finance/fees-carry-forward' },
                     { title: 'Assign Fees', path: '/school/finance/assign-fees' },
-                    { title: 'Fees Master', path: '/school/finance/fees-master' },
-                    { title: 'Fee Groups', path: '/school/finance/fee-groups' },
                     { title: 'Fees Discount', path: '/school/finance/fees-discount' },
                     { title: 'Fee Types', path: '/school/finance/fee-types' },
                     { title: 'Fee Permissions', path: '/school/finance/fee-permissions' }
@@ -274,7 +277,13 @@ const menuData = [
                 title: 'Book Sales',
                 icon: IconShoppingCart,
                 subItems: [
-                    { title: 'Books Sales', path: '/book-sales' }
+                    { title: '📦 Dashboard', path: '/school/book-sales' },
+                    { title: '🧾 Vendor Details', path: '/school/book-sales/vendors' },
+                    { title: '📚 Book Inventory', path: '/school/book-sales/inventory' },
+                    { title: '📥 Stock In', path: '/school/book-sales/stock-in' },
+                    { title: '💰 Sales Entry', path: '/school/book-sales/sales' },
+                    { title: '🔁 Returns', path: '/school/book-sales/returns' },
+                    { title: '📊 Reports & Analytics', path: '/school/book-sales/reports' },
                 ]
             },
             {
@@ -314,6 +323,7 @@ const menuData = [
                     { title: 'Homework', path: '/school/academics/homework' }
                 ]
             },
+
             {
                 title: 'Front Office',
                 icon: IconBuilding,
@@ -329,13 +339,6 @@ const menuData = [
                 subItems: [
                     { title: 'Exam Dashboard', path: '/school/exam/dashboard' },
                     { title: 'Exam Schedule', path: '/school/exam/schedule' }
-                ]
-            },
-            {
-                title: 'Online Examinations',
-                icon: IconDeviceLaptop,
-                subItems: [
-                    { title: 'Online Exam', path: '/exam/online' }
                 ]
             },
             {
@@ -372,19 +375,29 @@ const menuData = [
                 title: 'Communicate',
                 icon: IconMessages,
                 subItems: [
-                    { title: 'Notice Board', path: '/communicate/notice' },
-                    { title: 'Events & Holidays', path: '/communicate/events' },
-                    { title: 'Compose Broadcast', path: '/communicate/broadcast' },
-                    { title: 'Broadcast History', path: '/communicate/history' }
+                    { title: 'Notice Board', path: '/school/communicate/notice' },
+                    { title: 'Events & Holidays', path: '/school/communicate/events' },
+                    { title: 'Compose Broadcast', path: '/school/communicate/broadcast' },
+                    { title: 'Broadcast History', path: '/school/communicate/history' },
+                    { title: 'Send Email', path: '/school/communicate/send-email' },
+                    { title: 'Send SMS', path: '/school/communicate/send-sms' },
+                    { title: 'Send Whatsapp', path: '/school/communicate/send-whatsapp' },
+                    { title: 'Email / SMS Log', path: '/school/communicate/log' },
+                    { title: 'Schedule Email SMS Log', path: '/school/communicate/schedule-log' },
+                    { title: 'Login Credentials Send', path: '/school/communicate/credentials' },
+                    { title: 'Email Template', path: '/school/communicate/email-template' },
+                    { title: 'SMS Template', path: '/school/communicate/sms-template' },
+                    { title: 'Whatsapp Template', path: '/school/communicate/whatsapp-template' }
                 ]
             },
             {
                 title: 'Library',
                 icon: IconBooks,
                 subItems: [
-                    { title: 'Issue/Return Book', path: '/library/issue-return' },
-                    { title: 'Manage Books', path: '/library/books' },
-                    { title: 'Book Categories', path: '/library/categories' }
+                    { title: 'Issue/Return Book', path: '/school/library/issue-return' },
+                    { title: 'Manage Books', path: '/school/library/books' },
+                    { title: 'Book Categories', path: '/school/library/categories' },
+                    { title: 'Library Members', path: '/school/library/members' }
                 ]
             },
             {
@@ -402,9 +415,10 @@ const menuData = [
                 title: 'Transport',
                 icon: IconTruck,
                 subItems: [
-                    { title: 'Manage Vehicles', path: '/transport/vehicles' },
-                    { title: 'Manage Routes', path: '/transport/routes' },
-                    { title: 'Live Vehicle Tracking', path: '/transport/tracking' }
+                    { title: 'Manage Student Transport', path: '/school/transport/student-transport' },
+                    { title: 'Manage Vehicles', path: '/school/transport/vehicles' },
+                    { title: 'Manage Routes', path: '/school/transport/routes' },
+                    { title: 'Live Vehicle Tracking', path: '/school/transport/tracking' }
                 ]
             },
             {
@@ -422,31 +436,34 @@ const menuData = [
                 title: 'Reports & Analytics',
                 icon: IconReportAnalytics,
                 subItems: [
-                    { title: 'Class Report', path: '/reports/class' },
-                    { title: 'Sponsorship Report', path: '/reports/sponsorship' },
-                    { title: 'Student Report', path: '/reports/student' },
-                    { title: 'ID Card Report', path: '/reports/id-card' },
-                    { title: 'Hall Ticket Report', path: '/reports/hall-ticket' },
-                    { title: 'Timetable Report', path: '/reports/timetable' },
-                    { title: 'Exam Schedule Report', path: '/reports/exam-schedule' },
-                    { title: 'Attendance Report', path: '/reports/attendance' },
-                    { title: 'Library Books Report', path: '/reports/library' },
-                    { title: 'Terminal Report', path: '/reports/terminal' },
-                    { title: 'Merit Stage Report', path: '/reports/merit' },
-                    { title: 'Online Exam', path: '/reports/online-exam' },
-                    { title: 'Certificate Report', path: '/reports/certificate' },
-                    { title: 'Leave Application Report', path: '/reports/leave' },
-                    { title: 'Product Purchase Report', path: '/reports/purchase' },
-                    { title: 'Product Sale Report', path: '/reports/sales' },
-                    { title: 'Fees Report', path: '/reports/fees' },
-                    { title: 'Due Fees Report', path: '/reports/due-fees' },
-                    { title: 'Balance Fees Report', path: '/reports/balance-fees' },
-                    { title: 'Transaction Report', path: '/reports/transactions' },
-                    { title: 'Student Fine Report', path: '/reports/fines' },
-                    { title: 'Overtime Report', path: '/reports/overtime' },
-                    { title: 'Salary Report', path: '/reports/salary' },
-                    { title: 'Audit Report', path: '/reports/audit' },
-                    { title: 'Account Ledger Report', path: '/reports/ledger' }
+                    { title: '📊 Dashboard', path: '/school/reports' },
+                    { title: 'Class Report', path: '/school/reports/class' },
+                    { title: 'Sponsorship Report', path: '/school/reports/sponsorship' },
+                    { title: 'Student Report', path: '/school/reports/student' },
+                    { title: 'ID Card Report', path: '/school/reports/id-card' },
+                    { title: 'Hall Ticket Report', path: '/school/reports/hall-ticket' },
+                    { title: 'Timetable Report', path: '/school/reports/timetable' },
+                    { title: 'Exam Schedule Report', path: '/school/reports/exam-schedule' },
+                    { title: 'Attendance Report', path: '/school/reports/attendance' },
+                    { title: 'Library Books Report', path: '/school/reports/library' },
+                    { title: 'Terminal Report', path: '/school/reports/terminal' },
+                    { title: 'Merit Stage Report', path: '/school/reports/merit' },
+                    { title: 'Online Exam', path: '/school/reports/online-exam' },
+                    { title: 'Certificate Report', path: '/school/reports/certificate' },
+                    { title: 'Leave Application Report', path: '/school/reports/leave' },
+                    { title: 'Product Purchase Report', path: '/school/reports/purchase' },
+                    { title: 'Product Sale Report', path: '/school/reports/sales' },
+                    { title: 'Fees Report', path: '/school/reports/fees' },
+                    { title: 'Due Fees Report', path: '/school/reports/due-fees' },
+                    { title: 'Balance Fees Report', path: '/school/reports/balance-fees' },
+                    { title: 'Transaction Report', path: '/school/reports/transactions' },
+                    { title: 'Student Fine Report', path: '/school/reports/fines' },
+                    { title: 'Overtime Report', path: '/school/reports/overtime' },
+                    { title: 'Salary Report', path: '/school/reports/salary' },
+                    { title: 'Audit Report', path: '/school/reports/audit' },
+                    { title: 'Account Ledger Report', path: '/school/reports/ledger' },
+                    { title: 'Hostel Report', path: '/school/reports/hostel' },
+                    { title: 'Transport Report', path: '/school/reports/transport' }
                 ]
             },
             {
@@ -481,6 +498,55 @@ const menuData = [
     }
 ];
 
+// Recursive component for nested menu items
+const SubMenuItemNested = ({ item, level = 0 }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const hasSubItems = item.subItems && item.subItems.length > 0;
+
+    const handleClick = (e) => {
+        if (hasSubItems) {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+        }
+    };
+
+    if (hasSubItems) {
+        return (
+            <div className="menu-item-container">
+                <a
+                    href="#"
+                    className={`menu-item ${isOpen ? 'active' : ''}`}
+                    onClick={handleClick}
+                    style={{ paddingLeft: `${level > 0 ? 12 + level * 12 : 0}px` }}
+                >
+                    <span className="menu-item-content">
+                        <span className="menu-title-text">{item.title}</span>
+                    </span>
+                    {isOpen ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
+                </a>
+                {isOpen && (
+                    <ul className="submenu">
+                        {item.subItems.map((sub, idx) => (
+                            <li key={idx}>
+                                <SubMenuItemNested item={sub} level={level + 1} />
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        );
+    }
+
+    return (
+        <NavLink
+            to={item.path || '#'}
+            className={({ isActive }) => `submenu-link ${isActive ? 'active' : ''}`}
+        >
+            {item.title}
+        </NavLink>
+    );
+};
+
 const SidebarMenuItem = ({ item }) => {
     const [isOpen, setIsOpen] = useState(false);
     const hasSubItems = item.subItems && item.subItems.length > 0;
@@ -511,12 +577,7 @@ const SidebarMenuItem = ({ item }) => {
                     <ul className="submenu">
                         {item.subItems.map((sub, idx) => (
                             <li key={idx}>
-                                <NavLink
-                                    to={sub.path}
-                                    className={({ isActive }) => `submenu-link ${isActive ? 'active' : ''}`}
-                                >
-                                    {sub.title}
-                                </NavLink>
+                                <SubMenuItemNested item={sub} level={0} />
                             </li>
                         ))}
                     </ul>

@@ -42,7 +42,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Row 1: Welcome Banner */}
+            {/* Row 1: Welcome Banner + Birthdays (built inside WelcomeBanner) */}
             <div className="dashboard-row">
                 <WelcomeBanner />
             </div>
@@ -54,65 +54,33 @@ const Dashboard = () => {
                 ))}
             </div>
 
-            {/* Row 3: Schedule with Events, Attendance, Quick Links */}
+            {/* Row 3: Schedule | Attendance | Quick Links */}
             <div className="dashboard-row three-col-row">
-                <div className="col-half">
-                    <ScheduleCalendar />
-                </div>
-                <div className="col-quarter">
-                    <AttendanceChart />
-                </div>
-                <div className="col-quarter">
-                    <QuickLinks />
-                </div>
+                <div className="dash-cell"><ScheduleCalendar /></div>
+                <div className="dash-cell"><AttendanceChart /></div>
+                <div className="dash-cell"><QuickLinks /></div>
             </div>
 
-            {/* Row 4: Best Performer, Star Students, Fees Chart */}
-            <div className="dashboard-row three-col-row">
-                <div className="col-quarter">
-                    <BestPerformer />
-                </div>
-                <div className="col-quarter">
-                    <StarStudents />
-                </div>
-                <div className="col-half">
-                </div>
+            {/* Row 4: Fees Collection | Performance | Top Subjects */}
+            <div className="dashboard-row pie-row-three">
+                <div className="dash-cell"><FeesCollectionChart /></div>
+                <div className="dash-cell"><PerformanceChart /></div>
+                <div className="dash-cell"><TopSubjects /></div>
             </div>
 
-            {/* Row 5: Fees Chart, Performance */}
-            <div className="dashboard-row two-col-row">
-                <div className="col-two-thirds">
-                    <FeesCollectionChart />
-                </div>
-                <div className="col-one-third">
-                    <PerformanceChart />
-                </div>
+            {/* Row 5: Finance | Notice Board | Fee Stats */}
+            <div className="dashboard-row pie-row-three">
+                <div className="dash-cell"><FinanceCards /></div>
+                <div className="dash-cell"><NoticeBoard /></div>
+                <div className="dash-cell"><FeeStats /></div>
             </div>
 
-            {/* Row 6: Finance, Notice Board, Fee Stats */}
-            <div className="dashboard-row three-col-row">
-                <div className="col-one-third">
-                    <FinanceCards />
-                </div>
-                <div className="col-one-third">
-                    <NoticeBoard />
-                </div>
-                <div className="col-one-third">
-                    <FeeStats />
-                </div>
-            </div>
-
-            {/* Row 7: Top Subjects, Student Activity, Todo */}
-            <div className="dashboard-row three-col-row">
-                <div className="col-one-third">
-                    <TopSubjects />
-                </div>
-                <div className="col-one-third">
-                    <StudentActivity />
-                </div>
-                <div className="col-one-third">
-                    <TodoList />
-                </div>
+            {/* Row 6: Best Performer | Star Student | Student Activity | Todo */}
+            <div className="dashboard-row bottom-row">
+                <div className="dash-cell"><BestPerformer /></div>
+                <div className="dash-cell"><StarStudents /></div>
+                <div className="dash-cell"><StudentActivity /></div>
+                <div className="dash-cell"><TodoList /></div>
             </div>
 
             {/* Footer */}

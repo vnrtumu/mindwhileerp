@@ -9,39 +9,26 @@ import 'tailwind-sidebar/styles.css';
 import { useState, useEffect } from 'react';
 
 const quotes = [
-{ text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
-{ text: "The beautiful thing about learning is that nobody can take it away from you.", author: "B.B. King" },
-{ text: "The mind is not a vessel to be filled, but a fire to be kindled.", author: "Plutarch" },
-{ text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.", author: "Benjamin Franklin" },
-{ text: "The roots of education are bitter, but the fruit is sweet.", author: "Aristotle" }];
-
-
-
-
-
-
-
-
-
-
-
-
+  { text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
+  { text: "The beautiful thing about learning is that nobody can take it away from you.", author: "B.B. King" },
+  { text: "The mind is not a vessel to be filled, but a fire to be kindled.", author: "Plutarch" },
+  { text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.", author: "Benjamin Franklin" },
+  { text: "The roots of education are bitter, but the fruit is sweet.", author: "Aristotle" }];
 
 
 const renderSidebarItems = (
-items,
-currentPath,
-onClose,
-isSubItem = false) =>
-{
+  items,
+  currentPath,
+  onClose,
+  isSubItem = false) => {
   return items.map((item) => {
     const isSelected = currentPath === item?.url;
     const IconComp = item.icon || null;
 
     const iconElement = IconComp ?
-    <Icon icon={IconComp} height={21} width={21} /> :
+      <Icon icon={IconComp} height={21} width={21} /> :
 
-    <Icon icon={'ri:checkbox-blank-circle-line'} height={9} width={9} />;
+      <Icon icon={'ri:checkbox-blank-circle-line'} height={9} width={9} />;
 
 
     // Heading
@@ -51,32 +38,43 @@ isSubItem = false) =>
           <AMMenu
             subHeading={item.heading}
             ClassName="hide-menu leading-21 text-sidebar-foreground font-bold uppercase text-xs dark:text-sidebar-foreground" />
-          
+
         </div>);
 
     }
 
     // Submenu
     if (item.children?.length) {
-      return (
-        <AMSubmenu
-          key={item.id}
-          icon={iconElement}
-          title={item.name}
-          ClassName="mt-0.5 text-sidebar-foreground dark:text-sidebar-foreground">
-          
-          {renderSidebarItems(item.children, currentPath, onClose, true)}
-        </AMSubmenu>);
+      const isChildActive = (children) => {
+        return children.some(child => {
+          if (child.url && child.url === currentPath) return true;
+          if (child.children) return isChildActive(child.children);
+          return false;
+        });
+      };
 
+      const isActiveGroup = isChildActive(item.children);
+
+      return (
+        <div key={item.id} className={isActiveGroup ? "active-submenu-group" : "inactive-submenu-group"}>
+          <AMSubmenu
+            icon={iconElement}
+            title={item.name}
+            ClassName="mt-0.5 text-sidebar-foreground dark:text-sidebar-foreground"
+          >
+            {renderSidebarItems(item.children, currentPath, onClose, true)}
+          </AMSubmenu>
+        </div>
+      );
     }
 
     // Regular menu item
     const linkTarget = item.url?.startsWith('https') ? '_blank' : '_self';
 
     const itemClassNames = isSubItem ?
-    `mt-0.5 text-sidebar-foreground dark:text-sidebar-foreground !hover:bg-transparent ${isSelected ? '!bg-transparent !text-primary' : ''}` :
+      `mt-0.5 text-sidebar-foreground dark:text-sidebar-foreground !hover:bg-transparent ${isSelected ? '!bg-transparent !text-primary' : ''}` :
 
-    `mt-0.5 text-sidebar-foreground dark:text-sidebar-foreground`;
+      `mt-0.5 text-sidebar-foreground dark:text-sidebar-foreground`;
 
     return (
       <div onClick={onClose}>
@@ -93,7 +91,7 @@ isSubItem = false) =>
           badgeContent={item.isPro ? 'Pro' : undefined}
           component={Link}
           className={`${itemClassNames}`}>
-          
+
           <span className="truncate flex-1">{item.title || item.name}</span>
         </AMMenuItem>
       </div>);
@@ -129,7 +127,7 @@ const SidebarLayout = ({ onClose, collapsed = false }) => {
         width: 270,
         transform: collapsed ? 'translateX(-270px)' : 'translateX(0)'
       }}>
-      
+
       <AMSidebar
         collapsible="none"
         animation={true}
@@ -138,28 +136,49 @@ const SidebarLayout = ({ onClose, collapsed = false }) => {
         showTrigger={false}
         mode={sidebarMode}
         className="border border-border dark:border-border bg-sidebar dark:bg-sidebar h-screen">
-        
+
         {/* Logo */}
         <div className="px-6 flex items-center brand-logo overflow-hidden">
-          <AMLogo component={Link} href="/" img="">
+          <AMLogo component={Link} href="/super/dashboard" img="">
             <FullLogo />
           </AMLogo>
         </div>
 
         {/* Sidebar items */}
-
         <SimpleBar className="h-[calc(100vh-100px)]">
           <div className="px-6">
-            {SidebarContent.map((section, index) =>
-            <div key={index}>
-                {renderSidebarItems(
-                [
-                ...(section.heading ? [{ heading: section.heading }] : []),
-                ...(section.children || [])],
+            <style dangerouslySetInnerHTML={{
+              __html: `
+              /* Override tailwind-sidebar's behavior */
+              .inactive-submenu-group button.side_sub {
+                background-color: transparent !important;
+                color: inherit !important;
+              }
+              
+              /* Force highlight on the active submenu parent group */
+              .active-submenu-group > div > button.side_sub {
+                background-color: rgba(93, 135, 255, 0.15) !important;
+                color: #5D87FF !important;
+                border: 1px solid rgba(93, 135, 255, 0.3) !important;
+                border-radius: 8px;
+              }
+              
+              .active-submenu-group > div > button.side_sub * {
+                color: #5D87FF !important;
+                font-weight: 600;
+              }
+            `}} />
 
-                pathname,
-                onClose
-              )}
+            {SidebarContent.map((section, index) =>
+              <div key={index}>
+                {renderSidebarItems(
+                  [
+                    ...(section.heading ? [{ heading: section.heading }] : []),
+                    ...(section.children || [])],
+
+                  pathname,
+                  onClose
+                )}
               </div>
             )}
 
@@ -170,7 +189,7 @@ const SidebarLayout = ({ onClose, collapsed = false }) => {
                 style={{
                   background: 'linear-gradient(135deg, #5D87FF 0%, #7C4DFF 50%, #E040FB 100%)'
                 }}>
-                
+
                 {/* Decorative elements */}
                 <div className="absolute top-0 right-0 w-16 h-16 rounded-full bg-white/10 -mr-4 -mt-4" />
                 <div className="absolute bottom-0 left-0 w-10 h-10 rounded-full bg-white/10 -ml-2 -mb-2" />
@@ -187,7 +206,7 @@ const SidebarLayout = ({ onClose, collapsed = false }) => {
                     opacity: fade ? 1 : 0,
                     transition: 'opacity 0.4s ease-in-out'
                   }}>
-                  
+
                   <p className="text-white text-[13px] leading-[1.5] italic font-light">
                     "{quotes[quoteIndex].text}"
                   </p>
@@ -200,7 +219,7 @@ const SidebarLayout = ({ onClose, collapsed = false }) => {
                     opacity: fade ? 1 : 0,
                     transition: 'opacity 0.4s ease-in-out 0.1s'
                   }}>
-                  
+
                   <div className="w-5 h-[1px] bg-white/40" />
                   <span className="text-white/80 text-[11px] font-medium tracking-wide">
                     {quotes[quoteIndex].author}
@@ -210,10 +229,10 @@ const SidebarLayout = ({ onClose, collapsed = false }) => {
                 {/* Dot indicators */}
                 <div className="flex justify-center gap-1.5 mt-3">
                   {quotes.map((_, i) =>
-                  <div
-                    key={i}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === quoteIndex ? 'bg-white scale-110' : 'bg-white/30'}`
-                    } />
+                    <div
+                      key={i}
+                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === quoteIndex ? 'bg-white scale-110' : 'bg-white/30'}`
+                      } />
 
                   )}
                 </div>

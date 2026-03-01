@@ -286,7 +286,7 @@ const AllTeachers = ({ initialView = 'grid' }) => {
     };
 
     return (
-        <div className="teachers-page">
+        <div className="page-wrapper">
             {showLoginModal && <LoginDetailsModal />}
 
             {view !== 'add' && view !== 'edit' && (
@@ -343,13 +343,33 @@ const AllTeachers = ({ initialView = 'grid' }) => {
                 }} />
             ) : (
                 <>
-                    <div className="filters-bar">
-                        <div className="title-section">
-                            <h3>{view === 'grid' ? 'Teachers Grid' : 'Teachers List'}</h3>
+                    {/* Filters */}
+                    <div className="filter-container">
+                        <div className="filter-left">
+                            <div className="search-box">
+                                <IconSearch size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Search by name, ID, or email..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
                         </div>
-                        <div className="controls-section">
-                            <div className="date-range">
-                                📅 02/07/2026 - 02/13/2026
+                        <div className="filter-right" style={{ display: 'flex', gap: '8px', width: 'auto' }}>
+                            <div className="view-toggle">
+                                <button
+                                    className={view === 'list' ? 'active' : ''}
+                                    onClick={() => setView('list')}
+                                >
+                                    <IconList size={18} />
+                                </button>
+                                <button
+                                    className={view === 'grid' ? 'active' : ''}
+                                    onClick={() => setView('grid')}
+                                >
+                                    <IconGridDots size={18} />
+                                </button>
                             </div>
                             <div className="filter-dropdown-container">
                                 <div
@@ -426,20 +446,6 @@ const AllTeachers = ({ initialView = 'grid' }) => {
                                         </div>
                                     </div>
                                 )}
-                            </div>
-                            <div className="view-toggle">
-                                <button
-                                    className={view === 'list' ? 'active' : ''}
-                                    onClick={() => setView('list')}
-                                >
-                                    <IconList size={18} />
-                                </button>
-                                <button
-                                    className={view === 'grid' ? 'active' : ''}
-                                    onClick={() => setView('grid')}
-                                >
-                                    <IconGridDots size={18} />
-                                </button>
                             </div>
                             <div className="sort-dropdown-container">
                                 <div

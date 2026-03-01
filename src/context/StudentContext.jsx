@@ -1,6 +1,7 @@
-import React, { createContext, useState } from 'react';
+import React, { useState } from 'react';
+import { StudentContext } from './StudentContextDefinition';
 
-export const StudentContext = createContext();
+export { StudentContext }; // Re-export for compatibility
 
 export const StudentProvider = ({ children }) => {
     // Initial Mock Data
@@ -13,6 +14,18 @@ export const StudentProvider = ({ children }) => {
         { id: 'PRE2153', name: 'Calvin', class: '9', section: 'B', rollNo: '1006', gender: 'Male', image: '' },
         { id: 'PRE1234', name: 'Joe Kelley', class: '10', section: 'B', rollNo: '1007', gender: 'Female', image: '' },
         { id: 'PRE2123', name: 'Charles', class: '8', section: 'A', rollNo: '1008', gender: 'Male', image: '' },
+        // Added Dummy Data for Testing
+        { id: 'PRE3001', name: 'John Doe', class: '1', section: 'A', rollNo: '101', gender: 'Male', image: '' },
+        { id: 'PRE3002', name: 'Jane Smith', class: '1', section: 'A', rollNo: '102', gender: 'Female', image: '' },
+        { id: 'PRE3003', name: 'Bob Johnson', class: '1', section: 'B', rollNo: '103', gender: 'Male', image: '' },
+        { id: 'PRE3004', name: 'Alice Brown', class: '2', section: 'A', rollNo: '201', gender: 'Female', image: '' },
+        { id: 'PRE3005', name: 'Charlie Davis', class: '3', section: 'A', rollNo: '301', gender: 'Male', image: '' },
+        { id: 'PRE3006', name: 'Eva Wilson', class: '4', section: 'A', rollNo: '401', gender: 'Female', image: '' },
+        { id: 'PRE3007', name: 'Frank Miller', class: '5', section: 'A', rollNo: '501', gender: 'Male', image: '' },
+        { id: 'PRE3008', name: 'Grace Taylor', class: '6', section: 'A', rollNo: '601', gender: 'Female', image: '' },
+        { id: 'PRE3009', name: 'Harry White', class: '7', section: 'A', rollNo: '701', gender: 'Male', image: '' },
+        { id: 'PRE3010', name: 'Ivy Clark', class: '8', section: 'B', rollNo: '801', gender: 'Female', image: '' },
+        { id: 'PRE3011', name: 'Jack Hall', class: '9', section: 'A', rollNo: '901', gender: 'Male', image: '' },
     ]);
 
     // Mock staff list for reporting
@@ -36,7 +49,7 @@ export const StudentProvider = ({ children }) => {
     };
 
     const addBehaviorRecord = (record) => {
-        const r = { id: `B${Math.floor(Math.random()*9000)+1000}`, ...record };
+        const r = { id: `B${Math.floor(Math.random() * 9000) + 1000}`, ...record };
         setBehaviorRecords(prev => [r, ...prev]);
     };
 
@@ -52,7 +65,7 @@ export const StudentProvider = ({ children }) => {
     const [categories, setCategories] = useState([]);
 
     const addCategory = (cat) => {
-        const c = { id: `C${Math.floor(Math.random()*9000)+1000}`, ...cat };
+        const c = { id: `C${Math.floor(Math.random() * 9000) + 1000}`, ...cat };
         setCategories(prev => [c, ...prev]);
         return c;
     };

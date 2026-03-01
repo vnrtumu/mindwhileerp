@@ -14,20 +14,22 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow } from
-'src/components/ui/table';
+  TableRow
+} from
+  'src/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar';
 import { Badge } from 'src/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger } from
-'src/components/ui/tooltip';
+  TooltipTrigger
+} from
+  'src/components/ui/tooltip';
 
 const TicketListing = () => {
   const { tickets, deleteTicket, searchTickets, ticketSearch, filter } =
-  useContext(TicketContext);
+    useContext(TicketContext);
 
   const navigate = useNavigate();
 
@@ -40,23 +42,23 @@ const TicketListing = () => {
       case 'Pending':
         return tickets.filter(
           (c) =>
-          !c.deleted &&
-          c.Status === 'Pending' &&
-          c.ticketTitle.toLocaleLowerCase().includes(ticketSearch)
+            !c.deleted &&
+            c.Status === 'Pending' &&
+            c.ticketTitle.toLocaleLowerCase().includes(ticketSearch)
         );
       case 'Closed':
         return tickets.filter(
           (c) =>
-          !c.deleted &&
-          c.Status === 'Closed' &&
-          c.ticketTitle.toLocaleLowerCase().includes(ticketSearch)
+            !c.deleted &&
+            c.Status === 'Closed' &&
+            c.ticketTitle.toLocaleLowerCase().includes(ticketSearch)
         );
       case 'Open':
         return tickets.filter(
           (c) =>
-          !c.deleted &&
-          c.Status === 'Open' &&
-          c.ticketTitle.toLocaleLowerCase().includes(ticketSearch)
+            !c.deleted &&
+            c.Status === 'Open' &&
+            c.ticketTitle.toLocaleLowerCase().includes(ticketSearch)
         );
       default:
         throw new Error(`Unknown filter: ${filter}`);
@@ -67,14 +69,14 @@ const TicketListing = () => {
 
   const ticketBadge = (ticket) => {
     return ticket.Status === 'Open' ?
-    'bg-lightsuccess text-success dark:bg-lightsuccess dark:text-success' :
-    ticket.Status === 'Closed' ?
-    'bg-lighterror text-error dark:bg-lighterror dark:text-error' :
-    ticket.Status === 'Pending' ?
-    'bg-lightwarning text-warning dark:bg-lightwarning dark:text-warning' :
-    ticket.Status === 'Moderate' ?
-    'bg-lightprimary text-primary dark:bg-lightprimary dark:text-primary' :
-    'bg-lightprimary text-primary dark:bg-lightprimary dark:text-primary';
+      'bg-lightsuccess text-success dark:bg-lightsuccess dark:text-success' :
+      ticket.Status === 'Closed' ?
+        'bg-lighterror text-error dark:bg-lighterror dark:text-error' :
+        ticket.Status === 'Pending' ?
+          'bg-lightwarning text-warning dark:bg-lightwarning dark:text-warning' :
+          ticket.Status === 'Moderate' ?
+            'bg-lightprimary text-primary dark:bg-lightprimary dark:text-primary' :
+            'bg-lightprimary text-primary dark:bg-lightprimary dark:text-primary';
   };
 
   return (
@@ -82,9 +84,9 @@ const TicketListing = () => {
       {/* Top bar */}
       <div className="flex justify-between items-center mb-4 gap-4">
         <Button
-          onClick={() => navigate('/apps/tickets/create')}
+          onClick={() => navigate('/super/apps/tickets/create')}
           className="rounded-md whitespace-nowrap">
-          
+
           Create Ticket
         </Button>
 
@@ -93,13 +95,13 @@ const TicketListing = () => {
             icon="tabler:search"
             height={18}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          
+
           <Input
             type="text"
             className="pl-10"
             onChange={(e) => searchTickets(e.target.value)}
             placeholder="Search" />
-          
+
         </div>
       </div>
 
@@ -125,7 +127,7 @@ const TicketListing = () => {
 
           <TableBody>
             {visibleTickets.map((ticket) =>
-            <TableRow key={ticket.Id}>
+              <TableRow key={ticket.Id}>
                 <TableCell className="whitespace-nowrap">{ticket.Id}</TableCell>
                 <TableCell className="max-w-md">
                   <h6 className="text-base truncate line-clamp-1 ">{ticket.ticketTitle}</h6>
@@ -151,23 +153,42 @@ const TicketListing = () => {
                   </p>
                 </TableCell>
                 <TableCell className="text-end">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                        variant="ghost"
-                        size="icon"
-                        className="btn-circle ms-auto"
-                        onClick={() => deleteTicket(ticket.Id)}>
-                        
-                          <Icon icon="tabler:trash" height="18" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Delete Ticket</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <div className="flex justify-end gap-1">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="btn-circle"
+                            onClick={() => navigate('/super/apps/tickets/edit/' + ticket.Id)}>
+                            <Icon icon="tabler:edit" height="18" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Edit Ticket</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="btn-circle"
+                            onClick={() => deleteTicket(ticket.Id)}>
+
+                            <Icon icon="tabler:trash" height="18" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Delete Ticket</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

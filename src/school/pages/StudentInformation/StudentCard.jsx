@@ -8,7 +8,7 @@ const StudentCard = ({ student }) => {
 
     return (
         <div
-            onClick={() => navigate(`/student-info/student-list/profile/${student.id}`)}
+            onClick={() => navigate(`/school/student-list/profile/${student.id}`)}
             className="group bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-lg hover:border-blue-100 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
         >
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">

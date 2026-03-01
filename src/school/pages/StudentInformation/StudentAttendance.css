@@ -1,3 +1,792 @@
+/* ============================================
+   STUDENT ATTENDANCE PAGE - MATCHES COLLECT FEES UI
+   Modern Admin UI following MindWhile Design System
+   ============================================ */
+
+@import '../../../styles/shared-table.css';
+
+:root {
+  --sa-bg-body: #ffffff;
+  --sa-bg-page: #f7f8fa;
+  --sa-card-bg: #ffffff;
+  --sa-text-color: #333448;
+  --sa-text-muted: #6e6b7b;
+  --sa-text-light: #b5b5c3;
+  --sa-border-color: #e9ecef;
+  --sa-input-bg: #ffffff;
+  --sa-primary-color: #3d5ee1;
+  --sa-primary-dark: #2b4fc4;
+  --sa-table-header-bg: linear-gradient(90deg, #3d5ee1, #2b4fc4);
+  --sa-table-hover-bg: rgba(61, 94, 225, 0.03);
+  --sa-badge-present: #E6FFFA;
+  --sa-badge-absent: #FFF5F5;
+  --sa-badge-late: #fff7ed;
+  --sa-badge-halfday: #eff6ff;
+  --sa-badge-present-text: #0F766E;
+  --sa-badge-absent-text: #C53030;
+  --sa-badge-late-text: #92400e;
+  --sa-badge-halfday-text: #1e3a8a;
+  --sa-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --sa-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+  --sa-bg-body: linear-gradient(180deg,#0f172a 0%,#111827 50%,#020617 100%);
+  --sa-bg-page: linear-gradient(180deg,#0f172a 0%,#111827 50%,#020617 100%);
+  --sa-card-bg: #0b1220;
+  --sa-text-color: #e5e7eb;
+  --sa-text-muted: #9ca3af;
+  --sa-text-light: #6b7280;
+  --sa-border-color: rgba(255,255,255,0.04);
+  --sa-input-bg: rgba(255,255,255,0.02);
+  --sa-primary-color: #60a5fa;
+  --sa-primary-dark: #3b82f6;
+  --sa-table-header-bg: linear-gradient(90deg,#1e3a8a,#3b82f6);
+  --sa-table-hover-bg: rgba(96, 165, 250, 0.06);
+  --sa-badge-present: #064e3b;
+  --sa-badge-absent: #7c2d12;
+  --sa-badge-late: #78350f;
+  --sa-badge-halfday: #1e3a8a;
+  --sa-badge-present-text: #6ee7b7;
+  --sa-badge-absent-text: #fb7185;
+  --sa-badge-late-text: #fcd34d;
+  --sa-badge-halfday-text: #93c5fd;
+  --sa-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Main Container */
+.student-attendance-page {
+  background: var(--sa-bg-body);
+  min-height: 100vh;
+  padding: 28px 20px;
+  display: flex;
+  justify-content: center;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+.student-attendance-page .container {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ============ PAGE HEADER ============ */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  gap: 20px;
+}
+
+.page-title {
+  flex: 1;
+}
+
+.page-title h4 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--sa-text-color);
+  letter-spacing: -0.5px;
+}
+
+.back-button-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: var(--sa-text-muted);
+  margin-top: 8px;
+}
+
+.breadcrumb .current {
+  color: var(--sa-primary-color);
+  font-weight: 500;
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ============ BUTTONS ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--sa-primary-color);
+  color: white;
+  box-shadow: var(--sa-shadow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--sa-primary-dark);
+  box-shadow: var(--sa-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.btn-action {
+  background-color: transparent;
+  color: var(--sa-text-color);
+  border: 1.5px solid var(--sa-border-color);
+}
+
+.btn-action:hover:not(:disabled) {
+  border-color: var(--sa-primary-color);
+  background-color: rgba(61, 94, 225, 0.05);
+}
+
+.btn svg {
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* ============ EMPTY STATE ============ */
+.empty-state-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 200px);
+  padding: 40px 20px;
+}
+
+.empty-state-card {
+  background: var(--sa-card-bg);
+  border-radius: 16px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--sa-border-color);
+  max-width: 500px;
+  width: 100%;
+}
+
+.empty-state-icon {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-state-icon svg {
+  color: var(--sa-primary-color);
+  opacity: 0.2;
+}
+
+.empty-state-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--sa-text-color);
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+}
+
+.empty-state-card p {
+  font-size: 14px;
+  color: var(--sa-text-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============ FILTER BAR ============ */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--sa-card-bg);
+  border: 1px solid var(--sa-border-color);
+  border-radius: 8px 8px 0 0;
+}
+
+.filter-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.toolbar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sa-input-bg);
+  border: 1px solid var(--sa-border-color);
+  border-radius: 6px;
+  padding: 0 12px;
+  flex: 1;
+  min-width: 240px;
+}
+
+.toolbar-search svg {
+  color: var(--sa-text-muted);
+  flex-shrink: 0;
+}
+
+.search-input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--sa-text-color);
+  font-size: 13px;
+  padding: 8px 0;
+  outline: none;
+  font-family: inherit;
+}
+
+.search-input-field::placeholder {
+  color: var(--sa-text-light);
+}
+
+.control-date,
+.sort-select {
+  padding: 8px 12px;
+  border: 1px solid var(--sa-border-color);
+  border-radius: 6px;
+  background: var(--sa-input-bg);
+  color: var(--sa-text-color);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.control-date:focus,
+.sort-select:focus {
+  outline: none;
+  border-color: var(--sa-primary-color);
+  box-shadow: 0 0 0 3px rgba(61, 94, 225, 0.1);
+}
+
+/* ============ ACTION BAR - REMOVED, BUTTONS MOVED TO FILTER BAR ============ */
+
+/* ============ TABLE TOOLBAR ============ */
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--sa-border-color);
+  background: var(--sa-card-bg);
+}
+
+.table-stats {
+  font-size: 14px;
+  color: var(--sa-text-muted);
+}
+
+.table-stats strong {
+  color: var(--sa-text-color);
+  font-weight: 600;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--sa-border-color);
+  border-radius: 6px;
+  background: var(--sa-card-bg);
+  color: var(--sa-text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.toolbar-btn:hover {
+  border-color: var(--sa-primary-color);
+  color: var(--sa-primary-color);
+  background: rgba(61, 94, 225, 0.05);
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* ============ TABLE ============ */
+.card.soft-card {
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--sa-border-color);
+  background: var(--sa-card-bg);
+}
+
+.table-card {
+  flex: 1;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  flex: 1;
+}
+
+.fee-types-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: var(--sa-text-color);
+}
+
+.fee-types-table thead {
+  background: var(--sa-table-header-bg);
+}
+
+.fee-types-table thead th {
+  padding: 14px 16px;
+  text-align: left;
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+}
+
+.fee-types-table tbody tr {
+  border-bottom: 1px solid var(--sa-border-color);
+  transition: background-color 0.15s ease;
+}
+
+.fee-types-table tbody tr:hover {
+  background: var(--sa-table-hover-bg);
+}
+
+.fee-types-table tbody tr.row-selected {
+  background: rgba(61, 94, 225, 0.05);
+}
+
+.fee-types-table tbody td {
+  padding: 12px 16px;
+  vertical-align: middle;
+}
+
+.checkbox-col {
+  width: 50px;
+  text-align: center;
+}
+
+.checkbox-td {
+  text-align: center;
+}
+
+.checkbox-td input[type="checkbox"],
+.fee-types-table thead input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  border: 1.5px solid var(--sa-border-color);
+  border-radius: 4px;
+  accent-color: var(--sa-primary-color);
+}
+
+.name-cell {
+  font-weight: 500;
+  color: var(--sa-text-color);
+}
+
+.phone-cell {
+  font-size: 13px;
+  color: var(--sa-text-muted);
+}
+
+.actions-col {
+  width: 100px;
+  text-align: center;
+}
+
+.actions-cell {
+  text-align: center;
+}
+
+.action-icons {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--sa-border-color);
+  color: var(--sa-primary-color);
+}
+
+.icon-btn.view-btn:hover {
+  color: #059669;
+  background: rgba(5, 150, 105, 0.1);
+}
+
+.icon-btn.edit-btn:hover {
+  color: #2563EB;
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* ============ REMARK INPUT ============ */
+.remark-input {
+  width: 100%;
+  max-width: 180px;
+  padding: 6px 8px;
+  border: 1px solid var(--sa-border-color);
+  border-radius: 6px;
+  background: var(--sa-input-bg);
+  color: var(--sa-text-color);
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.remark-input:focus {
+  outline: none;
+  border-color: var(--sa-primary-color);
+  box-shadow: 0 0 0 3px rgba(61, 94, 225, 0.1);
+  background: var(--sa-card-bg);
+}
+
+.remark-input::placeholder {
+  color: var(--sa-text-light);
+}
+
+/* ============ ROW MODIFICATION ============ */
+.fee-types-table tbody tr.row-modified {
+  background: rgba(61, 94, 225, 0.08) !important;
+  border-left: 3px solid var(--sa-primary-color);
+}
+
+.fee-types-table tbody tr.row-modified:hover {
+  background: rgba(61, 94, 225, 0.12) !important;
+}
+
+/* ============ STICKY SAVE BUTTON ============ */
+.save-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--sa-card-bg);
+  border-top: 1px solid var(--sa-border-color);
+  border-radius: 0 0 12px 12px;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.unsaved-indicator {
+  font-size: 13px;
+  color: var(--sa-text-muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.unsaved-indicator::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.save-btn {
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============ STATUS BUTTONS ============ */
+.status-buttons {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  padding: 6px 12px;
+  border: 1.5px solid var(--sa-border-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--sa-text-color);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.status-btn.active {
+  color: white;
+  border-color: transparent;
+}
+
+.status-btn.status-present {
+  color: var(--sa-badge-present-text);
+}
+
+.status-btn.status-present.active {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.status-btn.status-absent {
+  color: var(--sa-badge-absent-text);
+}
+
+.status-btn.status-absent.active {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.status-btn.status-late {
+  color: var(--sa-badge-late-text);
+}
+
+.status-btn.status-late.active {
+  background: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.status-btn.status-halfday {
+  color: var(--sa-badge-halfday-text);
+}
+
+.status-btn.status-halfday.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.status-btn:hover {
+  background: rgba(61, 94, 225, 0.1);
+}
+
+/* ============ INPUT FIELDS - REMOVED OLD LATE MINUTES/HALFDAY STYLES ============ */
+
+.muted {
+  color: var(--sa-text-muted);
+  font-size: 13px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1024px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-inputs {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .filter-actions {
+    width: 100%;
+  }
+
+  .toolbar-search {
+    min-width: auto;
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .student-attendance-page {
+    padding: 16px 12px;
+  }
+
+  .page-header {
+    margin-bottom: 24px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .filter-inputs {
+    width: 100%;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-actions {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .toolbar-search {
+    width: 100%;
+  }
+
+  .table-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-action,
+  .btn-primary {
+    flex: 1;
+    min-width: auto;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .control-date,
+  .sort-select {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .fee-types-table {
+    font-size: 12px;
+  }
+
+  .fee-types-table thead th,
+  .fee-types-table tbody td {
+    padding: 10px 8px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .icon-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .status-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .remark-input {
+    max-width: 120px;
+    font-size: 12px;
+    padding: 5px 6px;
+  }
+
+  .phone-cell {
+    font-size: 12px;
+  }
+
+  .save-button-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .unsaved-indicator {
+    text-align: center;
+  }
+
+  .save-btn {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
 :root{
   --bg: #f7fbff;
   --card: #ffffff;
@@ -13,17 +802,17 @@
 }
 
 .dark-theme {
-  --bg: #0f1419;
-  --card: #1a2332;
-  --muted: #9ca3af;
-  --text-color: #e5e7eb;
-  --accent: #60a5fa;
-  --accent-2: #3b82f6;
+  --bg: var(--bg-body, linear-gradient(180deg,#0f172a 0%,#111827 50%,#020617 100%));
+  --card: var(--card-bg, #0b1220);
+  --muted: var(--text-muted, #9ca3af);
+  --text-color: var(--text-color, #e5e7eb);
+  --accent: var(--primary-color, #60a5fa);
+  --accent-2: var(--primary-dark, #3b82f6);
   --glass: rgba(26, 35, 50, 0.7);
-  --border-color: #374151;
-  --input-bg: #1f2937;
-  --page-bg: #0f1419;
-  --hover-bg: #1f2937;
+  --border-color: var(--border-color, rgba(255,255,255,0.04));
+  --input-bg: var(--input-bg, rgba(255,255,255,0.02));
+  --page-bg: var(--bg-body);
+  --hover-bg: rgba(96,165,250,0.06);
 }
 
 .attendance-page{

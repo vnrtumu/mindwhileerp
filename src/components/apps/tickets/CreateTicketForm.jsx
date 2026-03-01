@@ -20,17 +20,18 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger } from
-'src/components/ui/dropdown-menu';
+  DropdownMenuTrigger
+} from
+  'src/components/ui/dropdown-menu';
 import { Button } from 'src/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar';
 import { ChevronDown } from 'lucide-react';
 
 const agents = [
-{ id: 1, name: 'Liam', photo: user1 },
-{ id: 2, name: 'Steve', photo: user2 },
-{ id: 3, name: 'Jack', photo: user3 },
-{ id: 4, name: 'John', photo: user8 }];
+  { id: 1, name: 'Liam', photo: user1 },
+  { id: 2, name: 'Steve', photo: user2 },
+  { id: 3, name: 'Jack', photo: user3 },
+  { id: 4, name: 'John', photo: user8 }];
 
 
 const CreateTicketForm = () => {
@@ -69,7 +70,7 @@ const CreateTicketForm = () => {
 
     addTicket(newTicket);
     resetForm();
-    navigate('/apps/tickets');
+    navigate('/super/apps/tickets');
   };
 
   const resetForm = () => {
@@ -102,7 +103,7 @@ const CreateTicketForm = () => {
               onChange={(e) => setTicketTitle(e.target.value)}
               placeholder="Ticket Title"
               className="w-full form-control" />
-            
+
           </div>
 
           <div>
@@ -115,7 +116,7 @@ const CreateTicketForm = () => {
               onChange={(e) => setTicketDescription(e.target.value)}
               placeholder="Ticket Description"
               className="w-full form-control" />
-            
+
           </div>
         </div>
 
@@ -132,13 +133,13 @@ const CreateTicketForm = () => {
               <DropdownMenuContent className="rounded-md">
                 <DropdownMenuLabel>Select Agent</DropdownMenuLabel>
                 {agents.map((agent) =>
-                <DropdownMenuItem
-                  key={agent.id}
-                  onClick={() => {
-                    setSelectedAgent(agent);
-                    setAgentPhoto(agent.photo);
-                  }}>
-                  
+                  <DropdownMenuItem
+                    key={agent.id}
+                    onClick={() => {
+                      setSelectedAgent(agent);
+                      setAgentPhoto(agent.photo);
+                    }}>
+
                     <div className="flex items-center gap-2">
                       <Avatar className="h-6 w-6">
                         <AvatarImage src={agent.photo} />
@@ -157,13 +158,12 @@ const CreateTicketForm = () => {
             <Button
               className="rounded-md bg-primary text-white hover:bg-primary/90"
               onClick={handleSubmit}>
-              
+
               Save
             </Button>
             <Button
               className="rounded-md bg-red-500 text-white hover:bg-red-600"
-              onClick={() => navigate('/apps/tickets')}>
-              
+              onClick={() => navigate('/super/apps/tickets')}>
               Cancel
             </Button>
           </div>

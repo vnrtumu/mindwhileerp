@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -59,13 +59,26 @@ const DEMO_USERS = {
 
 const SchoolLogin = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // If already authenticated with correct role, redirect to dashboard
+  useEffect(() => {
+    const savedUser = localStorage.getItem('auth_user');
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === 'super_admin' && isAuthenticated) {
+          navigate('/super/dashboard', { replace: true });
+        }
+      } catch { /* ignore */ }
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,21 +92,16 @@ const SchoolLogin = () => {
         password
       });
 
-      // 2. Save token
+      // 2. Save token FIRST — axios interceptor needs it for the /me call
       localStorage.setItem('auth_token', response.access_token);
 
-      // 3. Fetch profile to verify & store details
+      // 3. Fetch profile and add role
       const profile = await api.get('/super-admin/me');
-      localStorage.setItem('auth_user', JSON.stringify(profile));
+      const userData = { ...profile, role: 'super_admin' };
 
-      // 4. Set auth context (if needed by your app structure)
-      // Since your context expects a "token" and "user" object
-      // login(response.access_token, profile);
-      // Wait to see if login context requires a different structure, or just use localStorage.
-
-      // 5. Navigate to dashboard
-      // Note: We use the existing `/dashboard` route which maps to Modern.jsx
-      navigate('/dashboard', { replace: true });
+      // 4. Persist user to localStorage and do a full reload to ensure clean state
+      localStorage.setItem('auth_user', JSON.stringify(userData));
+      window.location.href = '/super/dashboard';
 
     } catch (err) {
       console.error('Login error:', err);

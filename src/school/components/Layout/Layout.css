@@ -1,23 +1,22 @@
-/* Layout Variables - Using Global Theme Tokens */
 :root {
     --sidebar-width: 260px;
     --sidebar-collapsed-width: 80px;
     --header-height: 70px;
     --primary-color: var(--primary);
-    --primary-light: var(--lightprimary);
-    --text-color: var(--foreground);
-    --text-muted: var(--bodytext);
-    --text-light: var(--muted-foreground);
-    --bg-body: var(--background);
-    --bg-white: var(--card);
-    --bg-sidebar: var(--card);
-    --border-color: var(--border);
+    --primary-light: var(--accent);
+    --text-color: var(--text-primary);
+    --text-muted: var(--text-secondary);
+    --text-light: var(--text-secondary);
+    --bg-body: var(--bg-main);
+    --bg-white: var(--bg-card);
+    --bg-sidebar: var(--bg-card);
+    --border-color: var(--border-color);
     --shadow-sm: var(--shadow-sm);
     --shadow-md: var(--shadow-md);
     --transition: all 0.3s ease;
-    --card-bg: var(--card);
-    --input-bg: var(--muted);
-    --dropdown-bg: var(--card);
+    --card-bg: var(--bg-card);
+    --input-bg: var(--input-bg);
+    --dropdown-bg: var(--bg-card);
 }
 
 * {
@@ -754,7 +753,8 @@ body {
     background: var(--bg-body);
     overflow-y: auto;
     width: 100%;
-    max-width: none; /* allow pages to use full available width */
+    max-width: none;
+    /* allow pages to use full available width */
 }
 
 /* Responsive */

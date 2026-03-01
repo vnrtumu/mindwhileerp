@@ -160,7 +160,7 @@ const Income = () => {
     };
 
     return (
-        <div className="accounts-page">
+        <div className="page-wrapper">
             {/* Page Header */}
             <div className="page-header">
                 <div className="page-title">
@@ -295,6 +295,36 @@ const Income = () => {
             </div>
 
             {/* Filters */}
+            <div className="filter-container">
+                <div className="filter-left">
+                    <div className="search-box">
+                        <IconSearch size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search by name or invoice..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="filter-right">
+                    <div className="select-wrapper">
+                        <select
+                            className="filter-select"
+                            value={filterHead}
+                            onChange={(e) => setFilterHead(e.target.value)}
+                        >
+                            {incomeHeads.map((head, idx) => (
+                                <option key={idx} value={head}>
+                                    {head === 'all' ? 'All Income Heads' : head}
+                                </option>
+                            ))}
+                        </select>
+                        <IconChevronDown size={14} className="select-chevron" />
+                    </div>
+                </div>
+            </div>
+
             <div className="accounts-card">
                 <div className="card-header">
                     <h5>Income List</h5>
@@ -306,35 +336,6 @@ const Income = () => {
                     </div>
                 </div>
                 <div className="card-body">
-                    <div className="filters-row">
-                        <div className="search-box">
-                            <IconSearch size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search by name or invoice..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                        <div className="filter-group">
-                            <IconFilter size={18} />
-                            <div className="select-wrapper">
-                                <select
-                                    className="filter-select"
-                                    value={filterHead}
-                                    onChange={(e) => setFilterHead(e.target.value)}
-                                >
-                                    {incomeHeads.map((head, idx) => (
-                                        <option key={idx} value={head}>
-                                            {head === 'all' ? 'All Income Heads' : head}
-                                        </option>
-                                    ))}
-                                </select>
-                                <IconChevronDown size={14} className="select-chevron" />
-                            </div>
-                        </div>
-                    </div>
-
                     {/* Table */}
                     <div className="table-container">
                         <table className="data-table">

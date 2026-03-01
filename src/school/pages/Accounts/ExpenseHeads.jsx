@@ -168,20 +168,18 @@ const ExpenseHeads = () => {
                         </div>
                         <div className="filter-group">
                             <IconFilter size={18} />
-                            <div className="select-wrapper">
-                                <select
-                                    className="filter-select"
-                                    value={filterCategory}
-                                    onChange={(e) => setFilterCategory(e.target.value)}
-                                >
-                                    {categories.map((cat, idx) => (
-                                        <option key={idx} value={cat}>
-                                            {cat === 'all' ? 'All Categories' : cat}
-                                        </option>
-                                    ))}
-                                </select>
-                                <IconChevronDown size={14} className="select-chevron" />
-                            </div>
+                            <select
+                                className="filter-select-minimal"
+                                value={filterCategory}
+                                onChange={(e) => setFilterCategory(e.target.value)}
+                            >
+                                {categories.map((cat, idx) => (
+                                    <option key={idx} value={cat}>
+                                        {cat === 'all' ? 'All Categories' : cat}
+                                    </option>
+                                ))}
+                            </select>
+                            <IconChevronDown size={14} />
                         </div>
                     </div>
 

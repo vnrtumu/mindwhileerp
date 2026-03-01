@@ -2,9 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FeeContext } from '../../../context/FeeContext';
 import './FeeTypes.css';
-import HeaderActionButton from '../StudentInformation/components/HeaderActionButton';
 import BackButton from '../StudentInformation/components/BackButton';
 import { EyeIcon, EditIcon, DeleteIcon } from '../../../components/Icons';
+import ExportToolbar from '../Reports/ExportToolbar';
 
 const FeeTypes = () => {
   const navigate = useNavigate();
@@ -202,38 +202,6 @@ const FeeTypes = () => {
     }
   };
 
-  // Export functions
-  const handleExportCopy = () => {
-    const data = paged.map(ft => `${ft.id}\t${ft.name}\t${ft.code}\t${ft.group}`).join('\n');
-    navigator.clipboard.writeText(data);
-    showToast('Copied to clipboard', 'success');
-  };
-
-  const handleExportCSV = () => {
-    const headers = ['ID', 'Fees Type', 'Fees Code', 'Fees Group', 'Description', 'Status'];
-    const rows = paged.map(ft => [ft.id, ft.name, ft.code, ft.group, ft.description, ft.status]);
-    const csv = [headers, ...rows].map(r => r.map(cell => `"${cell}"`).join(',')).join('\n');
-    downloadFile(csv, 'fee-types.csv', 'text/csv');
-  };
-
-  const handleExportPDF = () => {
-    showToast('PDF export coming soon', 'info');
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const downloadFile = (content, filename, type) => {
-    const element = document.createElement('a');
-    element.setAttribute('href', `data:${type};charset=utf-8,${encodeURIComponent(content)}`);
-    element.setAttribute('download', filename);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
-
   // Clear error when component mounts
   useEffect(() => {
     if (error) {
@@ -265,23 +233,14 @@ const FeeTypes = () => {
                 <path d="M3.51 9a9 9 0 0 1 14.85-3.36M20.49 15a9 9 0 0 1-14.85 3.36"></path>
               </svg>
             </button>
-            <div className="export-dropdown">
-              <button className="btn btn-outline" title="Export">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Export
-              </button>
-              <div className="dropdown-menu">
-                <button onClick={handleExportCopy}>Copy</button>
-                <button onClick={handleExportCSV}>CSV</button>
-                <button onClick={handleExportPDF}>Excel</button>
-                <button onClick={handlePrint}>Print</button>
-              </div>
-            </div>
-            <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
+
+            <ExportToolbar
+              rows={filtered}
+              columns={['ID', 'Fees Type', 'Fees Code', 'Fees Group', 'Description', 'Status']}
+              rowKeys={['id', 'name', 'code', 'group', 'description', 'status']}
+              title="Fee_Types_List"
+            />
+
             <button className="btn btn-primary" onClick={openModal} disabled={loading}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -347,24 +306,7 @@ const FeeTypes = () => {
             {/* Table Toolbar */}
             <div className="table-toolbar">
               <div className="toolbar-actions">
-                <button className="toolbar-btn" title="Copy" onClick={handleExportCopy} disabled={selectedRows.size === 0}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                  </svg>
-                  Copy
-                </button>
-                <button className="toolbar-btn" title="CSV" onClick={handleExportCSV} disabled={selectedRows.size === 0}>CSV</button>
-                <button className="toolbar-btn" title="Excel" onClick={handleExportCSV} disabled={selectedRows.size === 0}>Excel</button>
-                <button className="toolbar-btn" title="PDF" onClick={handleExportPDF} disabled={selectedRows.size === 0}>PDF</button>
-                <button className="toolbar-btn" title="Print" onClick={handlePrint}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                    <rect x="6" y="14" width="12" height="8"></rect>
-                  </svg>
-                  Print
-                </button>
+                {/* Removed manual export buttons as per update */}
               </div>
               <span className="table-stats">{filtered.length} fees types | {selectedRows.size > 0 && <strong>{selectedRows.size} selected</strong>}</span>
             </div>
@@ -488,7 +430,7 @@ const FeeTypes = () => {
                   type="text"
                   placeholder="Enter fees type name"
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="form-input"
                   disabled={loading}
                 />
@@ -498,7 +440,7 @@ const FeeTypes = () => {
                 <div className="select-with-add">
                   <select
                     value={formData.group}
-                    onChange={(e) => setFormData({...formData, group: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, group: e.target.value })}
                     className="form-select"
                     disabled={loading}
                   >
@@ -515,7 +457,7 @@ const FeeTypes = () => {
                 <textarea
                   placeholder="Enter description (optional)"
                   value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="form-textarea"
                   rows="3"
                   disabled={loading}
@@ -530,7 +472,7 @@ const FeeTypes = () => {
                       name="status"
                       value="Active"
                       checked={formData.status === 'Active'}
-                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                       disabled={loading}
                     />
                     <span>Active</span>
@@ -541,7 +483,7 @@ const FeeTypes = () => {
                       name="status"
                       value="Inactive"
                       checked={formData.status === 'Inactive'}
-                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                       disabled={loading}
                     />
                     <span>Inactive</span>
@@ -574,7 +516,7 @@ const FeeTypes = () => {
               <button className="btn btn-outline" onClick={() => setDeleteConfirm(null)} disabled={loading}>
                 Cancel
               </button>
-              <button className="btn btn-danger" onClick={confirmDelete} disabled={loading} style={{backgroundColor: '#ef4444'}}>
+              <button className="btn btn-danger" onClick={confirmDelete} disabled={loading} style={{ backgroundColor: '#ef4444' }}>
                 {loading ? 'Deleting...' : 'Delete'}
               </button>
             </div>

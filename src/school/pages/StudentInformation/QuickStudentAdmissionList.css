@@ -1,11 +1,13 @@
 /* ============================================
-   QUICK STUDENT ADMISSION LIST - MODERN ADMIN UI
-   Clean, Minimal Design System
-   ============================================ */
+    QUICK STUDENT ADMISSION LIST - MODERN ADMIN UI
+    Clean, Minimal Design System
+    ============================================ */
+
+@import '../../../styles/shared-table.css';
 
 :root {
     --qa-bg-body: #ffffff;
-    --qa-bg-page: #f7f8fa;
+    --qa-bg-page: #ffffff;
     --qa-card-bg: #ffffff;
     --qa-text-color: #333448;
     --qa-text-muted: #6e6b7b;
@@ -59,7 +61,7 @@
 }
 
 .qa-list-page {
-    background: transparent;
+    background: var(--qa-bg-page);
     min-height: 100vh;
     padding: 28px 20px;
     box-sizing: border-box;
@@ -231,6 +233,7 @@
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: none;
@@ -401,31 +404,37 @@
     accent-color: var(--qa-primary-color);
 }
 
-.col-photo { 
+.col-photo {
     width: 60px;
     flex-shrink: 0;
 }
-.col-name { 
+
+.col-name {
     width: 25%;
     min-width: 150px;
 }
-.col-class { 
+
+.col-class {
     width: 12%;
     min-width: 90px;
 }
-.col-section { 
+
+.col-section {
     width: 10%;
     min-width: 70px;
 }
-.col-rollno { 
+
+.col-rollno {
     width: 10%;
     min-width: 70px;
 }
-.col-phone { 
+
+.col-phone {
     width: 18%;
     min-width: 110px;
 }
-.col-actions { 
+
+.col-actions {
     width: 80px;
     flex-shrink: 0;
     text-align: center;
@@ -579,25 +588,25 @@
         padding: 12px 6px !important;
     }
 
-    .col-photo { 
+    .col-photo {
         width: 50px;
     }
-    
-    .col-name { 
+
+    .col-name {
         width: 30%;
         min-width: 120px;
     }
-    
-    .col-class { 
+
+    .col-class {
         width: 15%;
         min-width: 70px;
     }
-    
-    .col-section { 
+
+    .col-section {
         display: none;
     }
-    
-    .col-rollno { 
+
+    .col-rollno {
         width: 12%;
         min-width: 60px;
     }
@@ -644,21 +653,21 @@
         padding: 10px 6px;
     }
 
-    .col-photo { 
+    .col-photo {
         width: 45px;
     }
-    
-    .col-name { 
+
+    .col-name {
         width: 35%;
         min-width: 100px;
     }
-    
-    .col-class { 
+
+    .col-class {
         width: 15%;
         min-width: 60px;
     }
-    
-    .col-rollno { 
+
+    .col-rollno {
         width: 12%;
         min-width: 50px;
     }

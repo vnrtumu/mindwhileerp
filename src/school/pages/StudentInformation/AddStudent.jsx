@@ -1,11 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HeaderActionButton from './components/HeaderActionButton';
-import BackButton from './components/BackButton';
 import { StudentContext } from '../../../context/StudentContext';
 import { AcademicsContext } from '../../../context/AcademicsContext';
 import StudentAddress from './sections/StudentAddress';
 import ReferenceDetails from './sections/ReferenceDetails';
+import StudentPageContainer from './components/StudentPageContainer';
 import './AddStudent.css';
 
 const AddStudent = () => {
@@ -159,40 +158,29 @@ const AddStudent = () => {
     };
 
     return (
-        <div className="add-student-page">
-            {/* Page Header */}
-            <div className="page-header">
-                <div className="page-title">
-                    <div className="back-button-wrapper">
-                        <BackButton title="Go back to Student List" />
-                        <div>
-                            <h4>Add Student</h4>
-                            <nav className="breadcrumb">
-                                <span>Student List</span> / <span className="current">Add Student</span>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                <div className="page-actions">
-                    <HeaderActionButton to={'/school/dashboard'} label={'Back to Dashboard'} />
-                </div>
-            </div>
+        <StudentPageContainer
+            title="Add Student"
+            breadcrumb={<><span>Student List</span> / <span className="current">Add Student</span></>}
+            backTitle="Go back to Student List"
+            showDashboard={true}
+            pageClass="add-student-page"
+        >
 
             {/* Form Container */}
             <form onSubmit={handleSubmit} className="add-student-form">
-                
+
                 {/* SECTION 1: ADMISSION FORM */}
                 <div className="form-section">
                     <div className="section-header">
                         <h5>Admission Form</h5>
                         <span className="section-description">Enter admission details and academic information</span>
                     </div>
-                    
+
                     <div className="form-grid-two-col">
                         <div className="form-group">
                             <label>Admission No</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="admissionNo"
                                 value={formData.admissionNo}
                                 onChange={handleChange}
@@ -203,8 +191,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Admission Date</label>
-                            <input 
-                                type="date" 
+                            <input
+                                type="date"
                                 name="admissionDate"
                                 value={formData.admissionDate}
                                 onChange={handleChange}
@@ -214,8 +202,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>PEN Number</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="penNumber"
                                 value={formData.penNumber}
                                 onChange={handleChange}
@@ -226,8 +214,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Child ID</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="childId"
                                 value={formData.childId}
                                 onChange={handleChange}
@@ -238,7 +226,7 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Medium</label>
-                            <select 
+                            <select
                                 name="medium"
                                 value={formData.medium}
                                 onChange={handleChange}
@@ -253,8 +241,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>RF ID</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="rfId"
                                 value={formData.rfId}
                                 onChange={handleChange}
@@ -265,7 +253,7 @@ const AddStudent = () => {
 
                         <div className={"form-group required " + (errorsState.class ? 'has-error' : '')}>
                             <label>Class <span className="label-required">*</span></label>
-                            <select 
+                            <select
                                 name="class"
                                 value={formData.class}
                                 onChange={handleChange}
@@ -298,8 +286,8 @@ const AddStudent = () => {
 
                         <div className={"form-group required " + (errorsState.rollNo ? 'has-error' : '')}>
                             <label>Roll No <span className="label-required">*</span></label>
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 name="rollNo"
                                 value={formData.rollNo}
                                 onChange={handleChange}
@@ -311,7 +299,7 @@ const AddStudent = () => {
 
                         <div className={"form-group required " + (errorsState.joinedClass ? 'has-error' : '')}>
                             <label>Joined Class <span className="label-required">*</span></label>
-                            <select 
+                            <select
                                 name="joinedClass"
                                 value={formData.joinedClass}
                                 onChange={handleChange}
@@ -334,7 +322,7 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Group</label>
-                            <select 
+                            <select
                                 name="group"
                                 value={formData.group}
                                 onChange={handleChange}
@@ -349,7 +337,7 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Mother Tongue</label>
-                            <select 
+                            <select
                                 name="motherTongue"
                                 value={formData.motherTongue}
                                 onChange={handleChange}
@@ -364,7 +352,7 @@ const AddStudent = () => {
 
                         <div className="form-group-full">
                             <label>Remarks</label>
-                            <textarea 
+                            <textarea
                                 name="remarks"
                                 value={formData.remarks}
                                 onChange={handleChange}
@@ -376,8 +364,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Optional Subject</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="form-input"
                                 disabled
                                 placeholder="Field is disabled - no input allowed"
@@ -386,8 +374,8 @@ const AddStudent = () => {
 
                         <div className="form-group-full toggle-group">
                             <label className="toggle-label">
-                                <input 
-                                    type="checkbox" 
+                                <input
+                                    type="checkbox"
                                     name="addAdmissionFee"
                                     checked={formData.addAdmissionFee}
                                     onChange={handleChange}
@@ -406,12 +394,12 @@ const AddStudent = () => {
                         <h5>Student Personal Details</h5>
                         <span className="section-description">Personal information about the student</span>
                     </div>
-                    
+
                     <div className="form-grid-two-col">
                         <div className="form-group">
                             <label>First Name</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleChange}
@@ -422,8 +410,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Last Name</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleChange}
@@ -434,8 +422,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>ID Card Name</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="idCardName"
                                 value={formData.idCardName}
                                 onChange={handleChange}
@@ -446,7 +434,7 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Gender</label>
-                            <select 
+                            <select
                                 name="gender"
                                 value={formData.gender}
                                 onChange={handleChange}
@@ -461,7 +449,7 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Blood Group</label>
-                            <select 
+                            <select
                                 name="bloodGroup"
                                 value={formData.bloodGroup}
                                 onChange={handleChange}
@@ -481,8 +469,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Date of Birth</label>
-                            <input 
-                                type="date" 
+                            <input
+                                type="date"
                                 name="dob"
                                 value={formData.dob}
                                 onChange={handleChange}
@@ -492,8 +480,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Religion</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="religion"
                                 value={formData.religion}
                                 onChange={handleChange}
@@ -504,7 +492,7 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Caste</label>
-                            <select 
+                            <select
                                 name="caste"
                                 value={formData.caste}
                                 onChange={handleChange}
@@ -523,8 +511,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Sub Caste</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="subCaste"
                                 value={formData.subCaste}
                                 onChange={handleChange}
@@ -535,8 +523,8 @@ const AddStudent = () => {
 
                         <div className={"form-group required " + (errorsState.fatherName ? 'has-error' : '')}>
                             <label>Father Name <span className="label-required">*</span></label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="fatherName"
                                 value={formData.fatherName}
                                 onChange={handleChange}
@@ -548,8 +536,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Father Aadhaar</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="fatherAadhaar"
                                 value={formData.fatherAadhaar}
                                 onChange={handleChange}
@@ -560,8 +548,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Mother Name</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="motherName"
                                 value={formData.motherName}
                                 onChange={handleChange}
@@ -572,8 +560,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Mother Aadhaar</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="motherAadhaar"
                                 value={formData.motherAadhaar}
                                 onChange={handleChange}
@@ -584,8 +572,8 @@ const AddStudent = () => {
 
                         <div className={"form-group required " + (errorsState.phone ? 'has-error' : '')}>
                             <label>Phone <span className="label-required">*</span></label>
-                            <input 
-                                type="tel" 
+                            <input
+                                type="tel"
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
@@ -597,8 +585,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>WhatsApp Number</label>
-                            <input 
-                                type="tel" 
+                            <input
+                                type="tel"
                                 name="alternatePhone"
                                 value={formData.alternatePhone}
                                 onChange={handleChange}
@@ -609,8 +597,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Alternate Phone Number</label>
-                            <input 
-                                type="tel" 
+                            <input
+                                type="tel"
                                 name="alternatePhone2"
                                 value={formData.alternatePhone2}
                                 onChange={handleChange}
@@ -621,8 +609,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Email</label>
-                            <input 
-                                type="email" 
+                            <input
+                                type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
@@ -633,8 +621,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Mole 1 (Distinguish Mark)</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="mole1"
                                 value={formData.mole1}
                                 onChange={handleChange}
@@ -645,8 +633,8 @@ const AddStudent = () => {
 
                         <div className="form-group">
                             <label>Mole 2 (Distinguish Mark)</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="mole2"
                                 value={formData.mole2}
                                 onChange={handleChange}
@@ -658,8 +646,8 @@ const AddStudent = () => {
                         <div className="form-group-full">
                             <label>Student Photo</label>
                             <div className="file-upload-container">
-                                <input 
-                                    type="file" 
+                                <input
+                                    type="file"
                                     id="photo-upload"
                                     accept="image/*"
                                     onChange={handlePhotoChange}
@@ -676,9 +664,9 @@ const AddStudent = () => {
                                 {formData.photoPreview && (
                                     <div className="photo-preview">
                                         <img src={formData.photoPreview} alt="Photo Preview" />
-                                        <button 
-                                            type="button" 
-                                            onClick={() => setFormData(prev => ({ ...prev, photo: null, photoPreview: null }))} 
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData(prev => ({ ...prev, photo: null, photoPreview: null }))}
                                             className="preview-remove"
                                         >
                                             ✕
@@ -709,16 +697,16 @@ const AddStudent = () => {
 
             {/* STICKY ACTION BAR */}
             <div className="action-bar-sticky">
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     className="btn btn-outline"
                     onClick={() => navigate(-1)}
                 >
                     Cancel
                 </button>
-                <button 
-                    type="button" 
-                    className={"btn btn-primary btn-large " + (submitting? 'btn-loading':'')}
+                <button
+                    type="button"
+                    className={"btn btn-primary btn-large " + (submitting ? 'btn-loading' : '')}
                     onClick={handleSubmit}
                     disabled={submitting}
                 >
@@ -736,7 +724,7 @@ const AddStudent = () => {
                 </button>
             </div>
             {saved && <div className="success-badge">Saved ✓</div>}
-        </div>
+        </StudentPageContainer>
     );
 };
 

@@ -9,17 +9,17 @@
   --color-brand-orange: #FF9B44;
   --color-brand-purple: #6E62E5;
 
-  /* Background Colors */
-  --color-bg-main: #F7F7FA;
-  --color-card-white: #FFFFFF;
+  /* Background Colors - Mapped to Global Theme */
+  --color-bg-main: var(--bg-main);
+  --color-card-white: var(--bg-card);
 
-  /* Text Colors */
-  --color-text-main: #333333;
-  --color-text-muted: #888888;
+  /* Text Colors - Mapped to Global Theme */
+  --color-text-main: var(--text-primary);
+  --color-text-muted: var(--text-secondary);
 
   /* Status Colors */
-  --color-success-light: #E1F3E9;
-  --color-danger-light: #FFF0F0;
+  --color-success-light: rgba(26, 179, 148, 0.1);
+  --color-danger-light: rgba(232, 70, 70, 0.1);
   --color-success: #1AB394;
   --color-danger: #E84646;
 
@@ -45,8 +45,8 @@
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
-    background-color: #F7F7FA;
-    color: #333333;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
     font-family: 'Poppins', sans-serif;
   }
 
@@ -60,7 +60,7 @@
   h4,
   h5,
   h6 {
-    color: #333333;
+    color: var(--text-primary);
     font-weight: 600;
   }
 }
@@ -69,15 +69,16 @@
 
   /* Card with exact Preskool shadow */
   .card {
-    background-color: #FFFFFF;
+    background-color: var(--bg-card);
     border-radius: 10px;
-    box-shadow: 0 4px 24px 0 rgba(62, 44, 90, 0.05);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.05);
     margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
   }
 
   .card-header {
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid #F3F4F6;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -86,7 +87,7 @@
   .card-title {
     font-size: 1.125rem;
     font-weight: 600;
-    color: #333333;
+    color: var(--text-primary);
     margin: 0;
   }
 

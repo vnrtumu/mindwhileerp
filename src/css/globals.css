@@ -17,13 +17,15 @@ main {
 
 body {
   font-family: 'DM Sans', sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
 }
 
 *,
 *::before,
 *::after {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 }
 
 @theme {
@@ -110,38 +112,47 @@ body {
 }
 
 :root {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --input-bg: #ffffff;
+  --table-header-bg: #f1f5f9;
+
+  /* Existing variables (mapped where appropriate) */
   --radius: 10px;
-  --background: var(--white);
-  --foreground: var(--dark);
-  --card: var(--white);
-  --card-foreground: var(--link);
-  --popover: var(--white);
-  --popover-foreground: var(--link);
+  --background: var(--bg-main);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-card);
+  --popover-foreground: var(--text-primary);
   --primary: #5d87ff;
-  --primary-foreground: var(--white);
+  --primary-foreground: #ffffff;
   --secondary: #49beff;
-  --secondary-foreground: var(--white);
-  --muted: #f5f5f5;
-  --muted-foreground: #5a6a85bf;
-  --accent: var(--lightprimary);
+  --secondary-foreground: #ffffff;
+  --muted: var(--bg-main);
+  --muted-foreground: var(--text-secondary);
+  --accent: color-mix(in oklab, var(--primary) 12%, transparent);
   --accent-foreground: var(--primary);
-  --destructive: var(--error);
-  --destructive-foreground: var(--white);
-  --border: #dfe5ef;
-  --input: #e5e7eb;
-  --ring: var(--lightprimary);
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: var(--border-color);
+  --input: var(--border-color);
+  --ring: var(--primary);
   --chart-1: var(--primary);
   --chart-2: var(--secondary);
-  --chart-3: var(--success);
-  --chart-4: var(--warning);
-  --chart-5: var(--error);
-  --sidebar: var(--white);
-  --sidebar-foreground: #2a3547;
+  --chart-3: #13deb9;
+  --chart-4: #f6b51e;
+  --chart-5: #ef4444;
+  --sidebar: var(--bg-card);
+  --sidebar-foreground: var(--text-primary);
   --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--white);
-  --sidebar-accent: var(--lightprimary);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--accent);
   --sidebar-accent-foreground: var(--primary);
-  --sidebar-border: var(--border);
+  --sidebar-border: var(--border-color);
   --sidebar-ring: #a1a1a1;
 
   /* CUSTOM COLORS */
@@ -151,102 +162,132 @@ body {
   --error: #ef4444;
   --white: #ffffff;
   --dark: #1c2536;
-  --bodytext: #5a6a85bf;
-
-  /* Light Variants */
-  --lightprimary: color-mix(in oklab, var(--primary) 12%, transparent);
-  --lightsecondary: color-mix(in oklab, var(--secondary) 12%, transparent);
-  --lightsuccess: color-mix(in oklab, var(--success) 12%, transparent);
-  --lightwarning: color-mix(in oklab, var(--warning) 12%, transparent);
-  --lighterror: color-mix(in oklab, var(--error) 12%, transparent);
-  --lightinfo: color-mix(in oklab, var(--info) 12%, transparent);
-
-  /* Emphasis Variants */
-  --primary-emphasis: color-mix(in oklab, var(--primary) 80%, black);
-  --secondary-emphasis: color-mix(in oklab, var(--secondary) 80%, black);
-  --success-emphasis: color-mix(in oklab, var(--success) 80%, black);
-  --warning-emphasis: color-mix(in oklab, var(--warning) 80%, black);
-  --error-emphasis: color-mix(in oklab, var(--error) 80%, black);
-  --info-emphasis: color-mix(in oklab, var(--info) 80%, black);
+  --bodytext: var(--text-secondary);
 }
 
 .dark {
-  --background: var(--dark);
-  --foreground: var(--white);
-  --card: var(--dark);
-  --card-foreground: var(--white);
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --input-bg: #0f172a;
+  --table-header-bg: #1e293b;
+
+  --background: var(--bg-main);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
   --popover: #333f55;
-  --popover-foreground: var(--white);
+  --popover-foreground: var(--text-primary);
   --primary: #5d87ff;
-  --primary-foreground: var(--white);
+  --primary-foreground: #ffffff;
   --secondary: #49beff;
-  --secondary-foreground: var(--white);
+  --secondary-foreground: #ffffff;
   --muted: #2a3851;
-  --muted-foreground: #7c8fac;
-  --accent: var(--accent);
-  --accent-foreground: var(--accent-foreground);
-  --destructive: var(--error);
-  --border: #333f55;
-  --input: var(--border);
-  --ring: var(--lightprimary);
-  --chart-1: var(--primary);
-  --chart-2: var(--secondary);
-  --chart-3: var(--success);
-  --chart-4: var(--warning);
-  --chart-5: var(--error);
-  --sidebar: var(--dark);
-  --sidebar-foreground: #7c8fac;
-  --sidebar-primary: var(--sidebar-primary);
-  --sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --sidebar-accent: var(--sidebar-accent);
-  --sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --sidebar-border: var(--sidebar-border);
-  --sidebar-ring: var(--sidebar-ring);
+  --muted-foreground: var(--text-secondary);
+  --destructive: #ef4444;
+  --border: var(--border-color);
+  --input: var(--border-color);
+  --ring: var(--primary);
+  --sidebar: var(--bg-card);
+  --sidebar-foreground: var(--text-secondary);
+  --sidebar-border: var(--border-color);
 
-  /* CUSTOM COLORS */
-  --info: #8754ec;
-  --success: #13deb9;
-  --warning: #f6b51e;
-  --error: #ef4444;
-  --white: #ffffff;
-  --dark: #1c2536;
-  --bodytext: #c1cedd;
-
-  /* Light Variants */
-  --lightprimary: color-mix(in oklab, var(--primary) 20%, transparent);
-  --lightsecondary: color-mix(in oklab, var(--secondary) 20%, transparent);
-  --lightsuccess: color-mix(in oklab, var(--success) 20%, transparent);
-  --lightwarning: color-mix(in oklab, var(--warning) 20%, transparent);
-  --lighterror: color-mix(in oklab, var(--error) 20%, transparent);
-  --lightinfo: color-mix(in oklab, var(--info) 20%, transparent);
-
-  /* Emphasis Variants */
-  --primary-emphasis: color-mix(in oklab, var(--primary) 80%, black);
-  --secondary-emphasis: color-mix(in oklab, var(--secondary) 80%, black);
-  --success-emphasis: color-mix(in oklab, var(--success) 80%, black);
-  --warning-emphasis: color-mix(in oklab, var(--warning) 80%, black);
-  --error-emphasis: color-mix(in oklab, var(--error) 80%, black);
-  --info-emphasis: color-mix(in oklab, var(--info) 80%, black);
+  --bodytext: var(--text-secondary);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border-color);
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
   }
-}
 
-@layer base {
+  .card,
+  .table-container,
+  .form-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+  }
 
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+  input,
+  select,
+  textarea {
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    height: 42px;
+    border-radius: 8px;
+    padding: 0 12px;
+  }
+
+  input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  th {
+    background-color: var(--table-header-bg);
+    color: var(--text-secondary);
+  }
+
+  td {
+    color: var(--text-primary);
+  }
+
+  .page-wrapper {
+    background: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .page-title h4 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+  }
+
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb .current {
+    color: var(--primary);
+  }
+
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .filter-left {
+    flex: 1;
+  }
+
+  .filter-right {
+    width: 220px;
   }
 }
 
@@ -328,7 +369,7 @@ body {
     gap: 8px;
     padding: 8px 10px;
     border-radius: 8px;
-    border: 1px solid rgba(15,23,42,0.06);
+    border: 1px solid rgba(15, 23, 42, 0.06);
     background: color-mix(in oklab, var(--primary) 6%, transparent);
     color: var(--color-foreground, #1c2536);
     font-size: 13px;
@@ -337,14 +378,36 @@ body {
     transition: transform .08s ease, box-shadow .12s ease, background .12s ease;
   }
 
-  .header-action-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-btn-shadow); }
-  .header-action-btn:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .header-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-btn-shadow);
+  }
 
-  .header-action-btn .header-action-icon { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; }
-  .header-action-btn .header-action-label { display:inline-block; }
+  .header-action-btn:focus {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .header-action-btn .header-action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+  }
+
+  .header-action-btn .header-action-label {
+    display: inline-block;
+  }
 
   @media (max-width: 640px) {
-    .header-action-btn { padding:8px 8px; gap:6px; }
-    .header-action-btn .header-action-label { display:none; }
+    .header-action-btn {
+      padding: 8px 8px;
+      gap: 6px;
+    }
+
+    .header-action-btn .header-action-label {
+      display: none;
+    }
   }
 }

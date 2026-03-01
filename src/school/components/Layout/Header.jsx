@@ -70,10 +70,10 @@ const Header = ({ toggleSidebar }) => {
     ];
 
     const addMenuItems = [
-        { title: 'Students', icon: StudentIcon, path: '/students/add', color: '#3d5ee1', bgColor: '#e8f0ff' },
-        { title: 'Teachers', icon: TeachersIcon, path: '/teachers/add', color: '#22c55e', bgColor: '#e5f9ed' },
-        { title: 'Staffs', icon: StaffsIcon, path: '/staff/add', color: '#f59e0b', bgColor: '#fef3c7' },
-        { title: 'Invoice', icon: InvoiceIcon, path: '/invoice/add', color: '#3d5ee1', bgColor: '#e0f2fe' }
+        { title: 'Students', icon: StudentIcon, path: '/students/add', color: '#3d5ee1', bgColor: 'var(--accent)' },
+        { title: 'Teachers', icon: TeachersIcon, path: '/teachers/add', color: '#22c55e', bgColor: 'rgba(34, 197, 94, 0.1)' },
+        { title: 'Staffs', icon: StaffsIcon, path: '/staff/add', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
+        { title: 'Invoice', icon: InvoiceIcon, path: '/invoice/add', color: '#3d5ee1', bgColor: 'var(--accent)' }
     ];
 
     // Close dropdowns when clicking outside
@@ -95,8 +95,9 @@ const Header = ({ toggleSidebar }) => {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('authToken');
-        navigate('/login');
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        navigate('/auth/login', { replace: true });
     };
 
     const toggleFullscreen = () => {
@@ -251,16 +252,16 @@ const Header = ({ toggleSidebar }) => {
 
                             <ul className="dropdown-menu-list">
                                 <li>
-                                    <a href="/profile" className="dropdown-menu-item">
+                                    <button onClick={() => { setShowProfileDropdown(false); navigate('/school/dashboard'); }} className="dropdown-menu-item">
                                         <UserIcon size={18} color="var(--bodytext)" />
                                         <span>My Profile</span>
-                                    </a>
+                                    </button>
                                 </li>
                                 <li>
-                                    <a href="/settings" className="dropdown-menu-item">
+                                    <button onClick={() => { setShowProfileDropdown(false); navigate('/school/settings/general'); }} className="dropdown-menu-item">
                                         <SettingsIcon size={18} color="var(--bodytext)" />
                                         <span>Settings</span>
-                                    </a>
+                                    </button>
                                 </li>
                                 <li>
                                     <button onClick={handleLogout} className="dropdown-menu-item logout-btn">

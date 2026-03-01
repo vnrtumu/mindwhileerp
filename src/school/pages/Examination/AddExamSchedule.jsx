@@ -4,6 +4,7 @@ import {
     IconPlus, IconChevronLeft, IconChevronDown, IconTrash,
     IconLayoutDashboard, IconSchool, IconCalendarPlus
 } from '@tabler/icons-react';
+import { ScheduleContext } from '../../../context/ScheduleContext';
 import './ExamSchedule.css';
 
 const AddExamSchedule = () => {
@@ -19,8 +20,6 @@ const AddExamSchedule = () => {
 
     // Top form state
     const [headerData, setHeaderData] = useState({
-        class: '',
-        section: '',
         examName: ''
     });
 
@@ -66,16 +65,30 @@ const AddExamSchedule = () => {
         })));
     };
 
+    const { addScheduleTemplate } = React.useContext(ScheduleContext);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Submitting Schedule:', { headerData, rows });
-        // Here you would typically call an API
-        alert('Exam Schedule added successfully!');
-        navigate('/school/exam/schedule');
+
+        // Save as schedule template (without class/section)
+        const templateId = addScheduleTemplate({
+            exam: headerData.examName,
+            rows: rows.map(row => ({
+                subject: row.subject,
+                passMarks: row.passMarks,
+                maxMarks: row.maxMarks,
+                date: row.date,
+                startTime: row.startTime,
+                endTime: row.endTime
+            }))
+        });
+
+        // Redirect to assign page
+        navigate(`/school/exam/schedule/${templateId}/assign`);
     };
 
     return (
-        <div className="accounts-page add-exam-schedule-page">
+        <div className="page-wrapper add-exam-schedule-page">
             {/* Page Header */}
             <div className="page-header">
                 <div className="page-title">
@@ -142,41 +155,9 @@ const AddExamSchedule = () => {
                 {/* Main Form Content */}
                 <form className="schedule-form-content" onSubmit={handleSubmit}>
                     {/* Top Selectors */}
-                    <div className="form-grid-top">
+                    <div className="form-grid-top" style={{ gridTemplateColumns: '1fr' }}>
                         <div className="input-group">
-                            <label>Class <span className="required">*</span></label>
-                            <div className="select-wrapper">
-                                <select
-                                    className="custom-select"
-                                    required
-                                    value={headerData.class}
-                                    onChange={(e) => setHeaderData({ ...headerData, class: e.target.value })}
-                                >
-                                    <option value="">Select Class</option>
-                                    {classesList.map(cls => <option key={cls} value={cls}>{cls}</option>)}
-                                </select>
-                                <IconChevronDown size={18} className="chevron-icon" />
-                            </div>
-                        </div>
-
-                        <div className="input-group">
-                            <label>Section <span className="required">*</span></label>
-                            <div className="select-wrapper">
-                                <select
-                                    className="custom-select"
-                                    required
-                                    value={headerData.section}
-                                    onChange={(e) => setHeaderData({ ...headerData, section: e.target.value })}
-                                >
-                                    <option value="">Select Section</option>
-                                    {sectionsList.map(sec => <option key={sec} value={sec}>{sec}</option>)}
-                                </select>
-                                <IconChevronDown size={18} className="chevron-icon" />
-                            </div>
-                        </div>
-
-                        <div className="input-group">
-                            <label>Exam name <span className="required">*</span></label>
+                            <label>Exam Name <span className="required">*</span></label>
                             <div className="select-wrapper">
                                 <select
                                     className="custom-select"
@@ -286,7 +267,7 @@ const AddExamSchedule = () => {
                             Add Row
                         </button>
                         <button type="submit" className="btn-submit-schedule">
-                            Add Exam Schedule
+                            Save & Assign Classes
                         </button>
                     </div>
                 </form>

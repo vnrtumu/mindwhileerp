@@ -1,5 +1,4 @@
-import React from 'react';
-import { IconCash, IconClipboardCheck, IconCalendar, IconUserCheck } from '@tabler/icons-react';
+import { IconCash, IconClipboardCheck, IconCalendar, IconUserCheck, IconDeviceLaptop } from '@tabler/icons-react';
 
 const StudentQuickLinks = () => {
     const links = [
@@ -9,6 +8,13 @@ const StudentQuickLinks = () => {
             color: '#3d5ee1',
             bgColor: '#e8f0ff',
             link: '/student-fees'
+        },
+        {
+            title: 'Online Exam',
+            icon: IconDeviceLaptop,
+            color: '#7367f0',
+            bgColor: '#ebe9fe',
+            link: '/school/examination/online-exam'
         },
         {
             title: 'Exam Result',

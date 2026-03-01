@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 // ── Configuration ──
-// Forced override: Ignored Vercel's old VITE_API_URL environment variables
-const API_BASE_URL = 'https://schoolerp-w7x2.onrender.com/api/v1';
+const API_BASE_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 /**
  * Centralized Axios instance for all API calls.
@@ -37,11 +36,17 @@ apiClient.interceptors.request.use(
 );
 
 // ── Response Interceptor: Handle 401 globally ──
+let isRedirecting = false;
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      // Token expired or invalid permissions → clear auth and redirect
+    const status = error.response?.status;
+    const requestUrl = error.config?.url || '';
+
+    // Only handle 401 (not 403) — and skip login/public endpoints
+    const isAuthEndpoint = requestUrl.includes('/login') || requestUrl.includes('/public');
+    if (status === 401 && !isAuthEndpoint && !isRedirecting) {
+      isRedirecting = true;
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
       window.location.href = '/auth/login';

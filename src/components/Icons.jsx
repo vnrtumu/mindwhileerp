@@ -51,3 +51,10 @@ export const DeleteIcon = ({ size = 16 }) => (
     <path d="M10 11v6M14 11v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
+
+export const CreditCardIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="5" width="20" height="14" rx="2" ry="2" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M2 10h20" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);

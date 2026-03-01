@@ -14,6 +14,14 @@ const DEFAULT_TEACHERS = [
     { id: 'T849126', name: 'Daniel', class: 'II (A)', subject: 'Computer', email: 'daniel@example.com', phone: '+1 56752 86742', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Daniel', joinDate: '2024-03-28' },
     { id: 'T849125', name: 'Hellana', class: 'VI (A)', subject: 'English', email: 'hellana@example.com', phone: '+1 23566 52683', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Hellana', joinDate: '2024-04-11' },
     { id: 'T849124', name: 'Erickson', class: 'I (A)', subject: 'Chemistry', email: 'erickson@example.com', phone: '+1 26267 80542', status: 'Inactive', avatar: 'https://i.pravatar.cc/150?u=Erickson', joinDate: '2024-05-12' },
+    { id: 'T849123', name: 'Morgan', class: 'VIII', subject: 'Env Science', email: 'morgan@example.com', phone: '+1 63204 35730', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Morgan', joinDate: '2024-05-20' },
+    { id: 'T849122', name: 'Aaron', class: 'I (A)', subject: 'Chemistry', email: 'aaron@example.com', phone: '+1 26267 80542', status: 'Inactive', avatar: 'https://i.pravatar.cc/150?u=Aaron', joinDate: '2024-05-12' },
+    { id: 'T849121', name: 'Jacquelin', class: 'IV', subject: 'Maths', email: 'jacquelin@example.com', phone: '+1 77502 54845', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Jacquelin', joinDate: '2024-05-20' },
+    { id: 'T849120', name: 'Raul', class: 'IV', subject: 'Biology', email: 'raul@example.com', phone: '+1 67845 78784', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Raul', joinDate: '2024-05-27' },
+    { id: 'T849119', name: 'Elizabeth', class: 'VII', subject: 'Finance', email: 'elizabeth@example.com', phone: '+1 23566 52683', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Elizabeth', joinDate: '10 Jun 2024' },
+    { id: 'T849118', name: 'Edward', class: 'IX (C), X (C)', subject: 'Economics', email: 'edward@example.com', phone: '+1 97846 84518', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Edward', joinDate: '18 Jun 2024' },
+    { id: 'T849117', name: 'Maria', class: 'IX (C), X (C)', subject: 'Spanish', email: 'maria@example.com', phone: '+1 97846 84518', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Maria', joinDate: '22 Jul 2024' },
+    { id: 'T849116', name: 'Jacky', class: 'VI (A)', subject: 'English', email: 'jacky@example.com', phone: '+1 98392 37378', status: 'Active', avatar: 'https://i.pravatar.cc/150?u=Jacky', joinDate: '28 Jul 2024' },
 ];
 
 export const getTeachers = () => {
