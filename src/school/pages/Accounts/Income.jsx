@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     IconPlus, IconSearch, IconFilter, IconDownload, IconEdit, IconTrash,
-    IconTrendingUp, IconWallet, IconCalendar, IconFileText, IconEye, IconChevronDown
+    IconTrendingUp, IconWallet, IconCalendar, IconFileText, IconEye, IconChevronDown,
+    IconFileTypePdf, IconFileSpreadsheet
 } from '@tabler/icons-react';
+import { exportToCSV, exportToPDF, printTable } from '../../../utils/exportUtils';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 import './Accounts.css';
 
 const Income = () => {
@@ -11,12 +16,81 @@ const Income = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [showExportMenu, setShowExportMenu] = useState(false);
+    const exportMenuRef = useRef(null);
+
+    // Close export menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (exportMenuRef.current && !exportMenuRef.current.contains(event.target)) {
+                setShowExportMenu(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const incomeColumns = ['invoiceNo', 'name', 'head', 'date', 'amount'];
+    const incomeColumnLabels = {
+        invoiceNo: 'Invoice No',
+        name: 'Name',
+        head: 'Income Head',
+        date: 'Date',
+        amount: 'Amount'
+    };
+
+    const handleExportPDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text('Income Report', 14, 20);
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
+
+        const headers = incomeColumns.map(col => incomeColumnLabels[col]);
+        const rows = filteredData.map(item =>
+            incomeColumns.map(col => {
+                if (col === 'amount') return `₹${Number(item[col]).toLocaleString('en-IN')}`;
+                return item[col] ?? '';
+            })
+        );
+
+        autoTable(doc, {
+            head: [headers],
+            body: rows,
+            startY: 35,
+            theme: 'grid',
+            headStyles: { fillColor: [61, 94, 225], textColor: 255, fontStyle: 'bold' },
+            styles: { fontSize: 9, cellPadding: 4 },
+            alternateRowStyles: { fillColor: [245, 247, 250] }
+        });
+
+        doc.save('income-report.pdf');
+        setShowExportMenu(false);
+    };
+
+    const handleExportExcel = () => {
+        const headers = incomeColumns.map(col => incomeColumnLabels[col]);
+        const rows = filteredData.map(item =>
+            incomeColumns.map(col => item[col] ?? '')
+        );
+        const wsData = [headers, ...rows];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        ws['!cols'] = incomeColumns.map(() => ({ wch: 20 }));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Income');
+        XLSX.writeFile(wb, 'income-report.xlsx');
+        setShowExportMenu(false);
+    };
     const [formData, setFormData] = useState({
         name: '',
         date: '',
         amount: '',
         paymentMethod: '',
-        description: ''
+        description: '',
+        utrId: '',
+        transactionId: '',
+        senderBank: '',
+        receiverBank: ''
     });
 
     // Sample income data
@@ -112,7 +186,11 @@ const Income = () => {
             date: '',
             amount: '',
             paymentMethod: '',
-            description: ''
+            description: '',
+            utrId: '',
+            transactionId: '',
+            senderBank: '',
+            receiverBank: ''
         });
         setShowAddModal(true);
     };
@@ -124,8 +202,12 @@ const Income = () => {
             name: item.name,
             date: item.date,
             amount: item.amount,
-            paymentMethod: 'Cash', // Mocking payment method
-            description: item.description
+            paymentMethod: 'CASH', // Mocking payment method
+            description: item.description,
+            utrId: '',
+            transactionId: '',
+            senderBank: '',
+            receiverBank: ''
         });
         setShowAddModal(true);
     };
@@ -160,16 +242,18 @@ const Income = () => {
     };
 
     return (
-        <div className="page-wrapper">
+        <div className="income-page">
             {/* Page Header */}
-            <div className="page-header">
-                <div className="page-title">
-                    <h4>Income</h4>
-                    <nav className="breadcrumb">
-                        <span>Accounts</span> / <span className="current">Income</span>
+            <div className="income-page-header">
+                <div className="income-page-title">
+                    <h1>Income</h1>
+                    <nav className="income-breadcrumb">
+                        <span>Accounts</span>
+                        <span className="separator">/</span>
+                        <span className="current">Income</span>
                     </nav>
                 </div>
-                <button className="btn-primary" onClick={handleOpenAddModal}>
+                <button className="income-add-btn" onClick={handleOpenAddModal}>
                     <IconPlus size={18} />
                     Add Income
                 </button>
@@ -196,7 +280,7 @@ const Income = () => {
                                 />
                             </div>
 
-                            <div className="form-row">
+                            <div className="form-row" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
                                 <div className="form-group">
                                     <label>Date</label>
                                     <div className="input-with-icon">
@@ -217,8 +301,6 @@ const Income = () => {
                                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                                     />
                                 </div>
-                            </div>
-                            <div className="form-row">
                                 <div className="form-group">
                                     <label>Payment Method</label>
                                     <div className="select-with-icon">
@@ -227,13 +309,82 @@ const Income = () => {
                                             onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
                                         >
                                             <option value="">Select</option>
-                                            <option value="Cash">Cash</option>
-                                            <option value="Credit">Credit</option>
+                                            <option value="UPI">UPI</option>
+                                            <option value="BANK">BANK</option>
+                                            <option value="CASH">CASH</option>
                                         </select>
                                         <IconChevronDown size={18} className="field-icon" />
                                     </div>
                                 </div>
                             </div>
+
+                            {formData.paymentMethod === 'UPI' && (
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label>UTR ID</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter UTR ID"
+                                            value={formData.utrId}
+                                            onChange={(e) => setFormData({ ...formData, utrId: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Transaction ID</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Transaction ID"
+                                            value={formData.transactionId}
+                                            onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {formData.paymentMethod === 'BANK' && (
+                                <>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>Receiver's Bank</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter Receiver's Bank"
+                                                value={formData.receiverBank}
+                                                onChange={(e) => setFormData({ ...formData, receiverBank: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Sender's Bank</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter Sender's Bank"
+                                                value={formData.senderBank}
+                                                onChange={(e) => setFormData({ ...formData, senderBank: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>UTR ID</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter UTR ID"
+                                                value={formData.utrId}
+                                                onChange={(e) => setFormData({ ...formData, utrId: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Transaction ID</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter Transaction ID"
+                                                value={formData.transactionId}
+                                                onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                             <div className="form-group full-width">
                                 <label>Description</label>
                                 <textarea
@@ -255,62 +406,60 @@ const Income = () => {
             )}
 
             {/* Stats Cards */}
-            <div className="stats-row">
-                <div className="stat-card income">
-                    <div className="stat-icon">
-                        <IconTrendingUp size={24} />
+            <div className="income-stats-row">
+                <div className="income-stat-card">
+                    <div className="income-stat-icon green">
+                        <IconTrendingUp size={22} />
                     </div>
-                    <div className="stat-info">
-                        <span className="stat-label">Total Income</span>
-                        <h3 className="stat-value">{formatCurrency(totalIncome)}</h3>
-                    </div>
-                </div>
-                <div className="stat-card transactions">
-                    <div className="stat-icon">
-                        <IconFileText size={24} />
-                    </div>
-                    <div className="stat-info">
-                        <span className="stat-label">Total Transactions</span>
-                        <h3 className="stat-value">{filteredData.length}</h3>
+                    <div className="income-stat-info">
+                        <span className="income-stat-label">Total Income</span>
+                        <h3 className="income-stat-value">{formatCurrency(totalIncome)}</h3>
                     </div>
                 </div>
-                <div className="stat-card heads">
-                    <div className="stat-icon">
-                        <IconWallet size={24} />
+                <div className="income-stat-card">
+                    <div className="income-stat-icon blue">
+                        <IconFileText size={22} />
                     </div>
-                    <div className="stat-info">
-                        <span className="stat-label">Income Heads</span>
-                        <h3 className="stat-value">{incomeHeads.length - 1}</h3>
+                    <div className="income-stat-info">
+                        <span className="income-stat-label">Total Transactions</span>
+                        <h3 className="income-stat-value">{filteredData.length}</h3>
                     </div>
                 </div>
-                <div className="stat-card monthly">
-                    <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #d6ebff 100%)', color: '#5a7dff' }}>
-                        <IconCalendar size={24} />
+                <div className="income-stat-card">
+                    <div className="income-stat-icon orange">
+                        <IconWallet size={22} />
                     </div>
-                    <div className="stat-info">
-                        <span className="stat-label">Monthly Income</span>
-                        <h3 className="stat-value">{formatCurrency(totalIncome * 0.8)}</h3> {/* Mocking monthly as 80% of total for demo */}
+                    <div className="income-stat-info">
+                        <span className="income-stat-label">Income Heads</span>
+                        <h3 className="income-stat-value">{incomeHeads.length - 1}</h3>
+                    </div>
+                </div>
+                <div className="income-stat-card">
+                    <div className="income-stat-icon purple">
+                        <IconCalendar size={22} />
+                    </div>
+                    <div className="income-stat-info">
+                        <span className="income-stat-label">Monthly Income</span>
+                        <h3 className="income-stat-value">{formatCurrency(totalIncome * 0.8)}</h3>
                     </div>
                 </div>
             </div>
 
-            {/* Filters */}
-            <div className="filter-container">
-                <div className="filter-left">
-                    <div className="search-box">
-                        <IconSearch size={18} />
-                        <input
-                            type="text"
-                            placeholder="Search by name or invoice..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
+            {/* Search & Filter Row */}
+            <div className="income-filter-row">
+                <div className="income-search-box">
+                    <IconSearch size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search by name or invoice..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
-                <div className="filter-right">
-                    <div className="select-wrapper">
+                <div className="income-filter-right">
+                    <div className="income-select-wrapper">
                         <select
-                            className="filter-select"
+                            className="income-filter-select"
                             value={filterHead}
                             onChange={(e) => setFilterHead(e.target.value)}
                         >
@@ -320,25 +469,39 @@ const Income = () => {
                                 </option>
                             ))}
                         </select>
-                        <IconChevronDown size={14} className="select-chevron" />
+                        <IconChevronDown size={14} className="income-select-chevron" />
                     </div>
                 </div>
             </div>
 
-            <div className="accounts-card">
-                <div className="card-header">
+            {/* Table Card */}
+            <div className="income-table-card">
+                <div className="income-table-header">
                     <h5>Income List</h5>
-                    <div className="header-actions">
-                        <button className="btn-outline">
-                            <IconDownload size={16} />
-                            Export
-                        </button>
+                    <div className="income-header-actions">
+                        <div className="export-dropdown-wrapper" ref={exportMenuRef}>
+                            <button className="income-export-btn" onClick={() => setShowExportMenu(!showExportMenu)}>
+                                <IconDownload size={16} />
+                                Export
+                            </button>
+                            {showExportMenu && (
+                                <div className="export-dropdown-menu">
+                                    <button className="export-dropdown-item" onClick={handleExportPDF}>
+                                        <IconFileTypePdf size={20} />
+                                        Export as PDF
+                                    </button>
+                                    <button className="export-dropdown-item" onClick={handleExportExcel}>
+                                        <IconFileSpreadsheet size={20} />
+                                        Export as Excel
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-                <div className="card-body">
-                    {/* Table */}
+                <div className="income-table-body">
                     <div className="table-container">
-                        <table className="data-table">
+                        <table className="income-data-table">
                             <thead>
                                 <tr>
                                     <th>Invoice No</th>
@@ -353,35 +516,34 @@ const Income = () => {
                                 {filteredData.map((item) => (
                                     <tr key={item.id}>
                                         <td>
-                                            <span className="invoice-badge">{item.invoiceNo}</span>
+                                            <span className="income-invoice-badge">{item.invoiceNo}</span>
                                         </td>
                                         <td>
-                                            <div className="item-info">
-                                                <span className="item-name">{item.name}</span>
-                                                <span className="item-desc">{item.description}</span>
+                                            <div className="income-item-info">
+                                                <span className="income-item-name">{item.name}</span>
+                                                <span className="income-item-desc">{item.description}</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <span className="head-badge">{item.head}</span>
+                                            <span className="income-head-badge">{item.head}</span>
                                         </td>
                                         <td>
-                                            <div className="date-cell">
+                                            <div className="income-date-cell">
                                                 <IconCalendar size={14} />
                                                 {formatDate(item.date)}
                                             </div>
                                         </td>
                                         <td>
-                                            <span className="amount-cell positive">
+                                            <span className="income-amount-cell">
                                                 {formatCurrency(item.amount)}
                                             </span>
                                         </td>
                                         <td>
-                                            <div className="action-buttons">
-
-                                                <button className="action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
+                                            <div className="income-action-buttons">
+                                                <button className="income-action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
                                                     <IconEdit size={16} />
                                                 </button>
-                                                <button className="action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
+                                                <button className="income-action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
                                                     <IconTrash size={16} />
                                                 </button>
                                             </div>
@@ -393,14 +555,14 @@ const Income = () => {
                     </div>
 
                     {/* Pagination */}
-                    <div className="table-footer">
-                        <span className="showing-text">
+                    <div className="income-table-footer">
+                        <span className="income-showing-text">
                             Showing {filteredData.length} of {incomeData.length} entries
                         </span>
-                        <div className="pagination">
-                            <button className="page-btn" disabled>Previous</button>
-                            <button className="page-btn active">1</button>
-                            <button className="page-btn">Next</button>
+                        <div className="income-pagination">
+                            <button className="income-page-btn" disabled>Previous</button>
+                            <button className="income-page-btn active">1</button>
+                            <button className="income-page-btn">Next</button>
                         </div>
                     </div>
                 </div>

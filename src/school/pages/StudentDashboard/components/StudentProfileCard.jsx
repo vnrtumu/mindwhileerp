@@ -10,32 +10,51 @@ const StudentProfileCard = () => {
 
     return (
         <div className="student-profile-card">
-            <div className="profile-header">
-                <div className="profile-badge">1st Quarterly</div>
-                <div className="profile-photo-container">
-                    <img
-                        src="https://preskool.developer24.org/html/template/assets/img/students/student-01.jpg"
-                        alt="Student"
-                        className="profile-photo"
-                    />
+            <div className="profile-horizontal-header">
+                <div className="profile-top-info">
+                    <div className="avatar-square-container">
+                        <img
+                            src="https://preskool.developer24.org/html/template/assets/img/students/student-01.jpg"
+                            alt="Student"
+                            className="avatar-img-square"
+                        />
+                    </div>
+                    <div className="student-header-details">
+                        <span className="id-badge-pill">#ST1234546</span>
+                        <h3 className="student-name-white">Angelo Riana</h3>
+                        <div className="student-meta-row">
+                            <span className="meta-text">Class : III, C</span>
+                            <span className="meta-bar">|</span>
+                            <span className="meta-text">Roll No : 36545</span>
+                        </div>
+                    </div>
                 </div>
-                <h3 className="profile-name">Angelo Riana</h3>
-                <p className="profile-class">III, A</p>
-                <button className="edit-profile-btn">
-                    <IconEdit size={16} />
-                    Edit Profile
-                </button>
+
+                <div className="profile-dashed-line"></div>
+
+                <div className="profile-bottom-row">
+                    <div className="exam-status-group">
+                        <span className="exam-quarter">1st Quarterly</span>
+                        <div className="status-pass-badge">
+                            <span className="dot-green"></span>
+                            Pass
+                        </div>
+                    </div>
+                    <button className="edit-profile-action-btn">
+                        Edit Profile
+                    </button>
+                </div>
             </div>
 
-            <div className="todays-class">
-                <h4 className="section-title">Today's Class</h4>
-                <div className="class-list">
+            <div className="todays-class-section">
+                <h4 className="todays-class-title">Today's Class</h4>
+                <div className="todays-class-list">
                     {todaysClasses.map((item, index) => (
-                        <div key={index} className="class-item">
-                            <div className="class-icon" style={{ backgroundColor: `${item.color}15`, color: item.color }}>
+                        <div key={index} className="todays-class-row">
+                            <div className="subject-icon-box" style={{ backgroundColor: `${item.color}15`, color: item.color }}>
                                 <item.icon size={20} />
                             </div>
-                            <span className="class-name">{item.subject}</span>
+                            <span className="subject-display-name">{item.subject}</span>
                         </div>
                     ))}
                 </div>

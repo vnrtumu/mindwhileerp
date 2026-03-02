@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IconChevronDown, IconChevronLeft, IconChevronRight, IconCalendarEvent } from '@tabler/icons-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const StudentAttendance = () => {
     const [filter, setFilter] = useState('This Week');
@@ -145,7 +146,7 @@ const StudentAttendance = () => {
 
     const isWeekend = (dayIndex) => {
         const colIndex = dayIndex % 7;
-        return colIndex === 5 || colIndex === 6;
+        return colIndex === 0 || colIndex === 6;
     };
 
     const isSelected = (dayObj, index) => {
@@ -211,78 +212,51 @@ const StudentAttendance = () => {
             </div>
             <div className="card-body">
                 <div className="attendance-content">
-                    {/* Left Side - Stats */}
-                    <div className="attendance-left">
-                        <p className="working-days-text">
-                            No of total working days <strong>{attendanceStats.totalDays} Days</strong>
-                        </p>
-
-                        <div className="attendance-stats-vertical">
-                            <div className="stat-row present">
-                                <span className="stat-label">Present</span>
-                                <span className="stat-value">{attendanceStats.present}</span>
-                            </div>
-                            <div className="stat-row absent">
-                                <span className="stat-label">Absent</span>
-                                <span className="stat-value">{attendanceStats.absent}</span>
-                            </div>
-                            <div className="stat-row halfday">
-                                <span className="stat-label">Halfday</span>
-                                <span className="stat-value">{attendanceStats.halfday}</span>
-                            </div>
+                    {/* Stats at top */}
+                    <div className="attendance-stats-horizontal">
+                        <div className="stat-box present">
+                            <span className="stat-label">Present</span>
+                            <span className="stat-value">{attendanceStats.present}</span>
+                        </div>
+                        <div className="stat-box absent">
+                            <span className="stat-label">Absent</span>
+                            <span className="stat-value">{attendanceStats.absent}</span>
+                        </div>
+                        <div className="stat-box halfday">
+                            <span className="stat-label">Halfday</span>
+                            <span className="stat-value">{attendanceStats.halfday}</span>
                         </div>
                     </div>
 
-                    {/* Right Side - Donut Chart */}
-                    <div className="attendance-right">
-                        <div className="donut-chart">
-                            <svg viewBox="0 0 36 36" className="circular-chart">
-                                {/* Background circle */}
-                                <circle
-                                    className="circle-bg"
-                                    cx="18" cy="18" r="15.9155"
-                                    fill="none"
-                                    stroke="#ff9f43"
-                                    strokeWidth="3"
-                                />
-                                {/* Absent segment */}
-                                <circle
-                                    className="circle-absent"
-                                    cx="18" cy="18" r="15.9155"
-                                    fill="none"
-                                    stroke="#ea5455"
-                                    strokeWidth="3"
-                                    strokeDasharray={`${absentPercent} ${100 - absentPercent}`}
-                                    strokeDashoffset="0"
-                                />
-                                {/* Present segment */}
-                                <circle
-                                    className="circle-present"
-                                    cx="18" cy="18" r="15.9155"
-                                    fill="none"
-                                    stroke="#28c76f"
-                                    strokeWidth="3"
-                                    strokeDasharray={`${presentPercent} ${100 - presentPercent}`}
-                                    strokeDashoffset={`-${absentPercent}`}
-                                />
-                            </svg>
-                            <div className="donut-center">
-                                <span className="donut-percent">{Math.round(presentPercent)}%</span>
-                            </div>
-                        </div>
-                        <div className="chart-legend">
-                            <div className="legend-item">
-                                <span className="legend-dot present"></span>
-                                <span>Present</span>
-                            </div>
-                            <div className="legend-item">
-                                <span className="legend-dot absent"></span>
-                                <span>Absent</span>
-                            </div>
-                            <div className="legend-item">
-                                <span className="legend-dot halfday"></span>
-                                <span>Halfday</span>
-                            </div>
+                    {/* Centered Donut Chart */}
+                    <div className="attendance-chart-container">
+                        <div className="donut-chart-wrapper">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Tooltip />
+                                    <Pie
+                                        data={[
+                                            { name: 'Present', value: attendanceStats.present, color: '#28c76f' },
+                                            { name: 'Absent', value: attendanceStats.absent, color: '#ea5455' },
+                                            { name: 'Halfday', value: attendanceStats.halfday, color: '#ff9f43' }
+                                        ]}
+                                        innerRadius={70}
+                                        outerRadius={100}
+                                        dataKey="value"
+                                        startAngle={90}
+                                        endAngle={-270}
+                                        stroke="none"
+                                    >
+                                        {[
+                                            { name: 'Present', value: attendanceStats.present, color: '#28c76f' },
+                                            { name: 'Absent', value: attendanceStats.absent, color: '#ea5455' },
+                                            { name: 'Halfday', value: attendanceStats.halfday, color: '#ff9f43' }
+                                        ].map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                </PieChart>
+                            </ResponsiveContainer>
                         </div>
                     </div>
                 </div>

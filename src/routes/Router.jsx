@@ -31,6 +31,9 @@ const TeachersGrid = Loadable(lazy(() => import('../school/pages/Teachers/Teache
 const TeacherDetails = Loadable(lazy(() => import('../school/pages/Teachers/TeacherDetails')));
 const AddTeacher = Loadable(lazy(() => import('../school/pages/Teachers/AddTeacher')));
 const Routine = Loadable(lazy(() => import('../school/pages/Teachers/Routine')));
+const User = Loadable(lazy(() => import('../school/pages/Teachers/User')));
+const EditUser = Loadable(lazy(() => import('../school/pages/Teachers/EditUser')));
+const AddUser = Loadable(lazy(() => import('../school/pages/Teachers/AddUser')));
 
 // Academics Pages
 const AcademicsDashboard = Loadable(lazy(() => import('../school/pages/Academics/AcademicsDashboard')));
@@ -158,6 +161,13 @@ const IssueNewBook = Loadable(lazy(() => import('../school/pages/Library/IssueNe
 const ManageBooks = Loadable(lazy(() => import('../school/pages/Library/ManageBooks')));
 const BookCategories = Loadable(lazy(() => import('../school/pages/Library/BookCategories')));
 const LibraryMembers = Loadable(lazy(() => import('../school/pages/Library/LibraryMembers')));
+
+// Hostel Pages
+const HostelAllocation = Loadable(lazy(() => import('../school/pages/Hostel/StudentAllocation')));
+const ManageRooms = Loadable(lazy(() => import('../school/pages/Hostel/ManageRooms')));
+const RoomTypes = Loadable(lazy(() => import('../school/pages/Hostel/RoomTypes')));
+const ManageHostels = Loadable(lazy(() => import('../school/pages/Hostel/ManageHostels')));
+const HostelPermissions = Loadable(lazy(() => import('../school/pages/Hostel/Permissions')));
 
 // Super Admin Dashboards
 const Modern = Loadable(lazy(() => import('../views/dashboards/Modern')));
@@ -373,6 +383,13 @@ const Router = [
       { path: 'transport/student-transport/add', element: <ManageStudentTransport /> },
       { path: 'transport/student-transport/edit/:id', element: <ManageStudentTransport /> },
 
+      // Hostel Routes
+      { path: 'hostel/allocation', element: <HostelAllocation /> },
+      { path: 'hostel/rooms', element: <ManageRooms /> },
+      { path: 'hostel/room-types', element: <RoomTypes /> },
+      { path: 'hostel/manage', element: <ManageHostels /> },
+      { path: 'hostel/permissions', element: <HostelPermissions /> },
+
       // Teachers Routes
       {
         path: 'teachers',
@@ -384,6 +401,9 @@ const Router = [
           { path: 'edit/:id', element: <AddTeacher /> },
           { path: 'routine', element: <Routine /> },
           { path: 'details/:id', element: <TeacherDetails /> },
+          { path: 'user', element: <User /> },
+          { path: 'user/add', element: <AddUser /> },
+          { path: 'user/edit/:id', element: <EditUser /> },
           { index: true, element: <Navigate to="all" replace /> },
           { path: 'departments', element: <div>Departments Page</div> },
           { path: 'accounts', element: <div>Accounts Page</div> },

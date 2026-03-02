@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     IconPlus, IconSearch, IconFilter, IconDownload, IconEdit, IconTrash,
-    IconTrendingDown, IconWallet, IconCalendar, IconFileText, IconEye, IconChevronDown
+    IconTrendingDown, IconWallet, IconCalendar, IconFileText, IconEye, IconChevronDown,
+    IconFileTypePdf, IconFileSpreadsheet
 } from '@tabler/icons-react';
+import { exportToCSV, exportToPDF, printTable } from '../../../utils/exportUtils';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 import './Accounts.css';
 
 const Expense = () => {
@@ -11,14 +16,95 @@ const Expense = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [showExportMenu, setShowExportMenu] = useState(false);
+    const [viewingItem, setViewingItem] = useState(null);
+    const exportMenuRef = useRef(null);
+
+    // Close export menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (exportMenuRef.current && !exportMenuRef.current.contains(event.target)) {
+                setShowExportMenu(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const expenseColumns = ['invoiceNo', 'name', 'head', 'date', 'amount'];
+    const expenseColumnLabels = {
+        invoiceNo: 'Invoice No',
+        name: 'Title',
+        head: 'Expense Head',
+        date: 'Date',
+        amount: 'Amount'
+    };
+
+    const handleExportPDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text('Expense Report', 14, 20);
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
+
+        const headers = expenseColumns.map(col => expenseColumnLabels[col]);
+        const rows = filteredData.map(item =>
+            expenseColumns.map(col => {
+                if (col === 'amount') return `₹${Number(item[col]).toLocaleString('en-IN')}`;
+                return item[col] ?? '';
+            })
+        );
+
+        autoTable(doc, {
+            head: [headers],
+            body: rows,
+            startY: 35,
+            theme: 'grid',
+            headStyles: { fillColor: [61, 94, 225], textColor: 255, fontStyle: 'bold' },
+            styles: { fontSize: 9, cellPadding: 4 },
+            alternateRowStyles: { fillColor: [245, 247, 250] }
+        });
+
+        doc.save('expense-report.pdf');
+        setShowExportMenu(false);
+    };
+
+    const handleExportExcel = () => {
+        const headers = expenseColumns.map(col => expenseColumnLabels[col]);
+        const rows = filteredData.map(item =>
+            expenseColumns.map(col => item[col] ?? '')
+        );
+        const wsData = [headers, ...rows];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        ws['!cols'] = expenseColumns.map(() => ({ wch: 20 }));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Expenses');
+        XLSX.writeFile(wb, 'expense-report.xlsx');
+        setShowExportMenu(false);
+    };
     const [formData, setFormData] = useState({
         invoiceNo: '',
         title: '',
         head: '',
         date: '',
+        paymentMode: '',
+        bankDetails: '',
         amount: '',
-        description: '' // Kept for consistency, though not in the mini-header request
+        description: ''
     });
+
+    const bankNames = [
+        'State Bank of India',
+        'HDFC Bank',
+        'ICICI Bank',
+        'Punjab National Bank',
+        'Bank of Baroda',
+        'Axis Bank',
+        'Canara Bank',
+        'Union Bank of India',
+        'Indian Bank',
+        'Kotak Mahindra Bank'
+    ];
 
     // Sample expense data
     const [expenseData, setExpenseData] = useState([
@@ -119,6 +205,8 @@ const Expense = () => {
             title: '',
             head: '',
             date: new Date().toISOString().split('T')[0],
+            paymentMode: '',
+            bankDetails: '',
             amount: '',
             description: ''
         });
@@ -133,6 +221,8 @@ const Expense = () => {
             title: item.name,
             head: item.head,
             date: item.date,
+            paymentMode: item.paymentMode || '',
+            bankDetails: item.bankDetails || '',
             amount: item.amount,
             description: item.description
         });
@@ -164,16 +254,18 @@ const Expense = () => {
     };
 
     return (
-        <div className="page-wrapper">
+        <div className="expense-page">
             {/* Page Header */}
-            <div className="page-header">
-                <div className="page-title">
-                    <h4>Expense</h4>
-                    <nav className="breadcrumb">
-                        <span>Accounts</span> / <span className="current">Expense</span>
+            <div className="expense-page-header">
+                <div className="expense-page-title">
+                    <h1>Expense</h1>
+                    <nav className="expense-breadcrumb">
+                        <span>Accounts</span>
+                        <span className="separator">/</span>
+                        <span className="current">Expense</span>
                     </nav>
                 </div>
-                <button className="btn-primary" style={{ background: '#7367f0' }} onClick={handleOpenAddModal}>
+                <button className="expense-add-btn" onClick={handleOpenAddModal}>
                     <IconPlus size={18} />
                     Add Expense
                 </button>
@@ -236,15 +328,50 @@ const Expense = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Amount <span style={{ color: '#ea5455' }}>*</span></label>
-                                <input
-                                    type="number"
-                                    placeholder="Enter amount"
-                                    required
-                                    value={formData.amount}
-                                    onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                                />
+                                <label>Payment Mode <span style={{ color: '#ea5455' }}>*</span></label>
+                                <div className="select-with-icon">
+                                    <select
+                                        required
+                                        value={formData.paymentMode}
+                                        onChange={(e) => setFormData({ ...formData, paymentMode: e.target.value, bankDetails: '', amount: '' })}
+                                    >
+                                        <option value="">Select Payment Mode</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank">Bank</option>
+                                    </select>
+                                    <IconChevronDown size={18} className="field-icon" />
+                                </div>
                             </div>
+                            {formData.paymentMode === 'Bank' && (
+                                <div className="form-group">
+                                    <label>Bank Details <span style={{ color: '#ea5455' }}>*</span></label>
+                                    <div className="select-with-icon">
+                                        <select
+                                            required
+                                            value={formData.bankDetails}
+                                            onChange={(e) => setFormData({ ...formData, bankDetails: e.target.value })}
+                                        >
+                                            <option value="">Select Bank</option>
+                                            {bankNames.map((bank, idx) => (
+                                                <option key={idx} value={bank}>{bank}</option>
+                                            ))}
+                                        </select>
+                                        <IconChevronDown size={18} className="field-icon" />
+                                    </div>
+                                </div>
+                            )}
+                            {formData.paymentMode && (
+                                <div className="form-group">
+                                    <label>Amount <span style={{ color: '#ea5455' }}>*</span></label>
+                                    <input
+                                        type="number"
+                                        placeholder="Enter amount"
+                                        required
+                                        value={formData.amount}
+                                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                    />
+                                </div>
+                            )}
                             <div className="form-group full-width">
                                 <label>Description</label>
                                 <textarea
@@ -266,53 +393,51 @@ const Expense = () => {
             )}
 
             {/* Stats Cards */}
-            <div className="stats-row">
-                <div className="stat-card expense-variant">
-                    <div className="stat-icon" style={{ background: 'rgba(115, 103, 240, 0.1)', color: '#7367f0' }}>
-                        <IconTrendingDown size={24} />
+            <div className="expense-stats-row">
+                <div className="expense-stat-card">
+                    <div className="expense-stat-icon purple">
+                        <IconTrendingDown size={22} />
                     </div>
-                    <div className="stat-info">
-                        <span className="stat-label">Total Expense</span>
-                        <h3 className="stat-value">{formatCurrency(totalExpense)}</h3>
-                    </div>
-                </div>
-                <div className="stat-card transactions">
-                    <div className="stat-icon">
-                        <IconFileText size={24} />
-                    </div>
-                    <div className="stat-info">
-                        <span className="stat-label">Total Transactions</span>
-                        <h3 className="stat-value">{filteredData.length}</h3>
+                    <div className="expense-stat-info">
+                        <span className="expense-stat-label">Total Expense</span>
+                        <h3 className="expense-stat-value">{formatCurrency(totalExpense)}</h3>
                     </div>
                 </div>
-                <div className="stat-card heads">
-                    <div className="stat-icon">
-                        <IconWallet size={24} />
+                <div className="expense-stat-card">
+                    <div className="expense-stat-icon blue">
+                        <IconFileText size={22} />
                     </div>
-                    <div className="stat-info">
-                        <span className="stat-label">Expense Heads</span>
-                        <h3 className="stat-value">{expenseHeads.length - 1}</h3>
+                    <div className="expense-stat-info">
+                        <span className="expense-stat-label">Total Transactions</span>
+                        <h3 className="expense-stat-value">{filteredData.length}</h3>
+                    </div>
+                </div>
+                <div className="expense-stat-card">
+                    <div className="expense-stat-icon orange">
+                        <IconWallet size={22} />
+                    </div>
+                    <div className="expense-stat-info">
+                        <span className="expense-stat-label">Expense Heads</span>
+                        <h3 className="expense-stat-value">{expenseHeads.length - 1}</h3>
                     </div>
                 </div>
             </div>
 
-            {/* Filters */}
-            <div className="filter-container">
-                <div className="filter-left">
-                    <div className="search-box">
-                        <IconSearch size={18} />
-                        <input
-                            type="text"
-                            placeholder="Search by name or invoice..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
+            {/* Search & Filter Row */}
+            <div className="expense-filter-row">
+                <div className="expense-search-box">
+                    <IconSearch size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search by name or invoice..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
-                <div className="filter-right">
-                    <div className="select-wrapper">
+                <div className="expense-filter-right">
+                    <div className="expense-select-wrapper">
                         <select
-                            className="filter-select"
+                            className="expense-filter-select"
                             value={filterHead}
                             onChange={(e) => setFilterHead(e.target.value)}
                         >
@@ -322,25 +447,39 @@ const Expense = () => {
                                 </option>
                             ))}
                         </select>
-                        <IconChevronDown size={14} className="select-chevron" />
+                        <IconChevronDown size={14} className="expense-select-chevron" />
                     </div>
                 </div>
             </div>
 
-            <div className="accounts-card">
-                <div className="card-header">
+            {/* Table Card */}
+            <div className="expense-table-card">
+                <div className="expense-table-header">
                     <h5>Expense List</h5>
-                    <div className="header-actions">
-                        <button className="btn-outline">
-                            <IconDownload size={16} />
-                            Export
-                        </button>
+                    <div className="expense-header-actions">
+                        <div className="export-dropdown-wrapper" ref={exportMenuRef}>
+                            <button className="expense-export-btn" onClick={() => setShowExportMenu(!showExportMenu)}>
+                                <IconDownload size={16} />
+                                Export
+                            </button>
+                            {showExportMenu && (
+                                <div className="export-dropdown-menu">
+                                    <button className="export-dropdown-item" onClick={handleExportPDF}>
+                                        <IconFileTypePdf size={20} />
+                                        Export as PDF
+                                    </button>
+                                    <button className="export-dropdown-item" onClick={handleExportExcel}>
+                                        <IconFileSpreadsheet size={20} />
+                                        Export as Excel
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-                <div className="card-body">
-                    {/* Table */}
+                <div className="expense-table-body">
                     <div className="table-container">
-                        <table className="data-table">
+                        <table className="expense-data-table">
                             <thead>
                                 <tr>
                                     <th>Invoice No</th>
@@ -355,37 +494,37 @@ const Expense = () => {
                                 {filteredData.map((item) => (
                                     <tr key={item.id}>
                                         <td>
-                                            <span className="invoice-badge" style={{ background: 'rgba(115, 103, 240, 0.1)', color: '#7367f0' }}>{item.invoiceNo}</span>
+                                            <span className="expense-invoice-badge">{item.invoiceNo}</span>
                                         </td>
                                         <td>
-                                            <div className="item-info">
-                                                <span className="item-name">{item.name}</span>
-                                                <span className="item-desc">{item.description}</span>
+                                            <div className="expense-item-info">
+                                                <span className="expense-item-name">{item.name}</span>
+                                                <span className="expense-item-desc">{item.description}</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <span className="head-badge" style={{ background: 'rgba(115, 103, 240, 0.1)', color: '#7367f0' }}>{item.head}</span>
+                                            <span className="expense-head-badge">{item.head}</span>
                                         </td>
                                         <td>
-                                            <div className="date-cell">
+                                            <div className="expense-date-cell">
                                                 <IconCalendar size={14} />
                                                 {formatDate(item.date)}
                                             </div>
                                         </td>
                                         <td>
-                                            <span className="amount-cell negative">
+                                            <span className="expense-amount-cell">
                                                 {formatCurrency(item.amount)}
                                             </span>
                                         </td>
                                         <td>
-                                            <div className="action-buttons">
-                                                <button className="action-btn view" title="View">
+                                            <div className="expense-action-buttons">
+                                                <button className="expense-action-btn view" title="View" onClick={() => setViewingItem(item)}>
                                                     <IconEye size={16} />
                                                 </button>
-                                                <button className="action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
+                                                <button className="expense-action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
                                                     <IconEdit size={16} />
                                                 </button>
-                                                <button className="action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
+                                                <button className="expense-action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
                                                     <IconTrash size={16} />
                                                 </button>
                                             </div>
@@ -397,18 +536,63 @@ const Expense = () => {
                     </div>
 
                     {/* Pagination */}
-                    <div className="table-footer">
-                        <span className="showing-text">
+                    <div className="expense-table-footer">
+                        <span className="expense-showing-text">
                             Showing {filteredData.length} of {expenseData.length} entries
                         </span>
-                        <div className="pagination">
-                            <button className="page-btn" disabled>Previous</button>
-                            <button className="page-btn active">1</button>
-                            <button className="page-btn">Next</button>
+                        <div className="expense-pagination">
+                            <button className="expense-page-btn" disabled>Previous</button>
+                            <button className="expense-page-btn active">1</button>
+                            <button className="expense-page-btn">Next</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* View Expense Modal */}
+            {viewingItem && (
+                <div className="modal-overlay">
+                    <div className="modal-content add-income-modal">
+                        <div className="modal-header" style={{ background: '#7367f0' }}>
+                            <h3>Expense Details</h3>
+                            <button className="close-btn" onClick={() => setViewingItem(null)}>
+                                <IconPlus size={20} style={{ transform: 'rotate(45deg)' }} />
+                            </button>
+                        </div>
+                        <div className="modal-body" style={{ padding: '20px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--border-color, #e9ecef)' }}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-secondary, #6e6b7b)' }}>Invoice No</span>
+                                    <span style={{ fontWeight: 600, color: '#7367f0' }}>{viewingItem.invoiceNo}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--border-color, #e9ecef)' }}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-secondary, #6e6b7b)' }}>Title</span>
+                                    <span style={{ color: 'var(--text-primary, #333448)' }}>{viewingItem.name}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--border-color, #e9ecef)' }}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-secondary, #6e6b7b)' }}>Expense Head</span>
+                                    <span className="expense-head-badge">{viewingItem.head}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--border-color, #e9ecef)' }}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-secondary, #6e6b7b)' }}>Date</span>
+                                    <span style={{ color: 'var(--text-primary, #333448)' }}>{formatDate(viewingItem.date)}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--border-color, #e9ecef)' }}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-secondary, #6e6b7b)' }}>Amount</span>
+                                    <span style={{ fontWeight: 700, color: '#ea5455', fontSize: '16px' }}>{formatCurrency(viewingItem.amount)}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0' }}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-secondary, #6e6b7b)' }}>Description</span>
+                                    <span style={{ color: 'var(--text-primary, #333448)', textAlign: 'right', maxWidth: '60%' }}>{viewingItem.description}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer" style={{ padding: '12px 20px', display: 'flex', justifyContent: 'flex-end' }}>
+                            <button className="btn-cancel" onClick={() => setViewingItem(null)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

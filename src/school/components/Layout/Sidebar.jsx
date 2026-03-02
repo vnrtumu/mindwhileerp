@@ -74,6 +74,7 @@ const PATH_TO_PERMISSION_ID = {
     '/school/teachers/all': 'staff_list',
     '/school/teachers/list': 'staff_list',
     '/school/teachers/routine': 'timetable_view',
+    '/school/teachers/user': 'staff_list',
 
     // Academics
     '/school/academics/classes': 'class_list',
@@ -305,7 +306,8 @@ const menuData = [
                 subItems: [
                     { title: 'All Teachers', path: '/school/teachers/all' },
                     { title: 'Teachers List', path: '/school/teachers/list' },
-                    { title: 'Routine', path: '/school/teachers/routine' }
+                    { title: 'TimeTable', path: '/school/teachers/routine' },
+                    { title: 'User', path: '/school/teachers/user' }
                 ]
             },
             {
@@ -425,11 +427,11 @@ const menuData = [
                 title: 'Hostel',
                 icon: IconBed,
                 subItems: [
-                    { title: 'Student Allocation', path: '/hostel/allocation' },
-                    { title: 'Manage Rooms', path: '/hostel/rooms' },
-                    { title: 'Room Types', path: '/hostel/room-types' },
-                    { title: 'Manage Hostels', path: '/hostel/manage' },
-                    { title: 'Permissions', path: '/hostel/permissions' }
+                    { title: 'Student Allocation', path: '/school/hostel/allocation' },
+                    { title: 'Manage Rooms', path: '/school/hostel/rooms' },
+                    { title: 'Room Types', path: '/school/hostel/room-types' },
+                    { title: 'Manage Hostels', path: '/school/hostel/manage' },
+                    { title: 'Permissions', path: '/school/hostel/permissions' }
                 ]
             },
             {

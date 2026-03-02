@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IconChevronDown, IconCircleCheck, IconClock, IconCircleDashed } from '@tabler/icons-react';
 
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+
 const StudentTodo = () => {
     const [filter, setFilter] = useState('Today');
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -49,6 +51,18 @@ const StudentTodo = () => {
         }
     };
 
+    const statusColors = {
+        completed: '#28c76f',
+        inprogress: '#ff9f43',
+        pending: '#ea5455'
+    };
+
+    const pieData = Object.keys(statusColors).map(status => ({
+        name: status.charAt(0).toUpperCase() + status.slice(1),
+        value: todos.filter(t => t.status === status).length,
+        color: statusColors[status]
+    })).filter(d => d.value > 0);
+
     return (
         <div className="dashboard-card student-todo-card">
             <div className="card-header">
@@ -80,19 +94,68 @@ const StudentTodo = () => {
                 </div>
             </div>
             <div className="card-body">
-                <div className="todo-list">
+                <div className="summary-side-layout">
+                    <div className="summary-chart-left">
+                        <ResponsiveContainer width={140} height={140}>
+                            <PieChart>
+                                <Pie
+                                    data={pieData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={45}
+                                    outerRadius={65}
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                    stroke="none"
+                                >
+                                    {pieData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="summary-info-right">
+                        <div className="summary-title">
+                            <h3>{todos.length}</h3>
+                            <span>Total Todo Tasks</span>
+                        </div>
+                        <div className="summary-legend">
+                            {pieData.map((entry, idx) => (
+                                <div key={idx} className="legend-item">
+                                    <span className="legend-dot" style={{ backgroundColor: entry.color }}></span>
+                                    <span className="legend-label">{entry.name}:</span>
+                                    <span className="legend-value">{entry.value}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="dash-list-container">
                     {todos.map((todo, index) => (
-                        <div key={index} className={`todo-item ${todo.status}`}>
-                            <div className="todo-checkbox">
+                        <div key={index} className="dash-list-item">
+                            <div
+                                className="dash-list-icon"
+                                style={{ backgroundColor: `${statusColors[todo.status]}15`, color: statusColors[todo.status] }}
+                            >
                                 {getStatusIcon(todo.status)}
                             </div>
-                            <div className="todo-content">
-                                <h6 className="todo-title">{todo.title}</h6>
-                                <span className="todo-time">{todo.time}</span>
+                            <div className="dash-list-details">
+                                <div className="dash-list-header-mini">
+                                    <span className="dash-category-tag" style={{ color: statusColors[todo.status] }}>
+                                        {todo.status.charAt(0).toUpperCase() + todo.status.slice(1)}
+                                    </span>
+                                    <span className="dash-time-stamp">{todo.time}</span>
+                                </div>
+                                <h6 className="dash-list-title">{todo.title}</h6>
+                                <div className="dash-list-footer">
+                                    <span className="dash-status-pill">
+                                        <span className="dash-status-dot" style={{ backgroundColor: statusColors[todo.status] }}></span>
+                                        <span className="dash-status-text" style={{ color: statusColors[todo.status] }}>{todo.statusLabel}</span>
+                                    </span>
+                                </div>
                             </div>
-                            <span className={`todo-status status-${todo.status}`}>
-                                {todo.statusLabel}
-                            </span>
                         </div>
                     ))}
                 </div>

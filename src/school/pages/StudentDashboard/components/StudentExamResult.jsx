@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconChevronDown } from '@tabler/icons-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const StudentExamResult = () => {
     const [filter, setFilter] = useState('1st Quarter');
@@ -49,47 +49,49 @@ const StudentExamResult = () => {
                 </div>
             </div>
             <div className="card-body">
-                <div className="exam-result-chart">
-                    <div className="result-summary-compact">
-                        <div className="percentage-badge">
-                            <span className="percentage-value">{percentage}%</span>
-                        </div>
-                        <div className="result-info">
-                            <p className="result-marks">{totalMarks} / {totalPossible}</p>
-                            <span className="result-label">Total Marks</span>
-                        </div>
-                    </div>
-                    <div className="result-bar-chart">
-                        <ResponsiveContainer width="100%" height={180}>
-                            <BarChart data={resultData} layout="vertical">
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e9ecef" horizontal={false} />
-                                <XAxis type="number" domain={[0, 100]} hide />
-                                <YAxis
-                                    dataKey="subject"
-                                    type="category"
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tick={{ fill: '#6e6b7b', fontSize: 12 }}
-                                    width={70}
-                                />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: '#fff',
-                                        border: '1px solid #e9ecef',
-                                        borderRadius: '8px'
-                                    }}
-                                />
-                                <Bar
+                <div className="summary-side-layout">
+                    <div className="summary-chart-left">
+                        <ResponsiveContainer width={160} height={160}>
+                            <PieChart>
+                                <Pie
+                                    data={resultData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={55}
+                                    outerRadius={75}
+                                    paddingAngle={5}
                                     dataKey="marks"
-                                    radius={[0, 4, 4, 0]}
-                                    barSize={16}
+                                    nameKey="subject"
+                                    stroke="none"
                                 >
                                     {resultData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
-                                </Bar>
-                            </BarChart>
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
                         </ResponsiveContainer>
+                    </div>
+                    <div className="summary-info-right">
+                        <div className="overall-percent">
+                            <h3>{percentage}%</h3>
+                            <span>Overall Grade</span>
+                        </div>
+                        <div className="summary-stats">
+                            <div className="stat-item">
+                                <span className="stat-label">Total Marks:</span>
+                                <span className="stat-value">{totalMarks} / {totalPossible}</span>
+                            </div>
+                        </div>
+                        <div className="summary-legend">
+                            {resultData.map((entry, idx) => (
+                                <div key={idx} className="legend-item">
+                                    <span className="legend-dot" style={{ backgroundColor: entry.color }}></span>
+                                    <span className="legend-label">{entry.subject}:</span>
+                                    <span className="legend-value">{entry.marks}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

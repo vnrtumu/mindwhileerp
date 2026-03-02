@@ -8,6 +8,7 @@ import {
     IconChevronLeft,
     IconChevronRight
 } from '@tabler/icons-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const StudentQuickView = () => {
     const [activeTab, setActiveTab] = useState('attendance');
@@ -171,19 +172,31 @@ const StudentQuickView = () => {
                 return (
                     <div className="qv-attendance-content">
                         <div className="qv-attendance-chart">
-                            <svg viewBox="0 0 36 36" className="qv-circular-chart">
-                                <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#e9ecef" strokeWidth="3" />
-                                <circle
-                                    cx="18" cy="18" r="15.9155" fill="none"
-                                    stroke="#28c76f" strokeWidth="3"
-                                    strokeDasharray={`${attendancePercent} ${100 - attendancePercent}`}
-                                    strokeLinecap="round"
-                                    transform="rotate(-90 18 18)"
-                                />
-                            </svg>
-                            <div className="qv-chart-center">
-                                <span className="qv-percent">{attendancePercent}%</span>
-                            </div>
+                            <ResponsiveContainer width="100%" height={120}>
+                                <PieChart>
+                                    <Tooltip />
+                                    <Pie
+                                        data={[
+                                            { name: 'Present', value: attendanceStats.present, color: '#28c76f' },
+                                            { name: 'Absent', value: attendanceStats.absent, color: '#ea5455' },
+                                            { name: 'Halfday', value: attendanceStats.halfday, color: '#ff9f43' }
+                                        ]}
+                                        outerRadius={55}
+                                        dataKey="value"
+                                        startAngle={90}
+                                        endAngle={-270}
+                                        stroke="none"
+                                    >
+                                        {[
+                                            { name: 'Present', value: attendanceStats.present, color: '#28c76f' },
+                                            { name: 'Absent', value: attendanceStats.absent, color: '#ea5455' },
+                                            { name: 'Halfday', value: attendanceStats.halfday, color: '#ff9f43' }
+                                        ].map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                </PieChart>
+                            </ResponsiveContainer>
                         </div>
                         <div className="qv-attendance-stats">
                             <div className="qv-stat present"><span className="qv-stat-dot"></span>Present: <strong>{attendanceStats.present}</strong></div>

@@ -79,16 +79,18 @@ const ExpenseHeads = () => {
     };
 
     return (
-        <div className="accounts-page">
+        <div className="heads-page">
             {/* Page Header */}
-            <div className="page-header">
-                <div className="page-title">
-                    <h4>Expense Heads</h4>
-                    <nav className="breadcrumb">
-                        <span>Accounts</span> / <span className="current">Expense Heads</span>
+            <div className="heads-page-header">
+                <div className="heads-page-title">
+                    <h1>Expense Heads</h1>
+                    <nav className="heads-breadcrumb">
+                        <span>Accounts</span>
+                        <span className="separator">/</span>
+                        <span className="current">Expense Heads</span>
                     </nav>
                 </div>
-                <button className="btn-primary" style={{ background: '#7367f0' }} onClick={handleOpenAddModal}>
+                <button className="heads-add-btn purple" onClick={handleOpenAddModal}>
                     <IconPlus size={18} />
                     Add Expense Head
                 </button>
@@ -150,42 +152,44 @@ const ExpenseHeads = () => {
                 </div>
             )}
 
-            {/* Content Card */}
-            <div className="accounts-card">
-                <div className="card-header">
+            {/* Search & Filter Row */}
+            <div className="heads-filter-row">
+                <div className="heads-search-box">
+                    <IconSearch size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search expense heads..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+                <div className="heads-filter-right">
+                    <div className="heads-select-wrapper">
+                        <IconFilter size={14} className="heads-filter-icon" />
+                        <select
+                            className="heads-filter-select"
+                            value={filterCategory}
+                            onChange={(e) => setFilterCategory(e.target.value)}
+                        >
+                            {categories.map((cat, idx) => (
+                                <option key={idx} value={cat}>
+                                    {cat === 'all' ? 'All Categories' : cat}
+                                </option>
+                            ))}
+                        </select>
+                        <IconChevronDown size={14} className="heads-select-chevron" />
+                    </div>
+                </div>
+            </div>
+
+            {/* Table Card */}
+            <div className="heads-table-card">
+                <div className="heads-table-header">
                     <h5>Master Expense Heads</h5>
                 </div>
-                <div className="card-body">
-                    <div className="filters-row">
-                        <div className="search-box">
-                            <IconSearch size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search expense heads..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                        <div className="filter-group">
-                            <IconFilter size={18} />
-                            <select
-                                className="filter-select-minimal"
-                                value={filterCategory}
-                                onChange={(e) => setFilterCategory(e.target.value)}
-                            >
-                                {categories.map((cat, idx) => (
-                                    <option key={idx} value={cat}>
-                                        {cat === 'all' ? 'All Categories' : cat}
-                                    </option>
-                                ))}
-                            </select>
-                            <IconChevronDown size={14} />
-                        </div>
-                    </div>
-
-                    {/* Table */}
+                <div className="heads-table-body">
                     <div className="table-container">
-                        <table className="data-table">
+                        <table className="heads-data-table">
                             <thead>
                                 <tr>
                                     <th>Title</th>
@@ -198,22 +202,20 @@ const ExpenseHeads = () => {
                                 {filteredData.map((item) => (
                                     <tr key={item.id}>
                                         <td>
-                                            <div className="item-info">
-                                                <span className="item-name">{item.name}</span>
-                                            </div>
+                                            <span className="heads-item-name">{item.name}</span>
                                         </td>
                                         <td>
-                                            <span className="item-desc">{item.description}</span>
+                                            <span className="heads-item-desc">{item.description}</span>
                                         </td>
                                         <td>
-                                            <span className="head-badge" style={{ background: 'rgba(115, 103, 240, 0.1)', color: '#7367f0' }}>{item.category}</span>
+                                            <span className="heads-category-badge purple">{item.category}</span>
                                         </td>
                                         <td>
-                                            <div className="action-buttons">
-                                                <button className="action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
+                                            <div className="heads-action-buttons">
+                                                <button className="heads-action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
                                                     <IconEdit size={16} />
                                                 </button>
-                                                <button className="action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
+                                                <button className="heads-action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
                                                     <IconTrash size={16} />
                                                 </button>
                                             </div>
@@ -222,6 +224,18 @@ const ExpenseHeads = () => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="heads-table-footer">
+                        <span className="heads-showing-text">
+                            Showing {filteredData.length} of {headsData.length} entries
+                        </span>
+                        <div className="heads-pagination">
+                            <button className="heads-page-btn" disabled>Previous</button>
+                            <button className="heads-page-btn active">1</button>
+                            <button className="heads-page-btn">Next</button>
+                        </div>
                     </div>
                 </div>
             </div>

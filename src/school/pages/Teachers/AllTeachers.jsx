@@ -7,6 +7,9 @@ import {
     IconUserPlus, IconX
 } from '@tabler/icons-react';
 import './Teachers.css';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import AddTeacher from './AddTeacher';
@@ -249,36 +252,107 @@ const AllTeachers = ({ initialView = 'grid' }) => {
     const currentTeachers = teachers.slice(indexOfFirstItem, indexOfLastItem);
 
     const handleExportExcel = () => {
-        const headers = ['ID', 'Name', 'Class', 'Subject', 'Email', 'Phone', 'Join Date', 'Status'];
-        const csvContent = [
-            headers.join(','),
-            ...teachers.map(t => [
-                t.id,
-                `"${t.name}"`,
-                `"${t.class}"`,
-                `"${t.subject}"`,
-                t.email,
-                `"${t.phone}"`,
-                t.joinDate,
-                t.status
-            ].join(','))
-        ].join('\n');
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", `teachers_list_${new Date().toISOString().split('T')[0]}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
         setShowExportMenu(false);
+        try {
+            const headers = ['ID', 'Name', 'Class', 'Subject', 'Email', 'Phone', 'Join Date', 'Status'];
+            const data = teachers.map(t => [
+                t.id,
+                t.name,
+                t.class,
+                t.subject,
+                t.email,
+                t.phone,
+                t.joinDate || '',
+                t.status
+            ]);
+
+            const wsData = [headers, ...data];
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+            // Set column widths
+            ws['!cols'] = [
+                { wch: 12 }, // ID
+                { wch: 20 }, // Name
+                { wch: 15 }, // Class
+                { wch: 15 }, // Subject
+                { wch: 25 }, // Email
+                { wch: 18 }, // Phone
+                { wch: 15 }, // Join Date
+                { wch: 10 }, // Status
+            ];
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Teachers');
+            XLSX.writeFile(wb, `teachers_list_${new Date().toISOString().split('T')[0]}.xlsx`);
+        } catch (error) {
+            console.error('Excel export error:', error);
+            alert('Failed to export Excel. Please try again.');
+        }
     };
 
     const handleExportPDF = () => {
-        window.print();
         setShowExportMenu(false);
+        try {
+            const doc = new jsPDF('landscape');
+
+            // Title
+            doc.setFontSize(18);
+            doc.setTextColor(40, 40, 40);
+            doc.text('Teachers List', 14, 20);
+
+            // Date
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Generated on: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 14, 28);
+
+            // Table
+            const headers = [['ID', 'Name', 'Class', 'Subject', 'Email', 'Phone', 'Join Date', 'Status']];
+            const data = teachers.map(t => [
+                t.id,
+                t.name,
+                t.class,
+                t.subject,
+                t.email,
+                t.phone,
+                t.joinDate || '',
+                t.status
+            ]);
+
+            autoTable(doc, {
+                head: headers,
+                body: data,
+                startY: 34,
+                theme: 'grid',
+                headStyles: {
+                    fillColor: [41, 50, 65],
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold',
+                    fontSize: 9,
+                },
+                bodyStyles: {
+                    fontSize: 8,
+                    textColor: [50, 50, 50],
+                },
+                alternateRowStyles: {
+                    fillColor: [240, 243, 248],
+                },
+                styles: {
+                    cellPadding: 4,
+                    lineColor: [200, 200, 200],
+                    lineWidth: 0.25,
+                },
+                columnStyles: {
+                    0: { cellWidth: 25 },
+                    4: { cellWidth: 50 },
+                    5: { cellWidth: 35 },
+                },
+            });
+
+            doc.save(`teachers_list_${new Date().toISOString().split('T')[0]}.pdf`);
+        } catch (error) {
+            console.error('PDF export error:', error);
+            alert('Failed to export PDF. Please try again.');
+        }
     };
 
     const handlePageChange = (pageNumber) => {
@@ -403,47 +477,8 @@ const AllTeachers = ({ initialView = 'grid' }) => {
                                                 </div>
                                             </div>
 
-                                            <div className="filter-group-vertical">
-                                                <label>Name</label>
-                                                <select
-                                                    className="filter-select"
-                                                    value={tempFilters.name}
-                                                    onChange={(e) => setTempFilters({ ...tempFilters, name: e.target.value })}
-                                                >
-                                                    <option value="">Select</option>
-                                                    {teachersList.map(t => <option key={t.id} value={t.name}>{t.name}</option>)}
-                                                </select>
-                                            </div>
-
-                                            <div className="filter-group-vertical">
-                                                <label>Class</label>
-                                                <select
-                                                    className="filter-select"
-                                                    value={tempFilters.class}
-                                                    onChange={(e) => setTempFilters({ ...tempFilters, class: e.target.value })}
-                                                >
-                                                    <option value="">Select</option>
-                                                    {[...new Set(teachersList.map(t => t.class))].map(c => <option key={c} value={c}>{c}</option>)}
-                                                </select>
-                                            </div>
-
-                                            <div className="filter-group-vertical">
-                                                <label>Status</label>
-                                                <select
-                                                    className="filter-select"
-                                                    value={tempFilters.status}
-                                                    onChange={(e) => setTempFilters({ ...tempFilters, status: e.target.value })}
-                                                >
-                                                    <option value="">Select</option>
-                                                    <option value="Active">Active</option>
-                                                    <option value="Inactive">Inactive</option>
-                                                </select>
-                                            </div>
                                         </div>
-                                        <div className="filter-footer">
-                                            <button className="btn-reset" onClick={handleResetFilters}>Reset</button>
-                                            <button className="btn-apply" onClick={handleApplyFilters}>Apply</button>
-                                        </div>
+
                                     </div>
                                 )}
                             </div>

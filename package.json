@@ -44,6 +44,7 @@
     "i18next": "^25.5.2",
     "input-otp": "^1.4.2",
     "jspdf": "^4.2.0",
+    "jspdf-autotable": "^5.0.7",
     "lodash": "^4.17.21",
     "lucide-react": "^0.563.0",
     "moment": "^2.30.1",

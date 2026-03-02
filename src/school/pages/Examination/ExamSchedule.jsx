@@ -153,12 +153,10 @@ const ExamSchedule = () => {
             {/* Page Header */}
             <div className="page-header">
                 <div className="page-title">
-                    <div className="d-flex align-items-center gap-2">
-                        <button className="action-btn" onClick={() => navigate('/school/exam/dashboard')}>
-                            <IconChevronLeft size={20} />
-                        </button>
-                        <h4>Exam Schedule</h4>
-                    </div>
+                    <button className="back-btn" onClick={() => navigate('/school/exam/dashboard')}>
+                        <IconChevronLeft size={20} />
+                    </button>
+                    <h4>Exam Schedule</h4>
                     <nav className="breadcrumb">
                         <span>Dashboard</span> / <span>Exam</span> / <span className="current">Schedule</span>
                     </nav>
@@ -169,12 +167,73 @@ const ExamSchedule = () => {
                 </button>
             </div>
 
-            {/* Filters */}
-
-
-            <div className="card shadow-soft border-0 overflow-hidden mt-6">
-                <div className="premium-header-banner">
-                    <h4 className="mb-0">Exam Schedule List</h4>
+            <div className="accounts-card">
+                <div className="card-header">
+                    <h5>Exam Schedule List</h5>
+                    <div className="header-actions" style={{ position: 'relative' }}>
+                        <button
+                            className="btn-outline"
+                            onClick={() => setShowExportMenu(!showExportMenu)}
+                        >
+                            <IconDownload size={16} />
+                            Export
+                            <IconChevronDown size={14} style={{ marginLeft: '4px' }} />
+                        </button>
+                        {showExportMenu && (
+                            <div className="export-menu" style={{
+                                position: 'absolute',
+                                top: '100%',
+                                right: 0,
+                                background: '#fff',
+                                border: '1px solid #e9ecef',
+                                borderRadius: '8px',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                zIndex: 10,
+                                minWidth: '160px',
+                                padding: '4px 0',
+                                marginTop: '4px'
+                            }}>
+                                <button
+                                    className="export-dropdown-item"
+                                    onClick={handlePrint}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        width: '100%',
+                                        padding: '10px 16px',
+                                        border: 'none',
+                                        background: 'transparent',
+                                        cursor: 'pointer',
+                                        fontSize: '14px',
+                                        color: '#333448'
+                                    }}
+                                >
+                                    <IconFileTypePdf size={16} color="#ea5455" />
+                                    Export as PDF
+                                </button>
+                                <button
+                                    className="export-dropdown-item"
+                                    onClick={handleExportCSV}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        width: '100%',
+                                        padding: '10px 16px',
+                                        border: 'none',
+                                        background: 'transparent',
+                                        cursor: 'pointer',
+                                        fontSize: '14px',
+                                        color: '#333448'
+                                    }}
+                                >
+                                    <IconFileTypeXls size={16} color="#28c76f" />
+                                    Export as Excel
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className="table-toolbar-premium">
@@ -189,30 +248,33 @@ const ExamSchedule = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-
-                        <div className="filter-button-group">
-                            <select
-                                className="export-btn"
-                                style={{ height: '48px', borderRadius: '24px', paddingLeft: '20px', paddingRight: '40px', appearance: 'none' }}
-                                value={selectedClass}
-                                onChange={(e) => setSelectedClass(e.target.value)}
-                            >
-                                <option value="">All Classes</option>
-                                {classesList.map((cls, idx) => (
-                                    <option key={idx} value={cls}>{cls}</option>
-                                ))}
-                            </select>
-                            <select
-                                className="export-btn"
-                                style={{ height: '48px', borderRadius: '24px', paddingLeft: '20px', paddingRight: '40px', appearance: 'none' }}
-                                value={selectedSection}
-                                onChange={(e) => setSelectedSection(e.target.value)}
-                            >
-                                <option value="">All Sections</option>
-                                {sectionsList.map((sec, idx) => (
-                                    <option key={idx} value={sec}>{sec}</option>
-                                ))}
-                            </select>
+                        <div className="filter-group-right">
+                            <div className="select-wrapper">
+                                <select
+                                    className="filter-select"
+                                    value={selectedClass}
+                                    onChange={(e) => setSelectedClass(e.target.value)}
+                                >
+                                    <option value="">All Classes</option>
+                                    {classesList.map((cls, idx) => (
+                                        <option key={idx} value={cls}>{cls}</option>
+                                    ))}
+                                </select>
+                                <IconChevronDown size={14} className="select-chevron" />
+                            </div>
+                            <div className="select-wrapper">
+                                <select
+                                    className="filter-select"
+                                    value={selectedSection}
+                                    onChange={(e) => setSelectedSection(e.target.value)}
+                                >
+                                    <option value="">All Sections</option>
+                                    {sectionsList.map((sec, idx) => (
+                                        <option key={idx} value={sec}>{sec}</option>
+                                    ))}
+                                </select>
+                                <IconChevronDown size={14} className="select-chevron" />
+                            </div>
                         </div>
                     </div>
 

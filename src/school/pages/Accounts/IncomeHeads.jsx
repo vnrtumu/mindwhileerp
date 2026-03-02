@@ -72,16 +72,18 @@ const IncomeHeads = () => {
     };
 
     return (
-        <div className="accounts-page">
+        <div className="heads-page">
             {/* Page Header */}
-            <div className="page-header">
-                <div className="page-title">
-                    <h4>Income Heads</h4>
-                    <nav className="breadcrumb">
-                        <span>Accounts</span> / <span className="current">Income Heads</span>
+            <div className="heads-page-header">
+                <div className="heads-page-title">
+                    <h1>Income Heads</h1>
+                    <nav className="heads-breadcrumb">
+                        <span>Accounts</span>
+                        <span className="separator">/</span>
+                        <span className="current">Income Heads</span>
                     </nav>
                 </div>
-                <button className="btn-primary" onClick={handleOpenAddModal}>
+                <button className="heads-add-btn blue" onClick={handleOpenAddModal}>
                     <IconPlus size={18} />
                     Add Income Head
                 </button>
@@ -129,27 +131,27 @@ const IncomeHeads = () => {
                 </div>
             )}
 
-            {/* Content Card */}
-            <div className="accounts-card">
-                <div className="card-header">
+            {/* Search Row */}
+            <div className="heads-filter-row">
+                <div className="heads-search-box">
+                    <IconSearch size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search income heads..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+            </div>
+
+            {/* Table Card */}
+            <div className="heads-table-card">
+                <div className="heads-table-header">
                     <h5>Master Income Heads</h5>
                 </div>
-                <div className="card-body">
-                    <div className="filters-row">
-                        <div className="search-box">
-                            <IconSearch size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search income heads..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Table */}
+                <div className="heads-table-body">
                     <div className="table-container">
-                        <table className="data-table">
+                        <table className="heads-data-table">
                             <thead>
                                 <tr>
                                     <th>Title</th>
@@ -161,20 +163,17 @@ const IncomeHeads = () => {
                                 {filteredData.map((item) => (
                                     <tr key={item.id}>
                                         <td>
-                                            <div className="item-info">
-                                                <span className="item-name">{item.name}</span>
-                                            </div>
+                                            <span className="heads-item-name">{item.name}</span>
                                         </td>
                                         <td>
-                                            <span className="item-desc">{item.description}</span>
+                                            <span className="heads-item-desc">{item.description}</span>
                                         </td>
-
                                         <td>
-                                            <div className="action-buttons">
-                                                <button className="action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
+                                            <div className="heads-action-buttons">
+                                                <button className="heads-action-btn edit" title="Edit" onClick={() => handleOpenEditModal(item)}>
                                                     <IconEdit size={16} />
                                                 </button>
-                                                <button className="action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
+                                                <button className="heads-action-btn delete" title="Delete" onClick={() => handleDelete(item.id)}>
                                                     <IconTrash size={16} />
                                                 </button>
                                             </div>
@@ -183,6 +182,18 @@ const IncomeHeads = () => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="heads-table-footer">
+                        <span className="heads-showing-text">
+                            Showing {filteredData.length} of {headsData.length} entries
+                        </span>
+                        <div className="heads-pagination">
+                            <button className="heads-page-btn" disabled>Previous</button>
+                            <button className="heads-page-btn active">1</button>
+                            <button className="heads-page-btn">Next</button>
+                        </div>
                     </div>
                 </div>
             </div>

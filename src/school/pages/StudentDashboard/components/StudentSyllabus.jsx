@@ -1,5 +1,6 @@
-import React from 'react';
-import { IconDownload } from '@tabler/icons-react';
+import React, { useState } from 'react';
+import { IconDownload, IconChevronDown } from '@tabler/icons-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const StudentSyllabus = () => {
     const subjects = [
@@ -7,9 +8,15 @@ const StudentSyllabus = () => {
         { name: 'Physics', color: '#28c76f', completed: 72 },
         { name: 'Chemistry', color: '#ff9f43', completed: 68 },
         { name: 'Biology', color: '#ea5455', completed: 90 },
-        { name: 'English', color: '#00cfe8', completed: 95 },
-        { name: 'Hindi', color: '#7367f0', completed: 78 },
-        { name: 'Computer Science', color: '#ff6b6b', completed: 60 }
+        { name: 'English', color: '#00cfe8', completed: 95 }
+    ];
+
+    // Calculate overall completion
+    const totalCompleted = subjects.reduce((acc, s) => acc + s.completed, 0) / subjects.length;
+
+    const summaryData = [
+        { name: 'Completed', value: Math.round(totalCompleted), color: '#3d5ee1' },
+        { name: 'Remaining', value: Math.round(100 - totalCompleted), color: '#f0f4ff' }
     ];
 
     return (
@@ -18,39 +25,58 @@ const StudentSyllabus = () => {
                 <h5>Syllabus Completion</h5>
             </div>
             <div className="card-body">
-                <div className="syllabus-progress-list">
+                <div className="summary-side-layout">
+                    <div className="summary-chart-left">
+                        <ResponsiveContainer width={140} height={140}>
+                            <PieChart>
+                                <Pie
+                                    data={summaryData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={50}
+                                    outerRadius={65}
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                    startAngle={90}
+                                    endAngle={-270}
+                                    stroke="none"
+                                >
+                                    {summaryData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="summary-info-right">
+                        <div className="overall-percent">
+                            <h3>{Math.round(totalCompleted)}%</h3>
+                            <span>Overall Completion</span>
+                        </div>
+                        <div className="summary-stats">
+                            <div className="stat-item">
+                                <span className="stat-dot" style={{ backgroundColor: '#3d5ee1' }}></span>
+                                <span className="stat-label">Total Subjects:</span>
+                                <span className="stat-value">{subjects.length}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="dash-list-container">
                     {subjects.map((subject, index) => (
-                        <div key={index} className="syllabus-progress-item">
-                            <div className="syllabus-progress-header">
-                                <div className="syllabus-subject-info">
-                                    <span
-                                        className="syllabus-color-dot"
-                                        style={{ backgroundColor: subject.color }}
-                                    ></span>
-                                    <span className="syllabus-subject-name">{subject.name}</span>
+                        <div key={index} className="syllabus-mini-item dash-list-item">
+                            <div className="dash-list-details">
+                                <div className="dash-list-header-mini">
+                                    <span className="mini-name">{subject.name}</span>
+                                    <span className="mini-percent">{subject.completed}%</span>
                                 </div>
-                                <span className="syllabus-percent" style={{ color: subject.color }}>
-                                    {subject.completed}%
-                                </span>
-                            </div>
-                            <div className="syllabus-progress-bar">
-                                <div
-                                    className="syllabus-progress-fill"
-                                    style={{
-                                        width: `${subject.completed}%`,
-                                        backgroundColor: subject.color
-                                    }}
-                                ></div>
-                            </div>
-                            <div className="syllabus-progress-footer">
-                                <span className="syllabus-status">
-                                    {subject.completed >= 90 ? 'Almost Complete' :
-                                        subject.completed >= 70 ? 'On Track' :
-                                            subject.completed >= 50 ? 'In Progress' : 'Getting Started'}
-                                </span>
-                                <button className="download-btn" title="Download Syllabus">
-                                    <IconDownload size={14} />
-                                </button>
+                                <div className="mini-progress-bar">
+                                    <div
+                                        className="mini-progress-fill" style={{ width: `${subject.completed}%`, backgroundColor: subject.color }}
+                                    ></div>
+                                </div>
                             </div>
                         </div>
                     ))}

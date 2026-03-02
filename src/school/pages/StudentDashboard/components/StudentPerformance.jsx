@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconChevronDown } from '@tabler/icons-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 const StudentPerformance = () => {
     const [year, setYear] = useState('2024 - 2025');
@@ -21,10 +21,22 @@ const StudentPerformance = () => {
         { month: 'Dec', quiz: 58, exam: 72 }
     ];
 
+    // Calculate totals for Pie Chart
+    const totals = performanceData.reduce((acc, curr) => {
+        acc.quiz += curr.quiz;
+        acc.exam += curr.exam;
+        return acc;
+    }, { quiz: 0, exam: 0 });
+
+    const pieData = [
+        { name: 'Total Quiz', value: totals.quiz, color: '#3d5ee1' },
+        { name: 'Total Exam', value: totals.exam, color: '#28c76f' }
+    ];
+
     return (
         <div className="dashboard-card student-performance-card">
             <div className="card-header">
-                <h5>Performance</h5>
+                <h5>Performance Summary</h5>
                 <div className="dropdown-container">
                     <button
                         className="dropdown-toggle"
@@ -52,64 +64,43 @@ const StudentPerformance = () => {
                 </div>
             </div>
             <div className="card-body">
-                <div className="performance-area-chart">
-                    <ResponsiveContainer width="100%" height={280}>
-                        <AreaChart data={performanceData}>
-                            <defs>
-                                <linearGradient id="colorQuiz" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#3d5ee1" stopOpacity={0.3} />
-                                    <stop offset="95%" stopColor="#3d5ee1" stopOpacity={0} />
-                                </linearGradient>
-                                <linearGradient id="colorExam" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#28c76f" stopOpacity={0.3} />
-                                    <stop offset="95%" stopColor="#28c76f" stopOpacity={0} />
-                                </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e9ecef" />
-                            <XAxis
-                                dataKey="month"
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: '#6e6b7b', fontSize: 12 }}
-                            />
-                            <YAxis
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: '#6e6b7b', fontSize: 12 }}
-                            />
-                            <Tooltip
-                                contentStyle={{
-                                    backgroundColor: '#fff',
-                                    border: '1px solid #e9ecef',
-                                    borderRadius: '8px',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                                }}
-                            />
-                            <Legend
-                                verticalAlign="bottom"
-                                height={36}
-                                iconType="circle"
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="quiz"
-                                stroke="#3d5ee1"
-                                fillOpacity={1}
-                                fill="url(#colorQuiz)"
-                                strokeWidth={2}
-                                name="Quiz Per Month"
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="exam"
-                                stroke="#28c76f"
-                                fillOpacity={1}
-                                fill="url(#colorExam)"
-                                strokeWidth={2}
-                                name="Exam Per Month"
-                            />
-                        </AreaChart>
-                    </ResponsiveContainer>
+                <div className="performance-summary-inner">
+                    <div className="performance-chart-box">
+                        <ResponsiveContainer width={200} height={200}>
+                            <PieChart>
+                                <Pie
+                                    data={pieData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={60}
+                                    outerRadius={85}
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                    stroke="none"
+                                >
+                                    {pieData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="performance-info-box">
+                        <div className="perf-title-group">
+                            <h3 className="perf-main-title">Performance</h3>
+                            <span className="perf-sub-title">Yearly Summary</span>
+                        </div>
+                        <div className="perf-legend">
+                            {pieData.map((entry, idx) => (
+                                <div key={idx} className="perf-legend-item">
+                                    <span className="perf-dot" style={{ backgroundColor: entry.color }}></span>
+                                    <span className="perf-label">{entry.name}:</span>
+                                    <span className="perf-value">{entry.value}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
